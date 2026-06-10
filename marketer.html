@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merk-marketeer dashboard — Xtra Loyalty</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #F5F4F1; --white: #FFFFFF; --border: #E0DDD8;
+    --text: #1A1A1A; --text-mid: #4A4A4A; --text-muted: #888;
+    --xtra: #6D28D9; --xtra-pale: #F3EFFC;
+    --gold: #B45309; --gold-bg: #FEF3C7;
+    --green: #15803D; --green-bg: #DCFCE7;
+    --red: #DC2626; --red-bg: #FEE2E2;
+    --brand: #CC0000; --brand-pale: #FFF0F0; --brand-mid: #E50000;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+  /* ── SIDEBAR ─────────────────────────────── */
+  .sidebar {
+    background: var(--brand); display: flex; flex-direction: column;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    transition: background 0.35s ease;
+  }
+  .sidebar-head { padding: 22px 18px 18px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .sb-back { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 18px; }
+  .sb-back:hover { color: white; }
+  .sb-title { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; }
+  .brand-list { display: flex; flex-direction: column; gap: 3px; padding: 14px 10px; }
+  .bl-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; padding: 0 8px; margin-bottom: 6px; }
+  .brand-btn {
+    display: flex; align-items: center; gap: 10px; padding: 10px 10px;
+    border-radius: 9px; cursor: pointer; transition: all 0.2s;
+    border: 1.5px solid transparent; background: rgba(255,255,255,0.06);
+    font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75);
+    font-family: 'Inter', sans-serif; text-align: left; width: 100%;
+  }
+  .brand-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+  .brand-btn.active { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); color: white; }
+  .brand-avatar { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; padding: 3px; }
+  .brand-count { margin-left: auto; background: rgba(255,255,255,0.18); color: white; padding: 2px 7px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+  .sb-nav { padding: 10px; border-top: 1px solid rgba(255,255,255,0.12); margin-top: auto; }
+  .sb-nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 7px; font-size: 12px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.2s; }
+  .sb-nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+  .sb-nav-item.active { background: rgba(255,255,255,0.18); color: white; font-weight: 700; }
+
+  /* ── TAB 5: KLANTINZICHTEN ───────────────────── */
+  .ki-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .ki-stat { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px; border-top: 3px solid var(--brand); transition: border-color 0.35s; }
+  .ki-stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
+  .ki-stat-val { font-size: 22px; font-weight: 900; color: var(--text); }
+  .ki-stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  .seg-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .seg-row {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; display: grid; grid-template-columns: 40px 1fr 120px 120px 100px 200px; align-items: center; gap: 14px;
+    transition: border-color 0.2s;
+  }
+  .seg-row:hover { border-color: var(--brand); }
+  .seg-icon { font-size: 22px; text-align: center; }
+  .seg-info { }
+  .seg-name { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+  .seg-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .seg-count { text-align: center; }
+  .seg-count-val { font-size: 16px; font-weight: 900; color: var(--brand); transition: color 0.35s; }
+  .seg-count-lab { font-size: 10px; color: var(--text-muted); }
+  .seg-clv { text-align: center; }
+  .seg-clv-val { font-size: 16px; font-weight: 800; color: var(--text); }
+  .seg-clv-lab { font-size: 10px; color: var(--text-muted); }
+  .seg-kans { }
+  .seg-kans-label { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+  .seg-kans-pill { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+  .kp-high { background: #DCFCE7; color: #15803D; }
+  .kp-med { background: #FEF3C7; color: #B45309; }
+  .kp-low { background: #FEE2E2; color: #DC2626; }
+  .seg-nudge-col { }
+  .seg-nudge-btn {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px;
+    background: var(--brand); color: white; font-size: 11px; font-weight: 700; border: none;
+    cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.35s; white-space: nowrap;
+  }
+  .seg-nudge-btn:hover { filter: brightness(1.1); }
+
+  .nudge-panel {
+    background: #0F0A1E; border-radius: 16px; padding: 24px; margin-bottom: 24px;
+    border: 1px solid rgba(139,92,246,0.3);
+  }
+  .nudge-panel-title { font-size: 15px; font-weight: 800; color: white; margin-bottom: 4px; }
+  .nudge-panel-sub { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; }
+  .nudge-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .nudge-card-item {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .nci-header { display: flex; align-items: center; gap: 8px; }
+  .nci-seg-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(139,92,246,0.3); color: #C4B5FD; }
+  .nci-arrow { color: rgba(255,255,255,0.4); font-size: 11px; }
+  .nci-brand-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+  .nci-signal { font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.4; }
+  .nci-signal strong { color: rgba(255,255,255,0.9); }
+  .nci-notif {
+    background: #1a1a2e; border-radius: 10px; padding: 12px 14px;
+    display: flex; align-items: flex-start; gap: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .nci-notif-icon { font-size: 22px; flex-shrink: 0; }
+  .nci-notif-body { flex: 1; }
+  .nci-notif-title { font-size: 12px; font-weight: 700; color: white; margin-bottom: 2px; }
+  .nci-notif-text { font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.4; }
+  .nci-cta { font-size: 10px; font-weight: 700; color: #A78BFA; margin-top: 3px; }
+  .nci-metrics { display: flex; gap: 10px; }
+  .nci-metric { text-align: center; flex: 1; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 8px 6px; }
+  .nci-metric-val { font-size: 14px; font-weight: 800; color: #A78BFA; }
+  .nci-metric-lab { font-size: 9px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  /* ── MAIN ────────────────────────────────── */
+  .main { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* brand hero */
+  .brand-hero { background: white; border-bottom: 1px solid var(--border); }
+  .brand-hero-inner { display: flex; align-items: stretch; border-left: 6px solid var(--brand); transition: border-color 0.35s; }
+  .bh-color-block { width: 76px; min-height: 76px; background: var(--brand); display: flex; align-items: center; justify-content: center; padding: 12px; flex-shrink: 0; transition: background 0.35s; }
+  .bh-info { padding: 16px 24px; flex: 1; }
+  .bh-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+  .bh-name { font-size: 20px; font-weight: 900; color: var(--text); }
+  .bh-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .bh-stats { padding: 16px 24px; display: flex; gap: 24px; border-left: 1px solid var(--border); flex-shrink: 0; align-items: center; }
+  .bh-stat-val { font-size: 18px; font-weight: 800; color: var(--brand); transition: color 0.35s; }
+  .bh-stat-lab { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  /* tabs */
+  .topnav { background: white; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; align-items: center; height: 46px; gap: 4px; }
+  .tn-tab { padding: 0 16px; height: 100%; display: flex; align-items: center; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2.5px solid transparent; transition: all 0.2s; background: none; border-left: none; border-right: none; border-top: none; font-family: 'Inter', sans-serif; white-space: nowrap; }
+  .tn-tab:hover { color: var(--text); }
+  .tn-tab.active { color: var(--brand); border-bottom-color: var(--brand); transition: color 0.35s, border-color 0.35s; }
+
+  /* content */
+  .content { padding: 24px 28px; flex: 1; }
+
+  /* ── SHARED COMPONENTS ───────────────────── */
+  .sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .sec-title { font-size: 16px; font-weight: 800; }
+  .sec-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-brand { background: var(--brand); color: white; transition: background 0.35s; }
+  .btn-brand:hover { filter: brightness(1.1); }
+  .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
+  .btn-ghost:hover { border-color: #B8B4AF; background: var(--bg); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  /* ── TAB 1: STRATEGISCH DASHBOARD ────────── */
+  .kpi-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px; }
+  .kpi6 {
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 14px; border-top: 3px solid var(--brand); transition: border-color 0.35s;
+    position: relative;
+  }
+  .kpi6-label { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; line-height: 1.3; }
+  .kpi6-val { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 3px; }
+  .kpi6-trend { font-size: 11px; }
+  .kpi6-info { position: absolute; top: 10px; right: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted); cursor: default; }
+  .up { color: #15803D; } .down { color: #DC2626; } .neu { color: var(--text-muted); }
+
+  /* Goals section */
+  .goals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  .goal-card {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 18px; transition: border-color 0.2s;
+  }
+  .goal-card.focused { border-color: var(--brand); background: var(--brand-pale); transition: all 0.35s; }
+  .goal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .goal-title-row { display: flex; align-items: center; gap: 10px; }
+  .goal-icon { font-size: 22px; }
+  .goal-name { font-size: 14px; font-weight: 800; color: var(--text); }
+  .goal-target { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .goal-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 100px; white-space: nowrap; }
+  .gb-focus { background: var(--brand-pale); color: var(--brand); transition: background 0.35s, color 0.35s; border: 1px solid var(--brand); }
+  .gb-secondary { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+  .goal-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .goal-prog-bg { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; border: 1px solid var(--border); overflow: hidden; }
+  .goal-prog-fill { height: 100%; border-radius: 4px; background: var(--brand); transition: background 0.35s, width 0.6s ease; }
+  .goal-prog-pct { font-size: 12px; font-weight: 700; color: var(--brand); transition: color 0.35s; min-width: 32px; text-align: right; }
+  .goal-kpis { display: flex; gap: 16px; }
+  .goal-kpi { text-align: center; }
+  .goal-kpi-val { font-size: 14px; font-weight: 800; color: var(--text); }
+  .goal-kpi-lab { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .goal-campaigns { font-size: 11px; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+  .goal-camp-tag { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 600; color: var(--text-mid); }
+
+  /* Overall business case */
+  .obc-card {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .obc-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .obc-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+  .obc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .obc-cell { background: var(--white); padding: 16px; }
+  .obc-cell:first-child { border-radius: 10px 0 0 10px; }
+  .obc-cell:last-child { border-radius: 0 10px 10px 0; }
+  .obc-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .obc-val { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 3px; }
+  .obc-sub2 { font-size: 11px; color: var(--text-muted); }
+  .obc-val.green { color: var(--green); }
+  .obc-val.brand { color: var(--brand); transition: color 0.35s; }
+  .obc-supplier-row { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .obc-sup-badge { background: #FEF3C7; border: 1px solid #FDE68A; color: var(--gold); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+  .obc-sup-text { font-size: 12px; color: var(--text-muted); }
+
+  /* ── TAB 2: CAMPAGNES ────────────────────── */
+  .camp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .camp-card {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 14px;
+    overflow: hidden; transition: all 0.2s; cursor: default;
+  }
+  .camp-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); border-color: #C8C3BA; }
+  .camp-accent { height: 4px; background: var(--brand); transition: background 0.35s; }
+  .camp-body { padding: 16px 18px; }
+  .camp-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+  .camp-icon { width: 38px; height: 38px; border-radius: 9px; background: var(--brand-pale); display: flex; align-items: center; justify-content: center; font-size: 18px; transition: background 0.35s; flex-shrink: 0; }
+  .camp-badges { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .camp-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .cb-active { background: #DCFCE7; color: #15803D; }
+  .cb-paused { background: var(--gold-bg); color: var(--gold); }
+  .cb-draft { background: var(--bg); color: var(--text-muted); }
+  .camp-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+  .camp-desc { font-size: 12px; color: var(--text-mid); line-height: 1.5; margin-bottom: 10px; }
+
+  /* Goal tag on campaign */
+  .camp-goal-tag { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; background: var(--brand-pale); border: 1px solid rgba(0,0,0,0.06); margin-bottom: 10px; transition: background 0.35s; }
+  .cgt-icon { font-size: 13px; }
+  .cgt-text { font-size: 11px; font-weight: 700; color: var(--brand); transition: color 0.35s; }
+
+  /* Supplier badge on campaign */
+  .camp-supplier { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; background: var(--gold-bg); border: 1px solid #FDE68A; margin-bottom: 10px; }
+  .camp-supplier-text { font-size: 11px; font-weight: 700; color: var(--gold); }
+
+  /* Mini business case on card */
+  .camp-bc { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid var(--border); }
+  .camp-bc-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 7px; }
+  .camp-bc-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+  .camp-bc-row:last-child { margin-bottom: 0; border-top: 1px solid var(--border); padding-top: 5px; margin-top: 3px; }
+  .camp-bc-label { color: var(--text-muted); }
+  .camp-bc-val { font-weight: 700; color: var(--text); }
+  .camp-bc-val.green { color: var(--green); }
+  .camp-bc-val.orange { color: var(--gold); }
+
+  /* KPI impact row */
+  .camp-impact { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ci-pill { background: var(--green-bg); color: var(--green); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+  .ci-pill.neutral { background: var(--bg); color: var(--text-muted); }
+
+  .prog-wrap { margin-bottom: 8px; }
+  .prog-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .prog-bg { height: 5px; background: var(--bg); border-radius: 3px; border: 1px solid var(--border); overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; background: var(--brand); transition: background 0.35s; }
+  .camp-meta { display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+  .camp-meta strong { color: var(--text); }
+
+  /* new camp card */
+  .camp-new { background: var(--white); border: 2px dashed var(--border); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; min-height: 200px; cursor: pointer; transition: all 0.2s; }
+  .camp-new:hover { border-color: var(--brand); background: var(--brand-pale); }
+  .camp-new .cn-plus { font-size: 26px; color: var(--text-muted); transition: color 0.2s; }
+  .camp-new:hover .cn-plus { color: var(--brand); }
+  .camp-new .cn-text { font-size: 13px; font-weight: 700; color: var(--text-muted); transition: color 0.2s; }
+  .camp-new:hover .cn-text { color: var(--brand); }
+  .camp-new .cn-sub { font-size: 11px; color: rgba(0,0,0,0.3); text-align: center; max-width: 140px; }
+
+  /* ── TAB 3: CAMPAGNE BOUWEN ──────────────── */
+  .builder-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+  .builder-form { display: flex; flex-direction: column; gap: 18px; }
+  .form-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 20px; }
+  .form-card-title { font-size: 14px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .fct-step { width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: white; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.35s; }
+  .form-block { margin-bottom: 16px; }
+  .form-block:last-child { margin-bottom: 0; }
+  .form-lbl { font-size: 11px; font-weight: 700; color: var(--text-mid); margin-bottom: 7px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-lbl em { color: var(--brand); font-style: normal; }
+  .form-input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); background: var(--bg); transition: border-color 0.2s; }
+  .form-input:focus { outline: none; border-color: var(--brand); background: white; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  /* Goal selector */
+  .goal-sel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .goal-opt {
+    padding: 12px 10px; border-radius: 10px; border: 1.5px solid var(--border);
+    cursor: pointer; transition: all 0.2s; background: var(--bg); text-align: center;
+  }
+  .goal-opt:hover { border-color: var(--brand); background: var(--brand-pale); }
+  .goal-opt.sel { border-color: var(--brand); background: var(--brand-pale); }
+  .go-icon { font-size: 20px; margin-bottom: 5px; }
+  .go-name { font-size: 11px; font-weight: 800; margin-bottom: 2px; color: var(--text); }
+  .go-desc { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+
+  /* Supplier toggle */
+  .supplier-toggle { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; transition: all 0.2s; }
+  .supplier-toggle.on { border-color: var(--gold); background: var(--gold-bg); }
+  .supplier-toggle-dot { width: 32px; height: 18px; border-radius: 9px; background: #D1D5DB; transition: background 0.2s; position: relative; flex-shrink: 0; }
+  .supplier-toggle-dot::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: white; transition: transform 0.2s; }
+  .supplier-toggle.on .supplier-toggle-dot { background: var(--gold); }
+  .supplier-toggle.on .supplier-toggle-dot::after { transform: translateX(14px); }
+  .supplier-toggle-text { flex: 1; }
+  .stt-title { font-size: 12px; font-weight: 700; color: var(--text); }
+  .stt-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  #supplierFields { display: none; margin-top: 10px; }
+  #supplierFields.open { display: block; }
+
+  /* Type grid */
+  .type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .type-opt { padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--bg); }
+  .type-opt:hover { border-color: var(--brand); background: var(--brand-pale); }
+  .type-opt.sel { border-color: var(--brand); background: var(--brand-pale); }
+  .to-icon { font-size: 20px; margin-bottom: 5px; }
+  .to-name { font-size: 12px; font-weight: 800; margin-bottom: 2px; }
+  .to-desc { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+
+  /* Business case preview */
+  .bc-preview { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 20px; position: sticky; top: 20px; }
+  .bcp-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+  .bcp-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+  .bcp-section { margin-bottom: 14px; }
+  .bcp-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .bcp-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .bcp-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: var(--text-mid); }
+  .bcp-row strong { color: var(--text); }
+  .bcp-total { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; padding: 10px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); margin-top: 4px; }
+  .bcp-total .green { color: var(--green); }
+  .bcp-total .red { color: var(--red); }
+  .bcp-kpi-impact { margin-top: 12px; }
+  .bcp-kpi-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 7px; background: var(--bg); margin-bottom: 4px; }
+  .bcp-kpi-name { font-size: 11px; color: var(--text-mid); flex: 1; }
+  .bcp-kpi-val { font-size: 11px; font-weight: 700; color: var(--green); }
+  .bcp-submit { width: 100%; margin-top: 16px; padding: 12px; border-radius: 10px; background: var(--brand); color: white; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; border: none; cursor: pointer; transition: background 0.35s; }
+  .bcp-submit:hover { filter: brightness(1.1); }
+
+  /* ── CHARTS / TABLES ─────────────────────── */
+  .chart-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .chart-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+  .chart-title { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+  .chart-sub { font-size: 12px; color: var(--text-muted); }
+  .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+  .bar-grp { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+  .bar-val { font-size: 9px; color: var(--text-muted); font-weight: 600; }
+  .bar-body { width: 100%; border-radius: 3px 3px 0 0; background: var(--brand); opacity: 0.8; transition: background 0.35s; min-height: 3px; }
+  .bar-body:hover { opacity: 1; }
+  .bar-lbl { font-size: 9px; color: var(--text-muted); }
+  .table-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl th { text-align: left; font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .tbl td { padding: 10px 14px; border-bottom: 1px solid #F0EDE8; font-size: 12px; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: var(--bg); }
+  .tbl-brand { display: flex; align-items: center; gap: 8px; }
+  .tbl-av { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .p-hot { background: #DCFCE7; color: #15803D; }
+  .p-grow { background: #DBEAFE; color: #1D4ED8; }
+  .p-stable { background: var(--gold-bg); color: var(--gold); }
+  .p-normal { background: var(--bg); color: var(--text-muted); }
+
+  @media (max-width: 1100px) {
+    .kpi-grid-6 { grid-template-columns: repeat(3, 1fr); }
+    .goals-grid { grid-template-columns: 1fr; }
+    .builder-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .bh-stats { display: none; }
+    .content { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── SIDEBAR ──────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <a href="index.html" class="sb-back">← Terug naar overzicht</a>
+    <div class="sb-title">Kies jouw merk</div>
+  </div>
+  <div class="brand-list">
+    <div class="bl-label">Mijn merken</div>
+    <button class="brand-btn active" id="bb-colruyt" onclick="kiesMerk('colruyt')">
+      <div class="brand-avatar" style="background:rgba(255,255,255,0.2);">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg>
+      </div>
+      <span>Colruyt LP</span><span class="brand-count">3</span>
+    </button>
+    <button class="brand-btn" id="bb-okay" onclick="kiesMerk('okay')">
+      <div class="brand-avatar" style="background:rgba(255,255,255,0.2);">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="10"/></svg>
+      </div>
+      <span>OKay</span><span class="brand-count">2</span>
+    </button>
+    <button class="brand-btn" id="bb-bio" onclick="kiesMerk('bio')">
+      <div class="brand-avatar" style="background:rgba(255,255,255,0.2);">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><path d="M30,10 Q46,24 30,50 Q14,24 30,10" fill="rgba(255,255,255,0.85)"/></svg>
+      </div>
+      <span>Bio-Planet</span><span class="brand-count">1</span>
+    </button>
+    <button class="brand-btn" id="bb-jims" onclick="kiesMerk('jims')">
+      <div class="brand-avatar" style="background:rgba(255,255,255,0.2);">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="15" cy="20" r="6" fill="rgba(255,255,255,0.9)"/><circle cx="30" cy="15" r="5" fill="rgba(255,255,255,0.7)"/><circle cx="45" cy="20" r="6" fill="rgba(255,255,255,0.85)"/><circle cx="30" cy="46" r="6" fill="rgba(255,255,255,0.9)"/></svg>
+      </div>
+      <span>JIMS Fitness</span><span class="brand-count">2</span>
+    </button>
+    <button class="brand-btn" id="bb-newpharma" onclick="kiesMerk('newpharma')">
+      <div class="brand-avatar" style="background:rgba(255,255,255,0.2);">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect x="24" y="12" width="12" height="36" rx="6" fill="rgba(255,255,255,0.85)"/><rect x="12" y="24" width="36" height="12" rx="6" fill="rgba(255,255,255,0.85)"/></svg>
+      </div>
+      <span>Newpharma</span><span class="brand-count">1</span>
+    </button>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-nav-item active" onclick="toonTab('klanten', this)">👥 Klantinzichten</div>
+    <div class="sb-nav-item" onclick="toonTab('dashboard', this)">📊 Dashboard</div>
+    <div class="sb-nav-item" onclick="toonTab('campagnes', this)">🎯 Campagnes</div>
+    <div class="sb-nav-item" onclick="toonTab('builder', this)">➕ Nieuwe campagne</div>
+    <div class="sb-nav-item" onclick="toonTab('flow', this)">🔄 Xtratjes-flow</div>
+    <div class="sb-nav-item">⚙️ Instellingen</div>
+  </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────── -->
+<main class="main">
+
+  <!-- Brand hero -->
+  <div class="brand-hero">
+    <div class="brand-hero-inner" id="heroInner">
+      <div class="bh-color-block" id="heroBlock">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg>
+      </div>
+      <div class="bh-info">
+        <div class="bh-label">Marketeer dashboard — Xtra Loyalty</div>
+        <div class="bh-name" id="heroName">Colruyt Laagste Prijzen</div>
+        <div class="bh-sub" id="heroSub">3 actieve campagnes · 47.800 deelnemers deze maand · 2 strategische doelen in scope</div>
+      </div>
+      <div class="bh-stats">
+        <div class="bh-stat">
+          <div class="bh-stat-val" id="heroStat1">€247</div>
+          <div class="bh-stat-lab">Gem. CLV / klant</div>
+        </div>
+        <div class="bh-stat">
+          <div class="bh-stat-val" id="heroStat2">€84</div>
+          <div class="bh-stat-lab">Gem. besteding / maand</div>
+        </div>
+        <div class="bh-stat">
+          <div class="bh-stat-val" id="heroStat3">71%</div>
+          <div class="bh-stat-lab">Return rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="topnav">
+    <button class="tn-tab active" onclick="toonTab('klanten', this)">👥 Klantinzichten</button>
+    <button class="tn-tab" onclick="toonTab('dashboard', this)">📊 Strategisch dashboard</button>
+    <button class="tn-tab" onclick="toonTab('campagnes', this)">🎯 Campagnes</button>
+    <button class="tn-tab" onclick="toonTab('builder', this)">➕ Nieuwe campagne</button>
+    <button class="tn-tab" onclick="toonTab('flow', this)">🔄 Xtratjes-flow</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════ TAB 0: KLANTINZICHTEN ════════════ -->
+    <div id="tab-klanten">
+
+      <!-- Overzicht KPIs -->
+      <div class="sec-head">
+        <div>
+          <div class="sec-title" id="ki-title">Klantinzichten — Colruyt Laagste Prijzen</div>
+          <div class="sec-sub">Gedragsdata uit het Xtra-platform · bijgewerkt dagelijks</div>
+        </div>
+        <button class="btn btn-brand" onclick="toonTab('builder', document.querySelectorAll(\'.tn-tab\')[3])">+ Campagne op inzicht</button>
+      </div>
+
+      <div class="ki-grid" id="kiGrid">
+        <div class="ki-stat"><div class="ki-stat-label">Actieve klanten</div><div class="ki-stat-val" id="ki-actief">47.800</div><div class="ki-stat-sub">↑ +2.400 vs vorige maand</div></div>
+        <div class="ki-stat"><div class="ki-stat-label">Gemiddeld aankoopmoment</div><div class="ki-stat-val" id="ki-moment">Di &amp; Za</div><div class="ki-stat-sub">Piekdag: zaterdag 10–12u</div></div>
+        <div class="ki-stat"><div class="ki-stat-label">Cross-merk klanten</div><div class="ki-stat-val" id="ki-cross">22%</div><div class="ki-stat-sub">Bezoeken minstens 2 CG-merken/maand</div></div>
+        <div class="ki-stat"><div class="ki-stat-label">App-engagement rate</div><div class="ki-stat-val" id="ki-app">64%</div><div class="ki-stat-sub">Opent Xtra-app minstens 1×/week</div></div>
+        <div class="ki-stat"><div class="ki-stat-label">Gemiddelde categorieën / klant</div><div class="ki-stat-val" id="ki-cat">3,7</div><div class="ki-stat-sub">↑ +0.4 t.o.v. Q1 (bakker-actie)</div></div>
+        <div class="ki-stat"><div class="ki-stat-label">Slapende klanten (60d+)</div><div class="ki-stat-val" id="ki-slapend">4.200</div><div class="ki-stat-sub" style="color:#DC2626;">Churn-risico · campagne-kans</div></div>
+      </div>
+
+      <!-- Segmentatie -->
+      <div class="sec-head" style="margin-top:8px;">
+        <div>
+          <div class="sec-title">Klantsegmenten</div>
+          <div class="sec-sub">Gedragsmatig gesegmenteerd op basis van aankooppatroon &amp; loyaliteitsactiviteit</div>
+        </div>
+      </div>
+      <div class="seg-list" id="segList"><!-- filled by JS --></div>
+
+      <!-- Hyperpersonalisatie nudge engine -->
+      <div class="nudge-panel">
+        <div class="nudge-panel-title">🎯 Hyperpersonalisatie engine — actieve nudges voor jouw klanten</div>
+        <div class="nudge-panel-sub">Op basis van gedragssignalen genereert het systeem automatisch gepersonaliseerde nudges richting andere CG-merken</div>
+        <div class="nudge-cards-grid" id="nudgeCardsGrid"><!-- filled by JS --></div>
+      </div>
+
+    </div><!-- /tab-klanten -->
+
+    <!-- ════════════ TAB 1: STRATEGISCH DASHBOARD ════════════ -->
+    <div id="tab-dashboard" style="display:none;">
+
+      <!-- 6 KPIs -->
+      <div class="kpi-grid-6" id="kpiGrid">
+        <div class="kpi6"><div class="kpi6-info" title="Customer Lifetime Value: totale verwachte omzet per actieve klant">?</div><div class="kpi6-label">Customer Lifetime Value</div><div class="kpi6-val" id="kpi-clv">€247</div><div class="kpi6-trend up">↑ +€18 vs Q1</div></div>
+        <div class="kpi6"><div class="kpi6-info" title="Gemiddelde besteding per actieve loyaliteitsklant per maand">?</div><div class="kpi6-label">Gem. besteding / maand</div><div class="kpi6-val" id="kpi-spend">€84</div><div class="kpi6-trend up">↑ +€6 vs vorige maand</div></div>
+        <div class="kpi6"><div class="kpi6-info" title="Aandeel klanten dat maandelijks minstens 1× terugkomt">?</div><div class="kpi6-label">Return rate</div><div class="kpi6-val" id="kpi-return">71%</div><div class="kpi6-trend up">↑ +3pp vs Q1</div></div>
+        <div class="kpi6"><div class="kpi6-info" title="Gemiddeld aantal aankopen per actieve klant per maand">?</div><div class="kpi6-label">Aankoopfrequentie</div><div class="kpi6-val" id="kpi-freq">3,4×</div><div class="kpi6-trend up">↑ +0.2 vs Q1</div></div>
+        <div class="kpi6"><div class="kpi6-info" title="Net Promoter Score: bereidheid om het merk aan te bevelen (−100 tot +100)">?</div><div class="kpi6-label">NPS</div><div class="kpi6-val" id="kpi-nps">+42</div><div class="kpi6-trend up">↑ +5 vs vorig jaar</div></div>
+        <div class="kpi6"><div class="kpi6-info" title="Aandeel loyaliteitsklanten dat afgelopen 3 maanden niet meer actief was">?</div><div class="kpi6-label">Churn rate (3 mnd)</div><div class="kpi6-val" id="kpi-churn">8,2%</div><div class="kpi6-trend down">↓ −1.1pp vs Q1 ✓</div></div>
+      </div>
+
+      <!-- Strategische doelen -->
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Strategische loyaliteitsdoelen</div>
+          <div class="sec-sub">Kies je focusdoelen en volg de voortgang op per campagne</div>
+        </div>
+      </div>
+      <div class="goals-grid" id="goalsGrid">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Overall Business Case -->
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Overkoepelende business case — 2026</div>
+          <div class="sec-sub">Som van alle actieve en geplande campagnes</div>
+        </div>
+      </div>
+      <div class="obc-card">
+        <div class="obc-grid" id="obcGrid">
+          <div class="obc-cell">
+            <div class="obc-label">Totaal puntenbudget</div>
+            <div class="obc-val brand" id="obc-budget">240K ✦</div>
+            <div class="obc-sub2" id="obc-budget-sub">3 campagnes · €24.000 kost</div>
+          </div>
+          <div class="obc-cell">
+            <div class="obc-label">Verwachte inlossing</div>
+            <div class="obc-val" id="obc-redemption">72%</div>
+            <div class="obc-sub2">≈ 173K ✦ · €17.280</div>
+          </div>
+          <div class="obc-cell">
+            <div class="obc-label">Leverancier co-financiering</div>
+            <div class="obc-val" style="color:var(--gold);" id="obc-supplier">€8.400</div>
+            <div class="obc-sub2">35% van nettokost gedekt</div>
+          </div>
+          <div class="obc-cell">
+            <div class="obc-label">Nettokost na co-fin.</div>
+            <div class="obc-val green" id="obc-net">€8.880</div>
+            <div class="obc-sub2" id="obc-net-sub">vs. €14.200 verwachte omzetgroei</div>
+          </div>
+        </div>
+        <div class="obc-supplier-row">
+          <span class="obc-sup-badge">🤝 Leveranciers actief</span>
+          <span class="obc-sup-text" id="obc-sup-names">Chateau du Roy (wijn) · Danone (zuivel) — co-financieren €8.400 van de campagnekost</span>
+        </div>
+      </div>
+
+    </div><!-- /tab-dashboard -->
+
+    <!-- ════════════ TAB 2: CAMPAGNES ════════════ -->
+    <div id="tab-campagnes" style="display:none;">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Actieve &amp; geplande campagnes</div>
+          <div class="sec-sub">Elk met strategisch doel, business case en resultaatopvolging</div>
+        </div>
+        <button class="btn btn-brand" onclick="toonTabDirect('builder')">+ Nieuwe campagne</button>
+      </div>
+      <div class="camp-grid" id="campGrid"><!-- filled by JS --></div>
+    </div>
+
+    <!-- ════════════ TAB 3: NIEUWE CAMPAGNE ════════════ -->
+    <div id="tab-builder" style="display:none;">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Nieuwe campagne bouwen</div>
+          <div class="sec-sub">Stap voor stap: doel → mechanisme → business case → leverancier</div>
+        </div>
+      </div>
+      <div class="builder-layout">
+        <!-- LEFT: form -->
+        <div class="builder-form">
+
+          <!-- Stap 1: Strategisch doel -->
+          <div class="form-card">
+            <div class="form-card-title"><span class="fct-step">1</span> Strategisch doel</div>
+            <div class="form-block">
+              <label class="form-lbl">Welk loyaliteitsdoel dient deze campagne? <em>*</em></label>
+              <div class="goal-sel-grid">
+                <div class="goal-opt sel" onclick="selGoal(this)" data-goal="clv">
+                  <div class="go-icon">📈</div>
+                  <div class="go-name">Verhoog CLV</div>
+                  <div class="go-desc">Verhoog levenslange waarde per klant</div>
+                </div>
+                <div class="goal-opt" onclick="selGoal(this)" data-goal="freq">
+                  <div class="go-icon">🔁</div>
+                  <div class="go-name">Frequentie</div>
+                  <div class="go-desc">Klanten vaker laten terugkomen</div>
+                </div>
+                <div class="goal-opt" onclick="selGoal(this)" data-goal="spend">
+                  <div class="go-icon">💶</div>
+                  <div class="go-name">Gem. besteding</div>
+                  <div class="go-desc">Hogere bonbedrag per bezoek</div>
+                </div>
+                <div class="goal-opt" onclick="selGoal(this)" data-goal="retention">
+                  <div class="go-icon">🔒</div>
+                  <div class="go-name">Retentie / anti-churn</div>
+                  <div class="go-desc">Slapende klanten reactiveren</div>
+                </div>
+                <div class="goal-opt" onclick="selGoal(this)" data-goal="acquisition">
+                  <div class="go-icon">🌱</div>
+                  <div class="go-name">Nieuwe klanten</div>
+                  <div class="go-desc">Acquisitie via loyaliteitsvoordeel</div>
+                </div>
+                <div class="goal-opt" onclick="selGoal(this)" data-goal="crossbrand">
+                  <div class="go-icon">🔗</div>
+                  <div class="go-name">Cross-merk besteding</div>
+                  <div class="go-desc">Klanten naar andere CG-merken leiden</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stap 2: Campagnetype & naam -->
+          <div class="form-card">
+            <div class="form-card-title"><span class="fct-step">2</span> Campagnetype &amp; inhoud</div>
+            <div class="form-block">
+              <label class="form-lbl">Type campagne <em>*</em></label>
+              <div class="type-grid">
+                <div class="type-opt sel" onclick="selType(this)">
+                  <div class="to-icon">🎟️</div><div class="to-name">Spaarkaart</div>
+                  <div class="to-desc">X aankopen → beloning</div>
+                </div>
+                <div class="type-opt" onclick="selType(this)">
+                  <div class="to-icon">💶</div><div class="to-name">Bestedingsdrempel</div>
+                  <div class="to-desc">Bij X € besteed → bonus</div>
+                </div>
+                <div class="type-opt" onclick="selType(this)">
+                  <div class="to-icon">⚡</div><div class="to-name">Dubbele Xtratjes</div>
+                  <div class="to-desc">Tijdelijk 2× op alles</div>
+                </div>
+                <div class="type-opt" onclick="selType(this)">
+                  <div class="to-icon">📦</div><div class="to-name">Product-actie</div>
+                  <div class="to-desc">Specifiek product → extra</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-block">
+                <label class="form-lbl">Campagnenaam <em>*</em></label>
+                <input class="form-input" id="inp-name" placeholder="bv. Zomerse broodactie" oninput="updatePreview()">
+              </div>
+              <div class="form-block">
+                <label class="form-lbl">Looptijd</label>
+                <div class="form-row" style="gap:6px;">
+                  <input class="form-input" type="date" id="inp-start" onchange="updatePreview()">
+                  <input class="form-input" type="date" id="inp-end" onchange="updatePreview()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stap 3: Business case -->
+          <div class="form-card">
+            <div class="form-card-title"><span class="fct-step">3</span> Business case</div>
+            <div class="form-row-3">
+              <div class="form-block">
+                <label class="form-lbl">Puntenbudget (✦)</label>
+                <input class="form-input" id="inp-pts" type="number" placeholder="bv. 80000" oninput="updatePreview()">
+              </div>
+              <div class="form-block">
+                <label class="form-lbl">Kost per 1.000 ✦ (€)</label>
+                <input class="form-input" id="inp-cost-rate" type="number" placeholder="0.10" value="0.10" oninput="updatePreview()">
+              </div>
+              <div class="form-block">
+                <label class="form-lbl">Verwachte inlossing %</label>
+                <input class="form-input" id="inp-redemption" type="number" placeholder="bv. 72" value="72" oninput="updatePreview()">
+              </div>
+            </div>
+            <div class="form-row-3">
+              <div class="form-block">
+                <label class="form-lbl">Doelgroep (# klanten)</label>
+                <input class="form-input" id="inp-audience" type="number" placeholder="bv. 25000" oninput="updatePreview()">
+              </div>
+              <div class="form-block">
+                <label class="form-lbl">Verwachte deelname %</label>
+                <input class="form-input" id="inp-participation" type="number" placeholder="bv. 35" value="35" oninput="updatePreview()">
+              </div>
+              <div class="form-block">
+                <label class="form-lbl">Verwachte omzetgroei (€)</label>
+                <input class="form-input" id="inp-revenue" type="number" placeholder="bv. 14000" oninput="updatePreview()">
+              </div>
+            </div>
+            <div class="form-block">
+              <label class="form-lbl">Verwacht effect op KPI <em>(selecteer doel hierboven)</em></label>
+              <div class="form-row">
+                <div>
+                  <label class="form-lbl" style="font-size:10px;">KPI-impact (bv. +2pp return rate)</label>
+                  <input class="form-input" id="inp-kpi-impact" placeholder="bv. +2pp return rate" oninput="updatePreview()">
+                </div>
+                <div>
+                  <label class="form-lbl" style="font-size:10px;">Secundair effect (optioneel)</label>
+                  <input class="form-input" id="inp-kpi-impact2" placeholder="bv. +€5 gem. besteding" oninput="updatePreview()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stap 4: Leverancier -->
+          <div class="form-card">
+            <div class="form-card-title"><span class="fct-step">4</span> Leverancier co-financiering</div>
+            <div class="form-block">
+              <div class="supplier-toggle" id="supplierToggle" onclick="toggleSupplier()">
+                <div class="supplier-toggle-dot" id="supplierDot"></div>
+                <div class="supplier-toggle-text">
+                  <div class="stt-title">Leverancier financiert mee</div>
+                  <div class="stt-sub">Activeer als een leverancier (deels) de campagnekost draagt</div>
+                </div>
+              </div>
+              <div id="supplierFields">
+                <div class="form-row" style="margin-top:10px;">
+                  <div>
+                    <label class="form-lbl">Leveranciersnaam</label>
+                    <input class="form-input" id="inp-sup-name" placeholder="bv. Danone" oninput="updatePreview()">
+                  </div>
+                  <div>
+                    <label class="form-lbl">Co-financiering bedrag (€)</label>
+                    <input class="form-input" id="inp-sup-amount" type="number" placeholder="bv. 3500" oninput="updatePreview()">
+                  </div>
+                </div>
+                <div class="form-block" style="margin-top:10px;">
+                  <label class="form-lbl">Aangeboden product / dienst</label>
+                  <input class="form-input" id="inp-sup-product" placeholder="bv. Danone yoghurt promotie" oninput="updatePreview()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /builder-form -->
+
+        <!-- RIGHT: live preview -->
+        <div class="bc-preview">
+          <div class="bcp-title">Business case preview</div>
+          <div class="bcp-sub">Wordt live bijgewerkt terwijl je invult</div>
+
+          <div class="bcp-section">
+            <div class="bcp-section-title">Kosten</div>
+            <div class="bcp-row"><span>Puntenbudget</span><strong id="prev-pts">—</strong></div>
+            <div class="bcp-row"><span>Brutokost campagne</span><strong id="prev-cost">—</strong></div>
+            <div class="bcp-row"><span>Kost na inlossing (×<span id="prev-red-pct">72</span>%)</span><strong id="prev-net-cost">—</strong></div>
+            <div class="bcp-row"><span>Leveranciersbijdrage</span><strong id="prev-sup" style="color:var(--gold);">—</strong></div>
+            <div class="bcp-total"><span>Nettokost</span><span id="prev-total" class="red">—</span></div>
+          </div>
+
+          <div class="bcp-section">
+            <div class="bcp-section-title">Verwachte opbrengsten</div>
+            <div class="bcp-row"><span>Doelgroep</span><strong id="prev-audience">—</strong></div>
+            <div class="bcp-row"><span>Verwachte deelnemers</span><strong id="prev-participants">—</strong></div>
+            <div class="bcp-row"><span>Verwachte omzetgroei</span><strong id="prev-revenue" style="color:var(--green);">—</strong></div>
+            <div class="bcp-total"><span>ROI</span><span id="prev-roi" class="green">—</span></div>
+          </div>
+
+          <div class="bcp-kpi-impact">
+            <div class="bcp-section-title">KPI-impact</div>
+            <div class="bcp-kpi-row"><div class="bcp-kpi-name" id="prev-kpi1-name">Selecteer doel →</div><div class="bcp-kpi-val" id="prev-kpi1-val">—</div></div>
+            <div class="bcp-kpi-row" id="prev-kpi2-row" style="display:none;"><div class="bcp-kpi-name" id="prev-kpi2-name"></div><div class="bcp-kpi-val" id="prev-kpi2-val"></div></div>
+          </div>
+
+          <button class="bcp-submit" onclick="submitCampagne()">✓ Campagne opslaan &amp; activeren</button>
+        </div>
+
+      </div><!-- /builder-layout -->
+    </div><!-- /tab-builder -->
+
+    <!-- ════════════ TAB 4: XTRATJES-FLOW & FINANCIERING ════════════ -->
+    <div id="tab-flow" style="display:none;">
+
+      <!-- Financieel model uitleg -->
+      <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;padding:16px 20px;margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:800;color:#1D4ED8;margin-bottom:8px;">⚙️ Hoe zit het financieringsmodel in elkaar?</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px;color:var(--text-mid);line-height:1.5;">
+          <div><span style="background:#1D4ED8;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-right:6px;">1</span><strong style="color:var(--text);">Jij betaalt bij elke verdienste:</strong> Voor elke ✦ die een klant bij jouw merk verdient, stort jij €5/1.000 ✦ in de groepspot.</div>
+          <div><span style="background:#1D4ED8;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-right:6px;">2</span><strong style="color:var(--text);">Jij ontvangt bij elke besteding:</strong> Wanneer klanten (van andere merken) Xtratjes bij jou inlossen, krijg jij €5/1.000 ✦ uit de groepspot.</div>
+          <div><span style="background:#B45309;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-right:6px;">3</span><strong style="color:var(--text);">Extra korting = jouw eigen rekening:</strong> Elke extra korting die jij bovenop de standaard ✦-waarde geeft, financier jij volledig zelf — buiten de groepspot.</div>
+        </div>
+      </div>
+
+      <!-- Financiële positie kaarten -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid #CC0000;">
+          <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Bijdrage aan pot</div>
+          <div style="font-size:22px;font-weight:900;color:#CC0000;" id="fin-bijdrage">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="fin-bijdrage-sub">voor ✦ uitgegeven aan klanten</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid #15803D;">
+          <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Ontvangen uit pot</div>
+          <div style="font-size:22px;font-weight:900;color:#15803D;" id="fin-ontvangen">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="fin-ontvangen-sub">voor ✦ ingelost door klanten</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid var(--brand);transition:border-color .35s;">
+          <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Netto positie</div>
+          <div style="font-size:22px;font-weight:900;" id="fin-netto">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="fin-netto-sub">bijdrage min ontvangst</div>
+        </div>
+        <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:16px;border-top:3px solid #B45309;">
+          <div style="font-size:10px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Extra korting (eigen)</div>
+          <div style="font-size:22px;font-weight:900;color:#B45309;" id="fin-extra">—</div>
+          <div style="font-size:11px;color:#92400E;margin-top:3px;" id="fin-extra-sub">buiten groepspot om</div>
+        </div>
+      </div>
+
+      <!-- Totale loyaliteitskost breakdown -->
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:20px;">
+        <div class="chart-card" style="margin-bottom:0;">
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px;">Totale loyaliteitskost — breakdown</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">Wat kost het loyalty-programma jou netto per maand?</div>
+          <div id="costBreakdown"></div>
+        </div>
+        <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:18px;">
+          <div style="font-size:14px;font-weight:800;margin-bottom:14px;">Xtratjes-flow</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Klanten verdienen bij jou</div>
+            <div id="earnFlow" style="margin-bottom:8px;"></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;border-top:1px solid var(--border);padding-top:8px;">
+              <span>Totaal uitgedeeld</span><span id="earnTotal" style="color:var(--brand);transition:color .35s;"></span>
+            </div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-top:8px;">Klanten lossen in bij jou</div>
+            <div id="spendFlow" style="margin-bottom:8px;"></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;border-top:1px solid var(--border);padding-top:8px;">
+              <span>Totaal ontvangen</span><span id="spendTotal" style="color:#15803D;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /content -->
+</main>
+</div><!-- /shell -->
+
+<script>
+// ──────────────────────────────────────────────
+//  BRAND DATA
+// ──────────────────────────────────────────────
+const MERKEN = {
+  colruyt: {
+    name:'Colruyt Laagste Prijzen', color:'#CC0000', pale:'#FFF0F0',
+    sub:'4 actieve campagnes · 47.800 deelnemers · 3 doelen in scope',
+    heroStats: ['€247','€84','71%'],
+    heroStatsLabels: ['Gem. CLV','Gem. best./maand','Return rate'],
+    kpis: { clv:'€247', spend:'€84', ret:'71%', freq:'3,4×', nps:'+42', churn:'8,2%' },
+    kpiTrends: ['↑ +€18 vs Q1','↑ +€6 vs vorige mnd','↑ +3pp vs Q1','↑ +0.2 vs Q1','↑ +5 vs vorig jaar','↓ −1.1pp vs Q1 ✓'],
+    kpiTrendTypes: ['up','up','up','up','up','down'],
+    goals: [
+      { id:'freq', icon:'🔁', name:'Aankoopfrequentie verhogen', target:'Doel: 4,0×/maand', current:3.4, targetVal:4.0, pct:85, focus:true, campaigns:['Broodspaarkaart','Weekend 2×'] },
+      { id:'clv',  icon:'📈', name:'Customer Lifetime Value', target:'Doel: €280 CLV', current:247, targetVal:280, pct:88, focus:true, campaigns:['Weekend 2×'] },
+      { id:'retention', icon:'🔒', name:'Churn verlagen naar <7%', target:'Huidig: 8,2% → doel 7%', current:91.8, targetVal:93, pct:68, focus:false, campaigns:['Wijn-actie'] },
+      { id:'spend', icon:'💶', name:'Gem. besteding verhogen', target:'Doel: €95/maand', current:84, targetVal:95, pct:88, focus:false, campaigns:['Broodspaarkaart'] },
+      { id:'bakery', icon:'🥖', name:'Warme Bakker adoptie', target:'Doel: 40% klanten probeert bakker', current:12, targetVal:40, pct:30, focus:true, campaigns:['Ovenverse Broodjes'] }
+    ],
+    obc: { budget:'290K ✦', budgetSub:'4 campagnes · €29.000 kost', redemption:'72%', supplier:'€9.900', net:'€10.380', netSub:'vs. €17.200 verwachte omzetgroei', supNames:'Chateau du Roy (wijn) · Danone (zuivel) · Puratos (bakkerij)' },
+    campaigns: [
+      { icon:'🥖', name:'Ovenverse Broodjes actie', status:'active', goal:'bakery', goalLabel:'Bakker adoptie ↑', supplier:'Puratos', supplier_amount:'€1.500', pts_budget:50000, pts_spent:8200, cost_gross:'€5.000', redemption:0, kpi_impact:'+28pp bakker-adoptie', kpi2_impact:'+€6 besteding', participants:4100, target_participants:20000, desc:'Koop 3× ovenverse broodjes in 1 week → 20 Xtratjes bonus. Puratos (bakkerij-ingrediënten) co-financiert. Doel: nieuwe ochtendroutine verankeren bij Colruyt-klanten.', actual_revenue:'€2.100', expected_revenue:'€16.000', roi:'42%' },
+      { icon:'🍞', name:'Brood spaarkaart', status:'active', goal:'freq', goalLabel:'Frequentie ↑', supplier:null, pts_budget:80000, pts_spent:68200, cost_gross:'€8.000', redemption:78, kpi_impact:'+0.3× freq', kpi2_impact:'+€4 besteding', participants:18400, target_participants:20000, desc:'Koop 5 broden → 10 Xtratjes. Focus op dagelijkse trouwheid.', actual_revenue:'€11.200', expected_revenue:'€12.000', roi:'140%' },
+      { icon:'🛒', name:'Weekend dubbele Xtratjes', status:'active', goal:'clv', goalLabel:'CLV ↑', supplier:'Danone', supplier_amount:'€4.200', pts_budget:120000, pts_spent:96000, cost_gross:'€12.000', redemption:70, kpi_impact:'+€15 CLV', kpi2_impact:'+2pp return', participants:24100, target_participants:25000, desc:'Zaterdag & zondag: 2× Xtratjes op alles. Danone co-financiert via zuivel-promotie.', actual_revenue:'€18.600', expected_revenue:'€20.000', roi:'155%' },
+      { icon:'🍷', name:'Wijn proef-actie', status:'paused', goal:'retention', goalLabel:'Churn ↓', supplier:'Chateau du Roy', supplier_amount:'€4.200', pts_budget:40000, pts_spent:12400, cost_gross:'€4.000', redemption:55, kpi_impact:'−0.8pp churn', kpi2_impact:'+€6 CLV', participants:5300, target_participants:15000, desc:'6 flessen → 25 Xtratjes + wijnproef-uitnodiging. Chateau du Roy draagt €4.200 bij.', actual_revenue:'€4.800', expected_revenue:'€14.000', roi:'120%' }
+    ],
+    earnFlow: [{name:'Actieve klanten',val:'47.8K'},{name:'Acties uitgevoerd',val:'68.4K'},{name:'Gem. per actie',val:'2,7 ✦'}],
+    spendFlow: [{name:'JIMS',val:'34K ✦'},{name:'Newpharma',val:'28K ✦'},{name:'Bio-Planet',val:'18K ✦'}],
+    earnTotal:'128K ✦', spendTotal:'54K ✦',
+    fin: { earn_pts:'12,8M ✦', earn_eur:'€64.000', spend_pts:'5,4M ✦', spend_eur:'€27.000', netto:'−€37.000', netto_color:'#CC0000', extra_eur:'€18.000', extra_sub:'Kassabonus +10%', totaal:'€55.000', breakdown:[
+      { label:'Bijdrage groepspot (✦ uitgegeven)', amount:'−€64.000', color:'#CC0000' },
+      { label:'Ontvangen groepspot (✦ ingelost)', amount:'+€27.000', color:'#15803D' },
+      { label:'Extra kortingen eigen financiering', amount:'−€18.000', color:'#B45309' },
+      { label:'Nettokost loyalty', amount:'−€55.000', color:'#1A1A1A', bold:true },
+    ]},
+    logoSVG:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg>'
+  },
+  okay: {
+    name:'OKay', color:'#0066B3', pale:'#EFF6FF',
+    sub:'2 actieve campagnes · 18.200 deelnemers · 1 doel in scope',
+    heroStats:['€184','€52','64%'],
+    heroStatsLabels:['Gem. CLV','Gem. best./maand','Return rate'],
+    kpis:{ clv:'€184', spend:'€52', ret:'64%', freq:'4,1×', nps:'+31', churn:'11,4%' },
+    kpiTrends:['↑ +€9 vs Q1','↑ +€3 vs vorige mnd','↑ +1pp vs Q1','↑ +0.4 vs Q1','↔ stabiel','↓ −0.6pp vs Q1 ✓'],
+    kpiTrendTypes:['up','up','up','up','neu','down'],
+    goals:[
+      { id:'freq', icon:'🔁', name:'Buurttrouw verhogen', target:'Doel: 4,5×/maand', current:4.1, targetVal:4.5, pct:91, focus:true, campaigns:['Buurtkampioen'] },
+      { id:'retention', icon:'🔒', name:'Churn verlagen naar <10%', target:'Huidig: 11,4% → doel 10%', current:88.6, targetVal:90, pct:62, focus:false, campaigns:['Vers-actie'] }
+    ],
+    obc:{ budget:'80K ✦', budgetSub:'2 campagnes · €8.000 kost', redemption:'68%', supplier:'€2.100', net:'€3.332', netSub:'vs. €6.800 verwachte omzetgroei', supNames:'Ardo (diepvries groenten)' },
+    campaigns:[
+      { icon:'🏠', name:'Buurtkampioen actie', status:'active', goal:'freq', goalLabel:'Frequentie ↑', supplier:null, pts_budget:50000, pts_spent:38000, cost_gross:'€5.000', redemption:68, kpi_impact:'+0.4× freq', kpi2_impact:'+1pp return', participants:12400, target_participants:14000, desc:'5 aankopen op 5 dagen → dubbele bonus. Stimuleert dagelijkse gewoonten.', actual_revenue:'€7.200', expected_revenue:'€8.000', roi:'144%' },
+      { icon:'🍎', name:'Vers & seizoen', status:'active', goal:'retention', goalLabel:'Churn ↓', supplier:'Ardo', supplier_amount:'€2.100', pts_budget:30000, pts_spent:18000, cost_gross:'€3.000', redemption:69, kpi_impact:'−0.5pp churn', kpi2_impact:'+€2 besteding', participants:5800, target_participants:8000, desc:'Extra Xtratjes op seizoensgroenten. Ardo co-financiert via diepvriespromotie.', actual_revenue:'€3.600', expected_revenue:'€5.000', roi:'120%' }
+    ],
+    earnFlow:[{name:'Actieve klanten',val:'18.2K'},{name:'Acties uitgevoerd',val:'22.1K'},{name:'Gem. per actie',val:'2,2 ✦'}],
+    spendFlow:[{name:'Colruyt',val:'12K ✦'},{name:'JIMS',val:'8K ✦'},{name:'Newpharma',val:'5K ✦'}],
+    earnTotal:'48K ✦', spendTotal:'22K ✦',
+    fin:{ earn_pts:'4,8M ✦', earn_eur:'€24.000', spend_pts:'2,2M ✦', spend_eur:'€11.000', netto:'−€13.000', netto_color:'#CC0000', extra_eur:'€8.000', extra_sub:'Versafdeling +5%', totaal:'€21.000', breakdown:[
+      { label:'Bijdrage groepspot (✦ uitgegeven)', amount:'−€24.000', color:'#CC0000' },
+      { label:'Ontvangen groepspot (✦ ingelost)', amount:'+€11.000', color:'#15803D' },
+      { label:'Extra kortingen eigen financiering', amount:'−€8.000', color:'#B45309' },
+      { label:'Nettokost loyalty', amount:'−€21.000', color:'#1A1A1A', bold:true },
+    ]},
+    logoSVG:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="10"/></svg>'
+  },
+  bio: {
+    name:'Bio-Planet', color:'#15803D', pale:'#F0FDF4',
+    sub:'1 actieve campagne · 9.600 deelnemers · 2 doelen in scope',
+    heroStats:['€312','€96','78%'],
+    heroStatsLabels:['Gem. CLV','Gem. best./maand','Return rate'],
+    kpis:{ clv:'€312', spend:'€96', ret:'78%', freq:'2,8×', nps:'+58', churn:'5,4%' },
+    kpiTrends:['↑ +€24 vs Q1','↑ +€11 vs vorige mnd','↑ +4pp vs Q1','↔ stabiel','↑ +8 vs vorig jaar','↓ −0.9pp vs Q1 ✓'],
+    kpiTrendTypes:['up','up','up','neu','up','down'],
+    goals:[
+      { id:'clv', icon:'📈', name:'CLV verhogen naar €350', target:'Huidig: €312 → doel €350', current:312, targetVal:350, pct:89, focus:true, campaigns:['Seizoensbox'] },
+      { id:'crossbrand', icon:'🔗', name:'Cross-merk besteding', target:'30% naar ander merk', current:22, targetVal:30, pct:73, focus:false, campaigns:['Seizoensbox'] }
+    ],
+    obc:{ budget:'60K ✦', budgetSub:'1 campagne · €6.000 kost', redemption:'80%', supplier:'€3.000', net:'€1.800', netSub:'vs. €9.600 verwachte omzetgroei', supNames:'Oatly (haverdrank) · Alpro (plantaardig)' },
+    campaigns:[
+      { icon:'🌾', name:'Seizoensbox challenge', status:'active', goal:'clv', goalLabel:'CLV ↑', supplier:'Oatly + Alpro', supplier_amount:'€3.000', pts_budget:60000, pts_spent:44000, cost_gross:'€6.000', redemption:80, kpi_impact:'+€24 CLV', kpi2_impact:'+4pp return', participants:9600, target_participants:12000, desc:'Koop 5 seizoensproducten → 250 ✦ + biologische box. Oatly & Alpro dragen €3.000 bij.', actual_revenue:'€9.600', expected_revenue:'€12.000', roi:'160%' }
+    ],
+    earnFlow:[{name:'Actieve klanten',val:'9.6K'},{name:'Acties uitgevoerd',val:'12.8K'},{name:'Gem. per actie',val:'3,4 ✦'}],
+    spendFlow:[{name:'JIMS',val:'8K ✦'},{name:'Colruyt',val:'6K ✦'},{name:'Newpharma',val:'4K ✦'}],
+    earnTotal:'42K ✦', spendTotal:'18K ✦',
+    fin:{ earn_pts:'4,2M ✦', earn_eur:'€21.000', spend_pts:'1,8M ✦', spend_eur:'€9.000', netto:'−€12.000', netto_color:'#CC0000', extra_eur:'€9.500', extra_sub:'Bio-bonus +15%', totaal:'€21.500', breakdown:[
+      { label:'Bijdrage groepspot (✦ uitgegeven)', amount:'−€21.000', color:'#CC0000' },
+      { label:'Ontvangen groepspot (✦ ingelost)', amount:'+€9.000', color:'#15803D' },
+      { label:'Extra kortingen eigen financiering', amount:'−€9.500', color:'#B45309' },
+      { label:'Nettokost loyalty', amount:'−€21.500', color:'#1A1A1A', bold:true },
+    ]},
+    logoSVG:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><path d="M30,10 Q46,24 30,50 Q14,24 30,10" fill="rgba(255,255,255,0.85)"/></svg>'
+  },
+  jims: {
+    name:'JIMS Fitness', color:'#00B4B8', pale:'#F0FFFE',
+    sub:'2 actieve campagnes · 14.200 deelnemers · 2 doelen in scope',
+    heroStats:['€420','€55','82%'],
+    heroStatsLabels:['Gem. CLV','Gem. best./maand','Return rate'],
+    kpis:{ clv:'€420', spend:'€55', ret:'82%', freq:'8,2×', nps:'+66', churn:'4,1%' },
+    kpiTrends:['↑ +€35 vs Q1','↑ +€4 vs vorige mnd','↑ +2pp vs Q1','↑ +0.6 vs Q1','↑ +9 vs vorig jaar','↓ −0.5pp vs Q1 ✓'],
+    kpiTrendTypes:['up','up','up','up','up','down'],
+    goals:[
+      { id:'retention', icon:'🔒', name:'Abonnementsbehoud', target:'Churn abo <4%', current:95.9, targetVal:96, pct:95, focus:true, campaigns:['30-daagse challenge'] },
+      { id:'crossbrand', icon:'🔗', name:'Cross-merk voedingsklanten', target:'25% naar Colruyt/Bio', current:18, targetVal:25, pct:72, focus:false, campaigns:['Healthy combo'] }
+    ],
+    obc:{ budget:'100K ✦', budgetSub:'2 campagnes · €10.000 kost', redemption:'65%', supplier:'€2.800', net:'€3.700', netSub:'vs. €12.400 verwachte omzetgroei', supNames:'MyProtein (supplementen)' },
+    campaigns:[
+      { icon:'🏋️', name:'30-daagse fitness challenge', status:'active', goal:'retention', goalLabel:'Retentie ↑', supplier:null, pts_budget:70000, pts_spent:52000, cost_gross:'€7.000', redemption:65, kpi_impact:'−0.4pp churn', kpi2_impact:'+€20 CLV', participants:10800, target_participants:12000, desc:'Train 20× in november → gratis maand abo. Focus op abonnementsbehoud.', actual_revenue:'€8.400', expected_revenue:'€10.000', roi:'120%' },
+      { icon:'🥗', name:'Healthy combo deal', status:'active', goal:'crossbrand', goalLabel:'Cross-merk ↑', supplier:'MyProtein', supplier_amount:'€2.800', pts_budget:30000, pts_spent:18000, cost_gross:'€3.000', redemption:65, kpi_impact:'+7pp cross-merk', kpi2_impact:'+€5 CLV', participants:3400, target_participants:5000, desc:'Combineer JIMS + Nutriscore A-aankopen bij Colruyt. MyProtein co-financiert.', actual_revenue:'€4.000', expected_revenue:'€6.000', roi:'133%' }
+    ],
+    earnFlow:[{name:'Actieve leden',val:'14.2K'},{name:'Check-ins geteld',val:'116K'},{name:'Gem. per check-in',val:'1,2 ✦'}],
+    spendFlow:[{name:'Colruyt',val:'18K ✦'},{name:'Newpharma',val:'12K ✦'},{name:'Bio-Planet',val:'8K ✦'}],
+    earnTotal:'62K ✦', spendTotal:'44K ✦',
+    fin:{ earn_pts:'6,2M ✦', earn_eur:'€31.000', spend_pts:'4,4M ✦', spend_eur:'€22.000', netto:'−€9.000', netto_color:'#CC0000', extra_eur:'€24.000', extra_sub:'Abo-korting +20%', totaal:'€33.000', breakdown:[
+      { label:'Bijdrage groepspot (✦ uitgegeven)', amount:'−€31.000', color:'#CC0000' },
+      { label:'Ontvangen groepspot (✦ ingelost)', amount:'+€22.000', color:'#15803D' },
+      { label:'Extra kortingen eigen financiering', amount:'−€24.000', color:'#B45309' },
+      { label:'Nettokost loyalty', amount:'−€33.000', color:'#1A1A1A', bold:true },
+    ]},
+    logoSVG:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="15" cy="20" r="6" fill="rgba(255,255,255,0.9)"/><circle cx="30" cy="15" r="5" fill="rgba(255,255,255,0.7)"/><circle cx="45" cy="20" r="6" fill="rgba(255,255,255,0.85)"/><circle cx="30" cy="46" r="6" fill="rgba(255,255,255,0.9)"/></svg>'
+  },
+  newpharma: {
+    name:'Newpharma', color:'#003087', pale:'#EFF6FF',
+    sub:'1 actieve campagne · 6.800 deelnemers · 1 doel in scope',
+    heroStats:['€198','€68','66%'],
+    heroStatsLabels:['Gem. CLV','Gem. best./maand','Return rate'],
+    kpis:{ clv:'€198', spend:'€68', ret:'66%', freq:'2,1×', nps:'+38', churn:'12,8%' },
+    kpiTrends:['↑ +€12 vs Q1','↑ +€5 vs vorige mnd','↑ +2pp vs Q1','↑ +0.3 vs Q1','↑ +4 vs vorig jaar','↓ −1.4pp vs Q1 ✓'],
+    kpiTrendTypes:['up','up','up','up','up','down'],
+    goals:[
+      { id:'retention', icon:'🔒', name:'Wintergezondheid retentie', target:'Churn <11% (huidig 12,8%)', current:87.2, targetVal:89, pct:74, focus:true, campaigns:['Wintergezondheid'] },
+      { id:'spend', icon:'💶', name:'Gem. besteding verhogen', target:'Doel: €80/maand', current:68, targetVal:80, pct:85, focus:false, campaigns:['Wintergezondheid'] }
+    ],
+    obc:{ budget:'50K ✦', budgetSub:'1 campagne · €5.000 kost', redemption:'62%', supplier:'€1.800', net:'€1.300', netSub:'vs. €4.800 verwachte omzetgroei', supNames:'Biogaran (geneesmiddelen)' },
+    campaigns:[
+      { icon:'💊', name:'Wintergezondheid actie', status:'active', goal:'retention', goalLabel:'Retentie ↑', supplier:'Biogaran', supplier_amount:'€1.800', pts_budget:50000, pts_spent:28000, cost_gross:'€5.000', redemption:62, kpi_impact:'−0.9pp churn', kpi2_impact:'+€6 besteding', participants:6800, target_participants:9000, desc:'Vitamine D + zinc pakket → bonus Xtratjes. Biogaran draagt €1.800 bij via productpromotie.', actual_revenue:'€4.800', expected_revenue:'€6.500', roi:'96%' }
+    ],
+    earnFlow:[{name:'Actieve klanten',val:'6.8K'},{name:'Bestellingen geteld',val:'9.2K'},{name:'Gem. per bestelling',val:'3,1 ✦'}],
+    spendFlow:[{name:'JIMS',val:'6K ✦'},{name:'Colruyt',val:'4K ✦'},{name:'Bio-Planet',val:'3K ✦'}],
+    earnTotal:'28K ✦', spendTotal:'16K ✦',
+    fin:{ earn_pts:'2,8M ✦', earn_eur:'€14.000', spend_pts:'1,6M ✦', spend_eur:'€8.000', netto:'−€6.000', netto_color:'#CC0000', extra_eur:'€12.000', extra_sub:'Gratis levering', totaal:'€18.000', breakdown:[
+      { label:'Bijdrage groepspot (✦ uitgegeven)', amount:'−€14.000', color:'#CC0000' },
+      { label:'Ontvangen groepspot (✦ ingelost)', amount:'+€8.000', color:'#15803D' },
+      { label:'Extra kortingen eigen financiering', amount:'−€12.000', color:'#B45309' },
+      { label:'Nettokost loyalty', amount:'−€18.000', color:'#1A1A1A', bold:true },
+    ]},
+    logoSVG:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect x="24" y="12" width="12" height="36" rx="6" fill="rgba(255,255,255,0.85)"/><rect x="12" y="24" width="36" height="12" rx="6" fill="rgba(255,255,255,0.85)"/></svg>'
+  }
+};
+
+let activeMerk = 'colruyt';
+let supplierOn = false;
+let selectedGoal = 'clv';
+
+// ──────────────────────────────────────────────
+//  SWITCH BRAND
+// ──────────────────────────────────────────────
+function kiesMerk(id) {
+  activeMerk = id;
+  const m = MERKEN[id];
+
+  // CSS vars
+  document.documentElement.style.setProperty('--brand', m.color);
+  document.documentElement.style.setProperty('--brand-pale', m.pale);
+  document.documentElement.style.setProperty('--brand-mid', m.color);
+
+  // Sidebar buttons
+  document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bb-' + id).classList.add('active');
+
+  // Sidebar bg
+  document.getElementById('sidebar').style.background = m.color;
+
+  // Hero
+  document.getElementById('heroBlock').innerHTML = m.logoSVG;
+  document.getElementById('heroBlock').style.background = m.color;
+  document.getElementById('heroInner').style.borderLeftColor = m.color;
+  document.getElementById('heroName').textContent = m.name;
+  document.getElementById('heroSub').textContent = m.sub;
+  document.getElementById('heroStat1').textContent = m.heroStats[0];
+  document.getElementById('heroStat2').textContent = m.heroStats[1];
+  document.getElementById('heroStat3').textContent = m.heroStats[2];
+
+  renderDashboard(m);
+  renderCampagnes(m);
+  renderFlow(m);
+  renderKlanten(m);
+}
+
+// ──────────────────────────────────────────────
+//  RENDER DASHBOARD
+// ──────────────────────────────────────────────
+function renderDashboard(m) {
+  // KPIs
+  document.getElementById('kpi-clv').textContent = m.kpis.clv;
+  document.getElementById('kpi-spend').textContent = m.kpis.spend;
+  document.getElementById('kpi-return').textContent = m.kpis.ret;
+  document.getElementById('kpi-freq').textContent = m.kpis.freq;
+  document.getElementById('kpi-nps').textContent = m.kpis.nps;
+  document.getElementById('kpi-churn').textContent = m.kpis.churn;
+  const trendEls = document.querySelectorAll('.kpi6-trend');
+  m.kpiTrends.forEach((t, i) => {
+    if (trendEls[i]) { trendEls[i].textContent = t; trendEls[i].className = 'kpi6-trend ' + m.kpiTrendTypes[i]; }
+  });
+
+  // Goals
+  document.getElementById('goalsGrid').innerHTML = m.goals.map(g => `
+    <div class="goal-card ${g.focus ? 'focused' : ''}">
+      <div class="goal-header">
+        <div class="goal-title-row">
+          <div class="goal-icon">${g.icon}</div>
+          <div>
+            <div class="goal-name">${g.name}</div>
+            <div class="goal-target">${g.target}</div>
+          </div>
+        </div>
+        <div class="goal-badge ${g.focus ? 'gb-focus' : 'gb-secondary'}">${g.focus ? 'Focus' : 'Secundair'}</div>
+      </div>
+      <div class="goal-progress-row">
+        <div class="goal-prog-bg"><div class="goal-prog-fill" style="width:${g.pct}%"></div></div>
+        <div class="goal-prog-pct">${g.pct}%</div>
+      </div>
+      <div class="goal-campaigns">
+        <span>Campagnes:</span>
+        ${g.campaigns.map(c => `<span class="goal-camp-tag">${c}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  // OBC
+  document.getElementById('obc-budget').textContent = m.obc.budget;
+  document.getElementById('obc-budget-sub').textContent = m.obc.budgetSub;
+  document.getElementById('obc-redemption').textContent = m.obc.redemption;
+  document.getElementById('obc-supplier').textContent = m.obc.supplier;
+  document.getElementById('obc-net').textContent = m.obc.net;
+  document.getElementById('obc-net-sub').textContent = m.obc.netSub;
+  document.getElementById('obc-sup-names').textContent = m.obc.supNames + ' — co-financieren een deel van de campagnekost';
+}
+
+// ──────────────────────────────────────────────
+//  RENDER CAMPAGNES
+// ──────────────────────────────────────────────
+function statusLabel(s) {
+  if (s === 'active') return '<span class="camp-badge cb-active">● Actief</span>';
+  if (s === 'paused') return '<span class="camp-badge cb-paused">⏸ Gepauzeerd</span>';
+  return '<span class="camp-badge cb-draft">○ Concept</span>';
+}
+
+function renderCampagnes(m) {
+  const progress = c => {
+    const pct = Math.round((c.pts_spent / c.pts_budget) * 100);
+    return `<div class="prog-wrap">
+      <div class="prog-labels"><span>Punten besteed</span><span>${(c.pts_spent/1000).toFixed(1)}K / ${(c.pts_budget/1000).toFixed(0)}K ✦</span></div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  };
+  const supBlock = c => c.supplier ? `
+    <div class="camp-supplier">
+      <span>🤝</span>
+      <span class="camp-supplier-text">Co-financiering: ${c.supplier} · ${c.supplier_amount}</span>
+    </div>` : '';
+
+  const bcBlock = c => {
+    const netCost = parseFloat((c.pts_budget * 0.0001 * c.redemption / 100).toFixed(1));
+    const supNum = c.supplier_amount ? parseFloat(c.supplier_amount.replace('€','').replace(',','')) : 0;
+    const net = (c.pts_budget * 0.0001 * c.redemption / 100) - supNum/1000;
+    const roi_num = parseFloat(c.actual_revenue.replace('€','').replace('.','').replace(',','.'));
+    return `<div class="camp-bc">
+      <div class="camp-bc-title">Business case</div>
+      <div class="camp-bc-row"><span class="camp-bc-label">Puntenbudget</span><span class="camp-bc-val">${(c.pts_budget/1000).toFixed(0)}K ✦</span></div>
+      <div class="camp-bc-row"><span class="camp-bc-label">Brutokost</span><span class="camp-bc-val">${c.cost_gross}</span></div>
+      <div class="camp-bc-row"><span class="camp-bc-label">Inlossing</span><span class="camp-bc-val">${c.redemption}%</span></div>
+      ${c.supplier ? `<div class="camp-bc-row"><span class="camp-bc-label">Co-financiering</span><span class="camp-bc-val orange">−${c.supplier_amount}</span></div>` : ''}
+      <div class="camp-bc-row"><span class="camp-bc-label">Gerealiseerde omzet</span><span class="camp-bc-val green">${c.actual_revenue}</span></div>
+      <div class="camp-bc-row"><span class="camp-bc-label">ROI</span><span class="camp-bc-val green">${c.roi}</span></div>
+    </div>`;
+  };
+
+  const partPct = c => Math.round((c.participants / c.target_participants) * 100);
+
+  document.getElementById('campGrid').innerHTML = m.campaigns.map(c => `
+    <div class="camp-card">
+      <div class="camp-accent ${c.status === 'paused' ? 'style="background:#9CA3AF;"' : ''}"></div>
+      <div class="camp-body">
+        <div class="camp-top">
+          <div class="camp-icon">${c.icon}</div>
+          <div class="camp-badges">
+            ${statusLabel(c.status)}
+          </div>
+        </div>
+        <div class="camp-name">${c.name}</div>
+        <div class="camp-desc">${c.desc}</div>
+        <div class="camp-goal-tag">
+          <span class="cgt-icon">🎯</span>
+          <span class="cgt-text">Strategisch doel: ${c.goalLabel}</span>
+        </div>
+        ${supBlock(c)}
+        <div class="camp-impact">
+          <span class="ci-pill">${c.kpi_impact}</span>
+          <span class="ci-pill">${c.kpi2_impact}</span>
+        </div>
+        ${bcBlock(c)}
+        ${progress(c)}
+        <div class="camp-meta">
+          <span>👥 <strong>${(c.participants/1000).toFixed(1)}K</strong> deelnemers</span>
+          <span>🎯 <strong>${partPct(c)}%</strong> van doel</span>
+        </div>
+      </div>
+    </div>
+  `).join('') + `
+    <div class="camp-new" onclick="toonTabDirect('builder')">
+      <div class="cn-plus">+</div>
+      <div class="cn-text">Nieuwe campagne</div>
+      <div class="cn-sub">Met strategisch doel & business case</div>
+    </div>`;
+}
+
+// ──────────────────────────────────────────────
+//  RENDER FLOW
+// ──────────────────────────────────────────────
+function renderFlow(m) {
+  document.getElementById('earnFlow').innerHTML = m.earnFlow.map(f =>
+    `<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted)">${f.name}</span><strong>${f.val}</strong></div>`
+  ).join('');
+  document.getElementById('spendFlow').innerHTML = m.spendFlow.map(f =>
+    `<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted)">${f.name}</span><strong>${f.val}</strong></div>`
+  ).join('');
+  document.getElementById('earnTotal').textContent = m.earnTotal;
+  document.getElementById('spendTotal').textContent = m.spendTotal;
+
+  // Financieel model
+  const f = m.fin;
+  document.getElementById('fin-bijdrage').textContent = f.earn_eur;
+  document.getElementById('fin-bijdrage-sub').textContent = f.earn_pts + ' uitgegeven aan klanten';
+  document.getElementById('fin-ontvangen').textContent = f.spend_eur;
+  document.getElementById('fin-ontvangen-sub').textContent = f.spend_pts + ' ingelost door klanten';
+  document.getElementById('fin-netto').textContent = f.netto;
+  document.getElementById('fin-netto').style.color = f.netto_color;
+  document.getElementById('fin-netto-sub').textContent = 'bijdrage min ontvangst (groepspot)';
+  document.getElementById('fin-extra').textContent = f.extra_eur;
+  document.getElementById('fin-extra-sub').textContent = f.extra_sub;
+
+  // Cost breakdown
+  document.getElementById('costBreakdown').innerHTML = f.breakdown.map(b => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;margin-bottom:6px;background:var(--bg);border:1px solid var(--border);">
+      <div style="font-size:12px;color:var(--text-mid);">${b.label}</div>
+      <div style="font-size:${b.bold?'15':'13'}px;font-weight:${b.bold?900:700};color:${b.color};">${b.amount}</div>
+    </div>
+  `).join('') + `
+    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:8px;background:#EFF6FF;border:1px solid #BFDBFE;font-size:12px;color:#1D4ED8;">
+      <span>💡</span> <span>Totale nettokost als % van omzet: <strong>${((parseInt(f.totaal.replace(/[^0-9]/g,'')) / 1000000) * 100).toFixed(2)}%</strong> — benchmark voor loyalty: 1–3% van omzet</span>
+    </div>`;
+}
+
+// ──────────────────────────────────────────────
+//  TAB SWITCHING
+// ──────────────────────────────────────────────
+function toonTab(id, btn) {
+  ['klanten','dashboard','campagnes','builder','flow'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === id ? '' : 'none';
+  });
+  document.querySelectorAll('.tn-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sb-nav-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+function toonTabDirect(id) {
+  const tabs = document.querySelectorAll('.tn-tab');
+  const map = { klanten:0, dashboard:1, campagnes:2, builder:3, flow:4 };
+  toonTab(id, tabs[map[id]]);
+}
+
+// ──────────────────────────────────────────────
+//  RENDER KLANTINZICHTEN
+// ──────────────────────────────────────────────
+const SEGMENTEN = {
+  colruyt: [
+    { icon:'🏆', name:'Loyale kopers', desc:'Wekelijks, hoge besteding, volledig assortiment', count:'12.400', clv:'€347', kans:'hoog', nudge:{ seg:'Loyale koper', brand:'JIMS', brandColor:'#00B4B8', signal:'Koopt 3×/week bij Colruyt maar géén fitness/health-producten. Hoge CLV-potentie voor lifestyle-uitbreiding.', notifIcon:'💪', notifTitle:'JIMS Fitness — speciaal voor jou', notifText:'Jij bent een van onze beste klanten. Als extra bedankt: probeer JIMS 30 dagen voor €1 — jouw eerste stap naar een actievere levensstijl.', cta:'Activeer dagpas →', reach:'12.4K', openRate:'38%', conv:'8,2%' } },
+    { icon:'🥖', name:'Bakker-beginners', desc:'Koopt brood maar ontdekt versafdeling nog niet', count:'8.200', clv:'€198', kans:'hoog', nudge:{ seg:'Bakker-beginner', brand:'Colruyt Bakker', brandColor:'#CC0000', signal:'Koopt verpakt brood, 0 bezoeken aan versafdeling de afgelopen 60 dagen.', notifIcon:'🥐', notifTitle:'Verse croissants — vandaag €0 ✦', notifText:'Sabine, wist je dat onze bakker elke ochtend om 7u verse croissants bakt? Eerste aankoop = 50 Xtratjes cadeau.', cta:'Ontdek de versafdeling →', reach:'8.2K', openRate:'44%', conv:'12%' } },
+    { icon:'😴', name:'Slapende klanten', desc:'Geen aankoop in 60+ dagen, churn-risico', count:'4.200', clv:'€84', kans:'med', nudge:{ seg:'Slapende klant', brand:'OKay', brandColor:'#0066B3', signal:'Laatste aankoop 67 dagen geleden. Woont op 800m van OKay-vestiging — buurtbezoek als re-activatiehefboom.', notifIcon:'👋', notifTitle:'We missen je — speciaal aanbod', notifText:'Het is al even geleden! Kom terug en verdien 100 bonus-Xtratjes op je eerste aankoop. Of probeer de OKay in jouw buurt.', cta:'Claim mijn bonus →', reach:'4.2K', openRate:'29%', conv:'5,4%' } },
+    { icon:'🌱', name:'Groene kopers', desc:'Bio, duurzaam, milieubewust aankooppatroon', count:'6.800', clv:'€268', kans:'hoog', nudge:{ seg:'Groene koper', brand:'Bio-Planet', brandColor:'#15803D', signal:'Koopt enkel bio-producten bij Colruyt. Heeft Impact-acties (boom planten) uitgevoerd — sterke groene identiteit.', notifIcon:'🌿', notifTitle:'Bio-Planet — jouw next step', notifText:'Jij kiest al bewust bij Colruyt. Bij Bio-Planet vind je 100% bio assortiment + plant een boom bij elke €50 aankoop.', cta:'Ontdek Bio-Planet →', reach:'6.8K', openRate:'51%', conv:'14%' } },
+    { icon:'💊', name:'Gezondheid-focus', desc:'Koopt regelmatig gezondheidsproducten, supplementen', count:'5.100', clv:'€224', kans:'hoog', nudge:{ seg:'Gezondheid-focus', brand:'Newpharma', brandColor:'#003087', signal:'Koopt vitaminecomplexen en gezondheidssupplementen. Geen online apotheek-gedrag gedetecteerd — uplift-kans.', notifIcon:'💊', notifTitle:'Newpharma — jouw online apotheek', notifText:'Jij let goed op je gezondheid. Bij Newpharma betaal je tot 40% minder op jouw favoriete supplementen. Gratis levering via Xtra.', cta:'Bekijk mijn aanbod →', reach:'5.1K', openRate:'42%', conv:'11%' } },
+    { icon:'🍷', name:'Premiumkopers', desc:'Hoge besteding, wijn & specialiteiten', count:'3.800', clv:'€412', kans:'med', nudge:{ seg:'Premiumkoper', brand:'JIMS', brandColor:'#00B4B8', signal:'Besteedt gemiddeld €148/week. Koopt premium food. Nog geen fitness-profiel — hoge CLV-waarde voor cross-sell.', notifIcon:'🏋️', notifTitle:'Exclusief voor premium Xtra-leden', notifText:'Als een van onze topklanten krijg jij toegang tot JIMS Premium tegen Xtra-ledenprijs. Train onbeperkt voor €29/maand.', cta:'Bekijk mijn voordeel →', reach:'3.8K', openRate:'35%', conv:'7%' } }
+  ],
+  okay: [
+    { icon:'🏘️', name:'Buurttrouwen', desc:'Dagelijks in de buurt, hoge bezoekfrequentie', count:'8.400', clv:'€214', kans:'hoog', nudge:{ seg:'Buurttrouwe klant', brand:'JIMS', brandColor:'#00B4B8', signal:'Bezoekt OKay 5×/week. Weinig cross-merk activiteit. Woont nabij JIMS-vestiging.', notifIcon:'💪', notifTitle:'Sport in jouw buurt — JIMS', notifText:'Jij bent dagelijks in de buurt. JIMS heeft een vestiging op 400m van jouw OKay! Eerste maand gratis via Xtra.', cta:'Plan mijn proefles →', reach:'8.4K', openRate:'41%', conv:'9%' } },
+    { icon:'🍎', name:'Vers-kopers', desc:'Focust op verse groenten en fruit', count:'5.600', clv:'€168', kans:'hoog', nudge:{ seg:'Vers-koper', brand:'Bio-Planet', brandColor:'#15803D', signal:'Koopt wekelijks vers fruit & groenten. 0 bio-aankopen gedetecteerd — bewust eten als upgrade-pad.', notifIcon:'🌿', notifTitle:'Nog verser — Bio-Planet', notifText:'Jij kiest al voor vers. Bij Bio-Planet is alles 100% biologisch geteeld. Eerste aankoop: 80 bonus-Xtratjes cadeau.', cta:'Ontdek bio →', reach:'5.6K', openRate:'48%', conv:'13%' } },
+    { icon:'😴', name:'Slapende buurtklanten', desc:'Geen bezoek in 45+ dagen', count:'2.100', clv:'€72', kans:'med', nudge:{ seg:'Slapende buurtklant', brand:'OKay', brandColor:'#0066B3', signal:'Laatste bezoek 52 dagen geleden. Woont 300m van winkel — re-activatie via buurtpromotie.', notifIcon:'👋', notifTitle:'Je buurt-OKay mist je!', notifText:'Kom terug naar jouw buurt-OKay en verdien 75 bonus-Xtratjes. Geldig deze week.', cta:'Claim mijn bonus →', reach:'2.1K', openRate:'32%', conv:'6%' } }
+  ],
+  bio: [
+    { icon:'🌿', name:'Hardcore bio-kopers', desc:'100% bio, hoog engagement, hoge CLV', count:'4.200', clv:'€398', kans:'hoog', nudge:{ seg:'Hardcore bio', brand:'Newpharma', brandColor:'#003087', signal:'Koopt uitsluitend bio. Heeft groen profiel + Impact-boom-actie. Supplementen nog niet via Newpharma.', notifIcon:'🌱', notifTitle:'Newpharma — bio supplements', notifText:'Jij kiest bewust voor bio. Newpharma heeft een volledig bio-supplement assortiment. Gratis levering via jouw Xtra-account.', cta:'Ontdek bio-supplementen →', reach:'4.2K', openRate:'55%', conv:'16%' } },
+    { icon:'🌱', name:'Bio-ontdekkers', desc:'Recent gestart, groeiende interesse', count:'3.400', clv:'€214', kans:'hoog', nudge:{ seg:'Bio-ontdekker', brand:'Bio-Planet', brandColor:'#15803D', signal:'Begonnen met bio-aankopen de afgelopen 90 dagen. Nog beperkte categoriekennis — expansiepotentieel.', notifIcon:'🥦', notifTitle:'Jij bent al groen bezig!', notifText:'Ontdek nog meer bio-categorieën bij Bio-Planet: van groenten tot verzorging. 100 Xtratjes bij je eerste uitbreiding.', cta:'Verken nieuw assortiment →', reach:'3.4K', openRate:'49%', conv:'14%' } }
+  ],
+  jims: [
+    { icon:'💪', name:'Power-leden', desc:'Hoge trainingsfrequentie, lange abonnementstijd', count:'6.200', clv:'€520', kans:'hoog', nudge:{ seg:'Power-lid', brand:'Newpharma', brandColor:'#003087', signal:'Traint 4×/week. Geen supplement-aankopen via Xtra gedetecteerd — hoog uplift-potentieel voor Newpharma.', notifIcon:'🏋️', notifTitle:'Jij traint hard — Newpharma', notifText:'Voor serieuze sporters: Newpharma heeft proteïne, creatine en herstelproducten aan Xtra-ledenprijs. Gratis levering.', cta:'Bekijk mijn sport-aanbod →', reach:'6.2K', openRate:'46%', conv:'15%' } },
+    { icon:'🌅', name:'Ochtendtrainers', desc:'Traint voor 8u, gezonde routines', count:'4.800', clv:'€448', kans:'hoog', nudge:{ seg:'Ochtendtrainer', brand:'Bio-Planet', brandColor:'#15803D', signal:'Check-ins voornamelijk 6–8u. Koopt geen ontbijt/voedingsproducten via Xtra. Gezonde routine = bio-kans.', notifIcon:'🌿', notifTitle:'Na je training — Bio-Planet', notifText:'Jij start de dag gezond. Bio-Planet heeft verse smoothies, bio-yoghurt en energierepen voor na de training. 50 Xtratjes op je eerste bestelling.', cta:'Ontdek mijn ochtendpakket →', reach:'4.8K', openRate:'52%', conv:'13%' } },
+    { icon:'📉', name:'Verloop-risico', desc:'Dalende trainingsfrequentie, dreigt te stoppen', count:'1.800', clv:'€180', kans:'med', nudge:{ seg:'Verloop-risico', brand:'JIMS', brandColor:'#00B4B8', signal:'Trainingsfrequentie gedaald van 3,2×/week naar 0,8×/week de afgelopen 4 weken.', notifIcon:'🔥', notifTitle:'Kom terug — JIMS mist jou', notifText:'Het is wat stiller geweest. Start opnieuw met een 14-daagse motivatie-challenge en verdien 200 Xtratjes bij 8 check-ins.', cta:'Start mijn comeback →', reach:'1.8K', openRate:'38%', conv:'11%' } }
+  ],
+  newpharma: [
+    { icon:'💊', name:'Gezondheids-loyalen', desc:'Regelmatige apotheekaankopen, hoge loyaliteit', count:'3.200', clv:'€248', kans:'hoog', nudge:{ seg:'Gezondheids-loyaal', brand:'JIMS', brandColor:'#00B4B8', signal:'Koopt maandelijks supplementen. Geen sport-profiel gedetecteerd — preventieve gezondheid als ingang.', notifIcon:'🏃', notifTitle:'Beweging = gezondheid — JIMS', notifText:'Jij neemt al goed voor jezelf. Wist je dat beweging jouw supplementen 2× zo effectief maakt? JIMS dagpas voor €4 via Xtra.', cta:'Probeer JIMS vandaag →', reach:'3.2K', openRate:'40%', conv:'9%' } },
+    { icon:'🌿', name:'Plantaardig-georiënteerd', desc:'Bio-supplementen, plantaardige producten', count:'2.400', clv:'€196', kans:'hoog', nudge:{ seg:'Plantaardig-georiënteerd', brand:'Bio-Planet', brandColor:'#15803D', signal:'Koopt plantaardige supplementen en bio-geneesmiddelen. Bio-Planet-klantenbestand nog niet bereikt.', notifIcon:'🌱', notifTitle:'Puur plantaardig — Bio-Planet', notifText:'Jij kiest al voor plantaardig. Bio-Planet heeft het grootste biologische assortiment van België. Gratis levering via jouw Xtra-account.', cta:'Ontdek Bio-Planet →', reach:'2.4K', openRate:'53%', conv:'17%' } }
+  ]
+};
+
+function renderKlanten(m) {
+  const id = activeMerk;
+  document.getElementById('ki-title').textContent = 'Klantinzichten — ' + m.name;
+  document.getElementById('ki-actief').textContent = m.kpis ? m.earnFlow[0].val : '—';
+
+  const segs = SEGMENTEN[id] || [];
+  document.getElementById('segList').innerHTML = segs.map((s, i) => `
+    <div class="seg-row">
+      <div class="seg-icon">${s.icon}</div>
+      <div class="seg-info">
+        <div class="seg-name">${s.name}</div>
+        <div class="seg-desc">${s.desc}</div>
+      </div>
+      <div class="seg-count">
+        <div class="seg-count-val">${s.count}</div>
+        <div class="seg-count-lab">klanten</div>
+      </div>
+      <div class="seg-clv">
+        <div class="seg-clv-val">${s.clv}</div>
+        <div class="seg-clv-lab">gem. CLV</div>
+      </div>
+      <div class="seg-kans">
+        <div class="seg-kans-label">Nudge-kans</div>
+        <span class="seg-kans-pill ${s.kans === 'hoog' ? 'kp-high' : s.kans === 'med' ? 'kp-med' : 'kp-low'}">${s.kans === 'hoog' ? '● Hoog' : s.kans === 'med' ? '● Midden' : '● Laag'}</span>
+      </div>
+      <div class="seg-nudge-col">
+        <button class="seg-nudge-btn" onclick="scrollToNudge(${i})">🎯 Stuur nudge naar ${s.nudge.brand}</button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('nudgeCardsGrid').innerHTML = segs.map((s, i) => {
+    const n = s.nudge;
+    return `
+    <div class="nudge-card-item" id="nudge-card-${i}">
+      <div class="nci-header">
+        <span class="nci-seg-badge">${n.seg}</span>
+        <span class="nci-arrow">→</span>
+        <span class="nci-brand-badge" style="background:${n.brandColor}22;color:${n.brandColor};">${n.brand}</span>
+      </div>
+      <div class="nci-signal">📡 <strong>Signaal:</strong> ${n.signal}</div>
+      <div class="nci-notif">
+        <div class="nci-notif-icon">${n.notifIcon}</div>
+        <div class="nci-notif-body">
+          <div class="nci-notif-title">${n.notifTitle}</div>
+          <div class="nci-notif-text">${n.notifText}</div>
+          <div class="nci-cta">${n.cta}</div>
+        </div>
+      </div>
+      <div class="nci-metrics">
+        <div class="nci-metric"><div class="nci-metric-val">${n.reach}</div><div class="nci-metric-lab">Bereik</div></div>
+        <div class="nci-metric"><div class="nci-metric-val">${n.openRate}</div><div class="nci-metric-lab">Verwacht open%</div></div>
+        <div class="nci-metric"><div class="nci-metric-val">${n.conv}</div><div class="nci-metric-lab">Verwachte conv.</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function scrollToNudge(i) {
+  const el = document.getElementById('nudge-card-' + i);
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.border = '1.5px solid #A78BFA'; setTimeout(() => { el.style.border = '1px solid rgba(255,255,255,0.12)'; }, 2000); }
+}
+
+// ──────────────────────────────────────────────
+//  BUILDER FORM
+// ──────────────────────────────────────────────
+function selGoal(el) {
+  document.querySelectorAll('.goal-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedGoal = el.dataset.goal;
+  const labels = { clv:'CLV stijging', freq:'Aankoopfrequentie', spend:'Gem. besteding', retention:'Churn / retentie', acquisition:'Nieuwe klanten', crossbrand:'Cross-merk besteding' };
+  document.getElementById('prev-kpi1-name').textContent = labels[selectedGoal] || 'KPI-impact';
+  updatePreview();
+}
+
+function selType(el) {
+  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function toggleSupplier() {
+  supplierOn = !supplierOn;
+  const tog = document.getElementById('supplierToggle');
+  const fields = document.getElementById('supplierFields');
+  tog.classList.toggle('on', supplierOn);
+  fields.classList.toggle('open', supplierOn);
+  updatePreview();
+}
+
+function fmt(n) { return n >= 1000 ? (n/1000).toFixed(1) + 'K' : n.toString(); }
+function fmtEur(n) { return '€' + Math.round(n).toLocaleString('nl-BE'); }
+
+function updatePreview() {
+  const pts = parseFloat(document.getElementById('inp-pts').value) || 0;
+  const costRate = parseFloat(document.getElementById('inp-cost-rate').value) || 0.10;
+  const redPct = parseFloat(document.getElementById('inp-redemption').value) || 72;
+  const audience = parseFloat(document.getElementById('inp-audience').value) || 0;
+  const partPct = parseFloat(document.getElementById('inp-participation').value) || 35;
+  const revenue = parseFloat(document.getElementById('inp-revenue').value) || 0;
+  const supAmount = supplierOn ? (parseFloat(document.getElementById('inp-sup-amount').value) || 0) : 0;
+  const kpiImpact = document.getElementById('inp-kpi-impact').value;
+  const kpiImpact2 = document.getElementById('inp-kpi-impact2').value;
+
+  const brutoCost = pts * costRate / 1000;
+  const netCost = brutoCost * redPct / 100;
+  const finalCost = Math.max(0, netCost - supAmount);
+  const participants = Math.round(audience * partPct / 100);
+  const roi = finalCost > 0 ? Math.round((revenue / finalCost) * 100) : 0;
+
+  document.getElementById('prev-pts').textContent = pts ? fmt(pts) + ' ✦' : '—';
+  document.getElementById('prev-cost').textContent = brutoCost ? fmtEur(brutoCost) : '—';
+  document.getElementById('prev-red-pct').textContent = redPct;
+  document.getElementById('prev-net-cost').textContent = netCost ? fmtEur(netCost) : '—';
+  document.getElementById('prev-sup').textContent = supAmount ? '−' + fmtEur(supAmount) : '—';
+  document.getElementById('prev-total').textContent = finalCost ? fmtEur(finalCost) : '—';
+  document.getElementById('prev-total').className = finalCost < (revenue * 0.5) ? 'green' : 'red';
+  document.getElementById('prev-audience').textContent = audience ? fmt(audience) : '—';
+  document.getElementById('prev-participants').textContent = participants ? fmt(participants) : '—';
+  document.getElementById('prev-revenue').textContent = revenue ? fmtEur(revenue) : '—';
+  document.getElementById('prev-roi').textContent = roi ? roi + '%' : '—';
+  document.getElementById('prev-roi').className = roi >= 100 ? 'green' : 'red';
+  document.getElementById('prev-kpi1-val').textContent = kpiImpact || '—';
+  if (kpiImpact2) {
+    document.getElementById('prev-kpi2-row').style.display = '';
+    document.getElementById('prev-kpi2-name').textContent = 'Secundair effect';
+    document.getElementById('prev-kpi2-val').textContent = kpiImpact2;
+  } else {
+    document.getElementById('prev-kpi2-row').style.display = 'none';
+  }
+}
+
+function submitCampagne() {
+  const name = document.getElementById('inp-name').value;
+  if (!name) { alert('Geef je campagne een naam.'); return; }
+  alert('✓ Campagne "' + name + '" opgeslagen!\n\nIn een productieomgeving zou dit naar het CG loyalty-platform worden gestuurd.');
+  toonTabDirect('campagnes');
+}
+
+// ──────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────
+kiesMerk('colruyt');
+// Start on Klantinzichten tab
+document.getElementById('tab-dashboard').style.display = 'none';
+</script>
+</body>
+</html>

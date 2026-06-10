@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoe werkt het voor de klant — Xtra Loyalty</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #F5F4F1; --white: #FFFFFF; --border: #E0DDD8;
+    --text: #1A1A1A; --text-mid: #4A4A4A; --text-muted: #888;
+    --xtra: #6D28D9; --xtra-pale: #F3EFFC;
+    --gold: #B45309; --gold-bg: #FEF3C7;
+    --colruyt: #CC0000; --okay: #E84010; --bioplanet: #2E7D32;
+    --jims: #C9A227; --newpharma: #0055B3;
+    --green: #15803D; --green-bg: #DCFCE7;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 40px; height: 56px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-back { color: var(--text-muted); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .nav-back:hover { color: var(--text); }
+  .nav-sep { color: var(--border); }
+  .nav-cur { font-weight: 700; font-size: 14px; color: var(--text); }
+  .nav-tag { margin-left: auto; background: var(--xtra-pale); color: var(--xtra); border: 1px solid rgba(109,40,217,0.18); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+
+  /* HERO */
+  .hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 52px 40px 44px; }
+  .hero-inner { max-width: 700px; }
+  .hero-label { display: inline-block; background: var(--xtra-pale); color: var(--xtra); border: 1px solid rgba(109,40,217,0.18); padding: 5px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 20px; }
+  .hero h1 { font-size: 36px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 12px; line-height: 1.1; }
+  .hero p { color: var(--text-mid); font-size: 16px; line-height: 1.65; max-width: 560px; }
+
+  /* SCENARIO TABS */
+  .scenario-bar {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 40px; display: flex; gap: 0; overflow-x: auto;
+  }
+  .sc-tab {
+    padding: 14px 22px; font-size: 14px; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
+    transition: all 0.2s; background: none; border-left: none; border-right: none; border-top: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .sc-tab:hover { color: var(--text); }
+  .sc-tab.active { color: var(--xtra); border-bottom-color: var(--xtra); }
+
+  /* CONTENT */
+  .content { max-width: 1080px; margin: 0 auto; padding: 40px; }
+
+  /* Scenario intro */
+  .sc-intro {
+    background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px 24px; margin-bottom: 36px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .sc-intro-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .sc-intro h3 { font-size: 16px; font-weight: 800; margin-bottom: 5px; }
+  .sc-intro p { font-size: 14px; color: var(--text-mid); line-height: 1.55; }
+
+  /* Journey steps — timeline */
+  .steps { display: flex; flex-direction: column; }
+  .step { display: grid; grid-template-columns: 64px 1fr; margin-bottom: 8px; }
+  .step-left { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+  .step-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; border: 2px solid; background: var(--white);
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .step-line { flex: 1; width: 2px; margin: 6px 0; min-height: 40px; }
+  .step-right { padding: 0 0 0 8px; }
+
+  /* Step meta */
+  .step-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; padding-top: 8px; }
+  .step-num { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+  .step-loc { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; }
+  .step-channel { font-size: 11px; color: var(--text-muted); background: var(--bg); padding: 3px 9px; border-radius: 4px; }
+
+  /* VIZ ROW — alternating layout */
+  .viz-row {
+    display: flex; gap: 28px; align-items: center; margin-bottom: 32px;
+    padding-bottom: 32px; border-bottom: 1px solid var(--border);
+  }
+  .viz-row.viz-right { flex-direction: row-reverse; }
+  .viz-row:last-child { border-bottom: none; }
+
+  .viz-panel {
+    flex: 0 0 320px; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+    background: var(--white);
+  }
+  .viz-panel svg { display: block; width: 100%; }
+
+  .viz-text { flex: 1; min-width: 220px; }
+  .viz-text h3 { font-size: 19px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.2px; line-height: 1.25; }
+  .viz-text p { font-size: 14px; color: var(--text-mid); line-height: 1.65; margin-bottom: 16px; }
+
+  /* Brand colors for steps */
+  .c-colruyt { border-color: var(--colruyt); }
+  .l-colruyt { background: rgba(204,0,0,0.12); }
+  .loc-colruyt { background: rgba(204,0,0,0.08); color: var(--colruyt); }
+  .c-jims { border-color: var(--jims); }
+  .l-jims { background: rgba(201,162,39,0.15); }
+  .loc-jims { background: rgba(201,162,39,0.1); color: #8B6914; }
+  .c-xtra { border-color: var(--xtra); }
+  .l-xtra { background: rgba(109,40,217,0.12); }
+  .loc-xtra { background: var(--xtra-pale); color: var(--xtra); }
+  .c-newpharma { border-color: var(--newpharma); }
+  .l-newpharma { background: rgba(0,85,179,0.12); }
+  .loc-newpharma { background: rgba(0,85,179,0.08); color: var(--newpharma); }
+  .c-okay { border-color: var(--okay); }
+  .l-okay { background: rgba(232,64,16,0.12); }
+  .loc-okay { background: rgba(232,64,16,0.08); color: var(--okay); }
+  .c-bio { border-color: var(--bioplanet); }
+  .l-bio { background: rgba(46,125,50,0.12); }
+  .loc-bio { background: rgba(46,125,50,0.08); color: var(--bioplanet); }
+
+  /* Touchpoints */
+  .touchpoints { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tp { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-width: 150px; }
+  .tp.physical { border-color: #FDE68A; background: #FFFBEB; }
+  .tp.digital { border-color: rgba(109,40,217,0.2); background: var(--xtra-pale); }
+  .tp-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+  .tp.physical .tp-type { color: var(--gold); }
+  .tp.digital .tp-type { color: var(--xtra); }
+  .tp-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .tp-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* Xtratjes badge */
+  .xtra-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; margin-bottom: 14px;
+  }
+  .xb-earn { background: var(--gold-bg); border: 1px solid #FDE68A; color: var(--gold); }
+  .xb-spend { background: var(--xtra-pale); border: 1px solid rgba(109,40,217,0.2); color: var(--xtra); }
+  .xb-balance { background: var(--green-bg); border: 1px solid #BBF7D0; color: var(--green); }
+
+  /* Summary box */
+  .summary-box {
+    background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; margin-top: 8px;
+  }
+  .sum-title { font-size: 14px; font-weight: 800; color: var(--xtra); margin-bottom: 16px; }
+  .sum-flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sum-step { text-align: center; }
+  .sum-icon { font-size: 22px; margin-bottom: 4px; }
+  .sum-name { font-size: 11px; color: var(--text-muted); }
+  .sum-val { font-size: 12px; font-weight: 700; color: var(--gold); }
+  .sum-arrow { color: var(--border); font-size: 16px; }
+
+  .sc { display: none; }
+  .sc.active { display: block; }
+
+  @media (max-width: 800px) {
+    .content { padding: 20px; }
+    .hero { padding: 32px 20px; }
+    nav { padding: 0 20px; }
+    .viz-row, .viz-row.viz-right { flex-direction: column; }
+    .viz-panel { flex: none; width: 100%; }
+    .step { grid-template-columns: 48px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← Terug</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cur">🛍️ Voor de klant</span>
+  <div class="nav-tag">Perspectief 1</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">🛍️ Perspectief 1 — De klant</div>
+    <h1>Spaar bij het ene merk.<br>Gebruik bij het andere.</h1>
+    <p>Zo simpel is het. De klant spaart Xtratjes waar hij graag winkelt, en geeft ze uit waar hij dat zelf kiest. Alles via één kaart of app. Kies een voorbeeld om te zien hoe dat er in de praktijk uitziet.</p>
+  </div>
+</div>
+
+<div class="scenario-bar">
+  <button class="sc-tab active" onclick="toon('s3', this)">🏆 Tom haalt zijn Gold-status binnen</button>
+  <button class="sc-tab" onclick="toon('s4', this)">🥖 Marie ontdekt de warme bakker bij Colruyt</button>
+  <button class="sc-tab" onclick="toon('s5', this)">🌿 Lena spaart voor een gratis Yoboo coaching</button>
+  <button class="sc-tab" onclick="toon('s6', this)">🎯 Hyperpersonalisatie — wie krijgt wat?</button>
+  <button class="sc-tab" onclick="toon('s1', this)">🛒 Alex spaart brood bij Colruyt, sport bij JIMS</button>
+  <button class="sc-tab" onclick="toon('s2', this)">💊 Sara haalt voordeel op Newpharma via OKay</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 1 — Alex
+════════════════════════════════════════════════════ -->
+<div id="s1" class="sc">
+
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🍞</div>
+    <div>
+      <h3>Alex koopt brood bij Colruyt, sport gratis bij JIMS</h3>
+      <p>Na 5 broden bij Colruyt krijgt Alex 10 Xtratjes. Die gebruikt hij om zijn JIMS-dagpas te betalen. Gewoon via zijn app — geen gedoe.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- STAP 1 — Broodrek (viz links) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-colruyt">🏪</div>
+        <div class="step-line l-colruyt"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 1</span>
+          <span class="step-loc loc-colruyt">Colruyt Laagste Prijzen</span>
+          <span class="step-channel">📍 In de winkel</span>
+        </div>
+        <div class="viz-row">
+          <!-- VIZ: broodrek met affiche -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Store background -->
+              <rect width="320" height="240" fill="#F0EDE8"/>
+              <!-- Floor -->
+              <rect y="200" width="320" height="40" fill="#D8D0C8"/>
+              <!-- Floor line -->
+              <rect y="200" width="320" height="2" fill="#C8BEB4"/>
+
+              <!-- Shelf unit back panel -->
+              <rect x="30" y="60" width="200" height="142" rx="3" fill="#C8C0B4"/>
+              <!-- Shelf unit sides -->
+              <rect x="28" y="58" width="6" height="144" fill="#B0A898"/>
+              <rect x="226" y="58" width="6" height="144" fill="#B0A898"/>
+
+              <!-- Shelf plank 1 (bottom) -->
+              <rect x="28" y="175" width="206" height="10" rx="2" fill="#A09080"/>
+              <!-- Bread row 1 -->
+              <rect x="38" y="148" width="36" height="24" rx="8" fill="#C8862A"/>
+              <rect x="42" y="150" width="28" height="8" rx="4" fill="#D4982E"/>
+              <ellipse cx="56" cy="148" rx="13" ry="5" fill="#B87020"/>
+              <rect x="84" y="148" width="36" height="24" rx="8" fill="#C8862A"/>
+              <rect x="88" y="150" width="28" height="8" rx="4" fill="#D4982E"/>
+              <ellipse cx="102" cy="148" rx="13" ry="5" fill="#B87020"/>
+              <rect x="130" y="148" width="36" height="24" rx="8" fill="#C8862A"/>
+              <rect x="134" y="150" width="28" height="8" rx="4" fill="#D4982E"/>
+              <ellipse cx="148" cy="148" rx="13" ry="5" fill="#B87020"/>
+              <rect x="176" y="148" width="36" height="24" rx="8" fill="#C8862A"/>
+              <rect x="180" y="150" width="28" height="8" rx="4" fill="#D4982E"/>
+              <ellipse cx="194" cy="148" rx="13" ry="5" fill="#B87020"/>
+
+              <!-- Shelf plank 2 (middle) -->
+              <rect x="28" y="118" width="206" height="10" rx="2" fill="#A09080"/>
+              <!-- Bread row 2 — baguettes -->
+              <rect x="40" y="90" width="46" height="24" rx="6" fill="#C8782A" transform="rotate(-5,63,102)"/>
+              <rect x="43" y="93" width="40" height="8" rx="4" fill="#D48A30" transform="rotate(-5,63,97)"/>
+              <rect x="96" y="92" width="46" height="24" rx="6" fill="#C8782A" transform="rotate(3,119,104)"/>
+              <rect x="99" y="95" width="40" height="8" rx="4" fill="#D48A30" transform="rotate(3,119,99)"/>
+              <rect x="150" y="91" width="46" height="24" rx="6" fill="#C8782A" transform="rotate(-3,173,103)"/>
+              <rect x="153" y="94" width="40" height="8" rx="4" fill="#D48A30" transform="rotate(-3,173,98)"/>
+
+              <!-- Shelf top -->
+              <rect x="28" y="58" width="206" height="10" rx="2" fill="#A09080"/>
+
+              <!-- Price tags on shelf edge -->
+              <rect x="36" y="183" width="28" height="14" rx="2" fill="white" stroke="#E0D8D0" stroke-width="0.5"/>
+              <text x="50" y="193" text-anchor="middle" font-size="7" fill="#888" font-family="Inter,sans-serif">€1.89</text>
+              <rect x="82" y="183" width="28" height="14" rx="2" fill="white" stroke="#E0D8D0" stroke-width="0.5"/>
+              <text x="96" y="193" text-anchor="middle" font-size="7" fill="#888" font-family="Inter,sans-serif">€2.29</text>
+              <rect x="128" y="183" width="28" height="14" rx="2" fill="white" stroke="#E0D8D0" stroke-width="0.5"/>
+              <text x="142" y="193" text-anchor="middle" font-size="7" fill="#888" font-family="Inter,sans-serif">€1.99</text>
+
+              <!-- AFFICHE / PROMOTIONAL SIGN hanging -->
+              <!-- Sign wire/string -->
+              <line x1="248" y1="50" x2="255" y2="72" stroke="#B0A898" stroke-width="1.5"/>
+              <line x1="295" y1="50" x2="290" y2="72" stroke="#B0A898" stroke-width="1.5"/>
+              <!-- Sign card -->
+              <rect x="244" y="72" width="58" height="88" rx="6" fill="#CC0000"/>
+              <rect x="247" y="75" width="52" height="82" rx="4" fill="#CC0000" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+              <!-- Top white band -->
+              <rect x="247" y="75" width="52" height="18" rx="4" fill="rgba(0,0,0,0.15)"/>
+              <text x="273" y="88" text-anchor="middle" font-size="8.5" font-weight="900" fill="white" font-family="Inter,sans-serif">COLRUYT</text>
+
+              <!-- Sign body -->
+              <text x="273" y="105" text-anchor="middle" font-size="7" font-weight="700" fill="white" font-family="Inter,sans-serif">Koop 5</text>
+              <text x="273" y="114" text-anchor="middle" font-size="7" font-weight="700" fill="white" font-family="Inter,sans-serif">broden</text>
+
+              <!-- Arrow divider -->
+              <rect x="253" y="117" width="40" height="1" fill="rgba(255,255,255,0.3)"/>
+
+              <!-- Xtra reward section -->
+              <rect x="249" y="120" width="44" height="28" rx="4" fill="#6D28D9"/>
+              <text x="271" y="132" text-anchor="middle" font-size="7.5" font-weight="900" fill="white" font-family="Inter,sans-serif">10</text>
+              <text x="271" y="141" text-anchor="middle" font-size="6" font-weight="700" fill="rgba(255,255,255,0.85)" font-family="Inter,sans-serif">Xtratjes ✦</text>
+
+              <!-- QR code area -->
+              <rect x="253" y="152" width="40" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+              <text x="273" y="155.5" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">Scan QR-code →</text>
+
+              <!-- Mini QR code representation -->
+              <rect x="259" y="157" width="28" height="28" rx="2" fill="white"/>
+              <rect x="261" y="159" width="7" height="7" rx="1" fill="#1A1A1A"/>
+              <rect x="270" y="159" width="7" height="7" rx="1" fill="#1A1A1A"/>
+              <rect x="261" y="168" width="7" height="7" rx="1" fill="#1A1A1A"/>
+              <rect x="270" y="159" width="3" height="3" rx="0.5" fill="white"/>
+              <rect x="263" y="161" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="272" y="161" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="263" y="170" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="270" y="168" width="7" height="7" rx="1" fill="#6D28D9"/>
+              <text x="273.5" y="174" text-anchor="middle" font-size="5.5" font-weight="900" fill="white" font-family="Inter,sans-serif">X</text>
+
+              <!-- Person silhouette looking at shelf -->
+              <ellipse cx="18" cy="175" rx="7" ry="7" fill="#D4C8BC"/>
+              <rect x="11" y="183" width="14" height="18" rx="4" fill="#6D28D9"/>
+              <rect x="9" y="185" width="5" height="12" rx="2.5" fill="#6D28D9"/>
+              <rect x="22" y="185" width="5" height="12" rx="2.5" fill="#6D28D9"/>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Alex ziet de actie hangen bij het broodrek</h3>
+            <p>Een opvallend bordje aan het rek: <em>"Koop 5 broden — krijg 10 Xtratjes cadeau. Te gebruiken bij JIMS, Newpharma en meer."</em> Alex scant de QR-code en ziet de actie meteen in zijn Colruyt-app staan.</p>
+            <div class="touchpoints">
+              <div class="tp physical">
+                <div class="tp-type">📍 In de winkel</div>
+                <div class="tp-name">Rekbordje</div>
+                <div class="tp-desc">Xtra-actie met QR-code. Duidelijk, zichtbaar, recht op het product.</div>
+              </div>
+              <div class="tp digital">
+                <div class="tp-type">📱 App</div>
+                <div class="tp-name">Colruyt-app melding</div>
+                <div class="tp-desc">"Nieuwe actie: spaar broden, verdien Xtratjes!"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAP 2 — Kassa (viz rechts) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-colruyt">🧾</div>
+        <div class="step-line l-colruyt"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 2</span>
+          <span class="step-loc loc-colruyt">Colruyt — kassa</span>
+          <span class="step-channel">📍 Fysiek + 📱 App</span>
+        </div>
+        <div class="viz-row viz-right">
+          <!-- VIZ: kassa met kasticket + phone -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="320" height="240" fill="#EAE6E0"/>
+              <!-- Counter surface -->
+              <rect x="0" y="140" width="320" height="100" fill="#C8BEB0"/>
+              <rect x="0" y="138" width="320" height="6" rx="0" fill="#B0A090"/>
+
+              <!-- POS Terminal -->
+              <rect x="60" y="80" width="90" height="62" rx="6" fill="#2C2C2E"/>
+              <rect x="64" y="84" width="82" height="48" rx="4" fill="#1C1C1E"/>
+              <!-- Screen content -->
+              <rect x="66" y="86" width="78" height="44" rx="3" fill="#0A1628"/>
+              <!-- Screen text lines -->
+              <text x="105" y="100" text-anchor="middle" font-size="7" fill="#4ADE80" font-family="monospace">COLRUYT</text>
+              <rect x="70" y="103" width="70" height="1" fill="rgba(255,255,255,0.1)"/>
+              <text x="105" y="112" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.7)" font-family="monospace">Brood spaarkaart</text>
+              <!-- Progress bar on POS -->
+              <rect x="70" y="116" width="70" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="70" y="116" width="42" height="6" rx="3" fill="#CC0000"/>
+              <text x="105" y="128" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.9)" font-family="monospace">3/5 gespaad ✓</text>
+              <!-- POS keypad -->
+              <rect x="70" y="135" width="70" height="10" rx="3" fill="#3A3A3C"/>
+              <circle cx="78" cy="140" r="3" fill="#5A5A5C"/>
+              <circle cx="88" cy="140" r="3" fill="#5A5A5C"/>
+              <circle cx="98" cy="140" r="3" fill="#5A5A5C"/>
+              <circle cx="108" cy="140" r="3" fill="#5A5A5C"/>
+              <circle cx="118" cy="140" r="3" fill="#CC0000"/>
+              <circle cx="130" cy="140" r="3" fill="#4ADE80"/>
+
+              <!-- Card reader / scanner -->
+              <rect x="72" y="143" width="66" height="4" rx="2" fill="#484848"/>
+              <!-- Card being tapped -->
+              <rect x="85" y="146" width="40" height="26" rx="4" fill="white" stroke="#E0DDD8" stroke-width="0.5" transform="rotate(-8,105,159)"/>
+              <rect x="88" y="150" width="35" height="3" rx="1" fill="#6D28D9" transform="rotate(-8,105,159)"/>
+              <text x="105" y="163" text-anchor="middle" font-size="5.5" fill="#1A1A1A" font-family="Inter,sans-serif" transform="rotate(-8,105,163)">Xtra</text>
+              <!-- Wireless symbol -->
+              <path d="M 155,96 Q 162,90 169,96" stroke="#4ADE80" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M 152,92 Q 162,84 172,92" stroke="#4ADE80" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+
+              <!-- KASTICKET / receipt -->
+              <rect x="195" y="70" width="80" height="120" rx="2" fill="white" filter="url(#shadow)"/>
+              <defs><filter id="shadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter></defs>
+              <!-- Receipt content -->
+              <text x="235" y="85" text-anchor="middle" font-size="8" font-weight="900" fill="#CC0000" font-family="Inter,sans-serif">COLRUYT</text>
+              <rect x="200" y="88" width="70" height="0.5" fill="#E0E0E0"/>
+              <text x="235" y="97" text-anchor="middle" font-size="6" fill="#666" font-family="monospace">16/04/2026 14:23</text>
+              <rect x="200" y="100" width="70" height="0.5" fill="#E0E0E0"/>
+              <!-- items -->
+              <text x="203" y="110" font-size="6" fill="#333" font-family="monospace">Boerenbrood     1.89</text>
+              <text x="203" y="118" font-size="6" fill="#333" font-family="monospace">Melk 1L         1.29</text>
+              <text x="203" y="126" font-size="6" fill="#333" font-family="monospace">Kaas 200g       3.49</text>
+              <rect x="200" y="129" width="70" height="0.5" fill="#E0E0E0"/>
+              <text x="203" y="138" font-size="6.5" font-weight="700" fill="#1A1A1A" font-family="monospace">TOTAAL     €6.67</text>
+              <rect x="200" y="141" width="70" height="0.5" fill="#E0E0E0"/>
+              <!-- Xtra block on ticket -->
+              <rect x="200" y="144" width="70" height="40" rx="2" fill="#F3EFFC"/>
+              <text x="203" y="154" font-size="6" font-weight="700" fill="#6D28D9" font-family="Inter,sans-serif">✦ Xtra spaarkaart</text>
+              <text x="203" y="163" font-size="6" fill="#555" font-family="monospace">3 van 5 broden</text>
+              <!-- mini progress on receipt -->
+              <rect x="203" y="166" width="60" height="4" rx="2" fill="#E0DAFA"/>
+              <rect x="203" y="166" width="36" height="4" rx="2" fill="#6D28D9"/>
+              <text x="203" y="177" font-size="5.5" fill="#6D28D9" font-weight="600" font-family="Inter,sans-serif">Nog 2 broden te gaan!</text>
+
+              <!-- Receipt curl at bottom -->
+              <path d="M 195,190 Q 235,196 275,190" stroke="#E8E8E8" stroke-width="1" fill="none"/>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Scannen aan de kassa, stempel bijgeschreven</h3>
+            <p>Alex toont zijn Xtra-kaart of opent de app. Zijn broodaankoop wordt meteen bijgehouden. Op het kasticket staat: <em>"3 van 5 broden gespaad. Nog 2 te gaan!"</em> De app toont hetzelfde, live.</p>
+            <div class="touchpoints">
+              <div class="tp physical">
+                <div class="tp-type">📍 Fysiek</div>
+                <div class="tp-name">Kasticket</div>
+                <div class="tp-desc">"3/5 gespaad — nog 2 broden te gaan!"</div>
+              </div>
+              <div class="tp digital">
+                <div class="tp-type">📱 App</div>
+                <div class="tp-name">Colruyt-app</div>
+                <div class="tp-desc">Voortgangsbalk update direct na de scan</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAP 3 — Feestmelding (viz links) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-colruyt">🎉</div>
+        <div class="step-line l-xtra"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 3</span>
+          <span class="step-loc loc-colruyt">Colruyt — na 5e aankoop</span>
+          <span class="step-channel">📱 App + ✉️ Mail</span>
+        </div>
+        <div class="viz-row">
+          <!-- VIZ: phone met feestmelding + confetti -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background gradient -->
+              <defs>
+                <linearGradient id="celebration-bg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#F3EFFC"/>
+                  <stop offset="100%" stop-color="#EDE9FE"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="240" fill="url(#celebration-bg)"/>
+
+              <!-- Confetti dots -->
+              <circle cx="30" cy="30" r="5" fill="#CC0000" opacity="0.7"/>
+              <rect x="55" y="18" width="8" height="8" rx="2" fill="#C9A227" opacity="0.8" transform="rotate(20,59,22)"/>
+              <circle cx="280" cy="40" r="4" fill="#6D28D9" opacity="0.6"/>
+              <rect x="290" y="20" width="7" height="7" rx="1" fill="#CC0000" opacity="0.7" transform="rotate(-15,293,23)"/>
+              <circle cx="40" cy="80" r="3" fill="#C9A227" opacity="0.5"/>
+              <circle cx="295" cy="80" r="5" fill="#2E7D32" opacity="0.6"/>
+              <rect x="15" y="60" width="6" height="6" rx="1" fill="#6D28D9" opacity="0.6" transform="rotate(30,18,63)"/>
+              <rect x="300" y="60" width="8" height="8" rx="2" fill="#C9A227" opacity="0.7" transform="rotate(-20,304,64)"/>
+              <circle cx="60" cy="200" r="4" fill="#6D28D9" opacity="0.4"/>
+              <circle cx="270" cy="210" r="6" fill="#CC0000" opacity="0.4"/>
+              <rect x="40" y="180" width="7" height="7" rx="1" fill="#C9A227" opacity="0.5" transform="rotate(15,43,183)"/>
+              <rect x="265" y="170" width="6" height="6" rx="1" fill="#2E7D32" opacity="0.5" transform="rotate(-25,268,173)"/>
+
+              <!-- Star bursts -->
+              <text x="22" y="175" font-size="16" opacity="0.6">⭐</text>
+              <text x="278" y="185" font-size="14" opacity="0.5">✨</text>
+              <text x="280" y="55" font-size="12" opacity="0.5">🎊</text>
+              <text x="22" y="55" font-size="12" opacity="0.5">🎉</text>
+
+              <!-- Phone outer shell -->
+              <rect x="100" y="18" width="120" height="205" rx="22" fill="#1C1C1E"/>
+              <!-- Phone screen area -->
+              <rect x="104" y="22" width="112" height="197" rx="20" fill="#1C1C1E"/>
+              <!-- Notch -->
+              <rect x="130" y="22" width="60" height="20" rx="10" fill="#1C1C1E"/>
+              <rect x="140" y="26" width="40" height="12" rx="6" fill="#0A0A0C"/>
+
+              <!-- Screen content -->
+              <rect x="104" y="42" width="112" height="177" rx="4" fill="#0F0A1E"/>
+
+              <!-- Header bar -->
+              <rect x="104" y="42" width="112" height="28" fill="#6D28D9" opacity="0.9"/>
+              <text x="160" y="59" text-anchor="middle" font-size="8.5" font-weight="800" fill="white" font-family="Inter,sans-serif">Colruyt ✦ Xtra</text>
+
+              <!-- Celebration card -->
+              <rect x="110" y="76" width="100" height="90" rx="10" fill="#6D28D9"/>
+              <!-- Glow effect -->
+              <rect x="112" y="78" width="96" height="86" rx="9" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+              <!-- Big star/celebrate icon -->
+              <text x="160" y="112" text-anchor="middle" font-size="28">🎉</text>
+              <text x="160" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Inter,sans-serif">Proficiat Alex!</text>
+              <text x="160" y="142" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif">Kaart vol!</text>
+              <text x="160" y="155" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif">5/5 broden gespaad ✓</text>
+
+              <!-- Xtratjes reward -->
+              <rect x="114" y="170" width="92" height="36" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+              <text x="160" y="184" text-anchor="middle" font-size="8" font-weight="700" fill="#B45309" font-family="Inter,sans-serif">✦ +10 Xtratjes</text>
+              <text x="160" y="196" text-anchor="middle" font-size="7" fill="#92400E" font-family="Inter,sans-serif">op je Xtra-rekening!</text>
+
+              <!-- Bottom CTA -->
+              <rect x="112" y="210" width="96" height="4" rx="2" fill="rgba(255,255,255,0.1)"/>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Kaart vol — 10 Xtratjes binnen!</h3>
+            <p>Na het 5e brood verschijnt een feestmelding in de app. De 10 Xtratjes staan meteen op zijn Xtra-rekening. Alex krijgt ook een mailtje: <em>"Je Xtratjes wachten op je bij JIMS!"</em></p>
+            <div class="xtra-badge xb-earn">✦ +10 Xtratjes op je Xtra-rekening!</div>
+            <div class="touchpoints">
+              <div class="tp digital">
+                <div class="tp-type">📱 App</div>
+                <div class="tp-name">Feestmelding</div>
+                <div class="tp-desc">Confetti in de app, Xtratjes zichtbaar op de rekening</div>
+              </div>
+              <div class="tp digital">
+                <div class="tp-type">✉️ Mail</div>
+                <div class="tp-name">Bevestigingsmail</div>
+                <div class="tp-desc">"Proficiat! Jouw 10 Xtratjes zijn klaar voor JIMS"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAP 4 — JIMS Balie (viz rechts) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-jims">💪</div>
+        <div class="step-line l-jims"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 4</span>
+          <span class="step-loc loc-jims">JIMS Fitness</span>
+          <span class="step-channel">📍 Balie + 📱 App</span>
+        </div>
+        <div class="viz-row viz-right">
+          <!-- VIZ: JIMS receptiebalie met QR scan -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Dark gym background -->
+              <rect width="320" height="240" fill="#0F0F1A"/>
+              <!-- Background accent -->
+              <rect x="0" y="0" width="320" height="80" fill="#141428" opacity="0.8"/>
+
+              <!-- JIMS Logo/Sign on wall -->
+              <rect x="80" y="12" width="160" height="50" rx="6" fill="#1A1A2E" stroke="rgba(0,180,184,0.3)" stroke-width="1"/>
+              <text x="160" y="33" text-anchor="middle" font-size="11" font-weight="900" fill="#00B4B8" font-family="Inter,sans-serif" letter-spacing="4">JIMS</text>
+              <text x="160" y="47" text-anchor="middle" font-size="7" fill="rgba(0,180,184,0.6)" font-family="Inter,sans-serif" letter-spacing="2">FITNESS</text>
+              <!-- Neon underline glow -->
+              <rect x="120" y="50" width="80" height="2" rx="1" fill="#00B4B8" opacity="0.6"/>
+
+              <!-- Reception counter -->
+              <rect x="20" y="145" width="280" height="60" rx="4" fill="#1E1E30"/>
+              <rect x="20" y="143" width="280" height="8" rx="2" fill="#252540"/>
+              <!-- Counter top surface -->
+              <rect x="20" y="143" width="280" height="4" rx="2" fill="#2A2A45"/>
+
+              <!-- Monitor on counter -->
+              <rect x="180" y="100" width="90" height="56" rx="4" fill="#1C1C2E" stroke="rgba(0,180,184,0.3)" stroke-width="1"/>
+              <rect x="184" y="104" width="82" height="44" rx="3" fill="#0D0D1A"/>
+              <!-- Monitor screen content -->
+              <text x="225" y="118" text-anchor="middle" font-size="7" fill="#00B4B8" font-family="monospace">XTRA CHECK-IN</text>
+              <rect x="188" y="121" width="74" height="0.5" fill="rgba(0,180,184,0.3)"/>
+              <text x="225" y="130" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.8)" font-family="monospace">Alex Vermeersch</text>
+              <rect x="188" y="133" width="74" height="12" rx="2" fill="#C9A227" opacity="0.2"/>
+              <text x="225" y="142" text-anchor="middle" font-size="7.5" font-weight="700" fill="#C9A227" font-family="monospace">★ 34 Xtratjes</text>
+              <!-- Monitor stand -->
+              <rect x="218" y="156" width="14" height="4" rx="1" fill="#252540"/>
+              <rect x="212" y="160" width="26" height="3" rx="1" fill="#252540"/>
+
+              <!-- QR Code scanner device -->
+              <rect x="155" y="128" width="28" height="22" rx="3" fill="#252540" stroke="rgba(0,180,184,0.4)" stroke-width="1"/>
+              <rect x="158" y="131" width="22" height="13" rx="2" fill="#0D0D1A"/>
+              <!-- Scan line animation-style -->
+              <rect x="158" y="138" width="22" height="1.5" fill="#00B4B8" opacity="0.8"/>
+              <!-- Scan corners -->
+              <path d="M 159,132 L 159,135 L 162,135" stroke="#00B4B8" stroke-width="1.5" fill="none"/>
+              <path d="M 178,132 L 178,135 L 175,135" stroke="#00B4B8" stroke-width="1.5" fill="none"/>
+              <path d="M 159,143 L 159,140 L 162,140" stroke="#00B4B8" stroke-width="1.5" fill="none"/>
+              <path d="M 178,143 L 178,140 L 175,140" stroke="#00B4B8" stroke-width="1.5" fill="none"/>
+
+              <!-- Phone being held at scanner -->
+              <rect x="65" y="100" width="75" height="120" rx="14" fill="#1C1C1E" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <rect x="69" y="104" width="67" height="112" rx="12" fill="#0A0A0C"/>
+              <!-- Phone notch -->
+              <rect x="87" y="104" width="32" height="10" rx="5" fill="#1C1C1E"/>
+              <!-- Phone screen -->
+              <rect x="69" y="114" width="67" height="102" rx="4" fill="#0F0A1E"/>
+              <!-- Xtra QR header -->
+              <rect x="69" y="114" width="67" height="20" fill="#6D28D9"/>
+              <text x="102" y="127" text-anchor="middle" font-size="7" font-weight="800" fill="white" font-family="Inter,sans-serif">Xtra QR-code</text>
+              <!-- QR code on phone screen -->
+              <rect x="79" y="138" width="46" height="46" rx="3" fill="white"/>
+              <!-- QR pattern -->
+              <rect x="82" y="141" width="12" height="12" rx="1" fill="#1A1A1A"/>
+              <rect x="96" y="141" width="12" height="12" rx="1" fill="#1A1A1A"/>
+              <rect x="82" y="155" width="12" height="12" rx="1" fill="#1A1A1A"/>
+              <rect x="84" y="143" width="4" height="4" fill="white"/>
+              <rect x="98" y="143" width="4" height="4" fill="white"/>
+              <rect x="84" y="157" width="4" height="4" fill="white"/>
+              <rect x="96" y="155" width="9" height="9" rx="1" fill="#6D28D9"/>
+              <text x="100" y="162" text-anchor="middle" font-size="5" font-weight="900" fill="white" font-family="Inter,sans-serif">X</text>
+              <!-- QR dots -->
+              <rect x="108" y="141" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="113" y="141" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="108" y="147" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="113" y="152" width="3" height="3" fill="#1A1A1A"/>
+              <rect x="108" y="158" width="6" height="3" fill="#1A1A1A"/>
+              <!-- Xtratjes on phone -->
+              <rect x="74" y="188" width="58" height="22" rx="6" fill="#C9A227" opacity="0.15"/>
+              <text x="103" y="202" text-anchor="middle" font-size="7.5" font-weight="700" fill="#C9A227" font-family="Inter,sans-serif">★ 34 Xtratjes</text>
+
+              <!-- JIMS staff silhouette -->
+              <ellipse cx="248" cy="120" rx="14" ry="14" fill="#252540"/>
+              <rect x="233" y="133" width="30" height="20" rx="6" fill="#00B4B8" opacity="0.7"/>
+              <text x="248" y="145" text-anchor="middle" font-size="7" fill="white" font-family="Inter,sans-serif">JIMS</text>
+
+              <!-- "Bevestigd" badge -->
+              <rect x="200" y="78" width="70" height="22" rx="6" fill="#4ADE80" opacity="0.9"/>
+              <text x="235" y="92" text-anchor="middle" font-size="8" font-weight="700" fill="#166534" font-family="Inter,sans-serif">✓ Bevestigd!</text>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Aan de JIMS-balie: QR scannen, betaald</h3>
+            <p>Alex toont zijn Xtra-QR-code in de app aan de JIMS-balie. De medewerker scant en ziet meteen de beschikbare Xtratjes. Alex gebruikt ze om zijn dagpas te betalen. Geen gedoe.</p>
+            <div class="touchpoints">
+              <div class="tp physical">
+                <div class="tp-type">📍 Balie</div>
+                <div class="tp-name">QR-scan</div>
+                <div class="tp-desc">Medewerker ziet saldo direct. Snel en zonder papier.</div>
+              </div>
+              <div class="tp digital">
+                <div class="tp-type">📱 App</div>
+                <div class="tp-name">JIMS-app</div>
+                <div class="tp-desc">Xtra-wallet zichtbaar: 20 Xtratjes = €10 dagpas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAP 5 — Xtra-app overzicht (viz links) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-xtra" style="font-size:0;overflow:hidden;padding:6px;">
+          <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/><ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/><ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/><ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/></svg>
+        </div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 5</span>
+          <span class="step-loc loc-xtra">Xtra-app</span>
+          <span class="step-channel">📱 App</span>
+        </div>
+        <div class="viz-row">
+          <!-- VIZ: Xtra app dashboard -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="xtra-header" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#5B21B6"/>
+                  <stop offset="100%" stop-color="#7C3AED"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="240" fill="#F0EDF8"/>
+
+              <!-- Phone -->
+              <rect x="80" y="10" width="160" height="222" rx="24" fill="#1C1C1E"/>
+              <rect x="84" y="14" width="152" height="214" rx="22" fill="#1C1C1E"/>
+              <!-- Notch -->
+              <rect x="115" y="14" width="90" height="22" rx="11" fill="#1C1C1E"/>
+              <rect x="125" y="18" width="70" height="14" rx="7" fill="#0A0A0C"/>
+
+              <!-- Screen -->
+              <rect x="84" y="36" width="152" height="192" rx="6" fill="#0F0A1E"/>
+
+              <!-- Xtra header -->
+              <rect x="84" y="36" width="152" height="52" fill="url(#xtra-header)"/>
+              <!-- Xtra logo -->
+              <ellipse cx="103" cy="56" rx="8" ry="4" transform="rotate(-42,103,56)" fill="#4A90D9" opacity="0.9"/>
+              <ellipse cx="115" cy="55" rx="8" ry="4" transform="rotate(42,115,55)" fill="#52B040" opacity="0.9"/>
+              <ellipse cx="102" cy="65" rx="8" ry="4" transform="rotate(42,102,65)" fill="#F5A623" opacity="0.9"/>
+              <ellipse cx="114" cy="65" rx="7" ry="4" transform="rotate(-42,114,65)" fill="#E04010" opacity="0.9"/>
+
+              <text x="178" y="52" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Inter,sans-serif">Mijn Xtra</text>
+              <text x="178" y="65" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">Dag, Alex! 👋</text>
+              <text x="178" y="79" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">15 jun 2026</text>
+
+              <!-- Saldo card -->
+              <rect x="90" y="92" width="140" height="50" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <text x="160" y="108" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">Huidig saldo</text>
+              <text x="160" y="125" text-anchor="middle" font-size="20" font-weight="900" fill="#C9A227" font-family="Inter,sans-serif">★ 14</text>
+              <text x="160" y="136" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Xtratjes</text>
+
+              <!-- Transaction history -->
+              <text x="92" y="152" font-size="7" font-weight="700" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif" letter-spacing="0.5">RECENT</text>
+
+              <!-- Transaction 1 -->
+              <rect x="90" y="155" width="140" height="22" rx="6" fill="rgba(255,255,255,0.06)"/>
+              <text x="95" y="169" font-size="7" fill="white" font-family="Inter,sans-serif">🏪 Colruyt — brood</text>
+              <text x="226" y="169" text-anchor="end" font-size="7" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">+10</text>
+
+              <!-- Transaction 2 -->
+              <rect x="90" y="180" width="140" height="22" rx="6" fill="rgba(255,255,255,0.06)"/>
+              <text x="95" y="194" font-size="7" fill="white" font-family="Inter,sans-serif">💪 JIMS — dagpas</text>
+              <text x="226" y="194" text-anchor="end" font-size="7" font-weight="700" fill="#F87171" font-family="Inter,sans-serif">−20</text>
+
+              <!-- Next action -->
+              <rect x="90" y="206" width="140" height="18" rx="6" fill="#C9A227" opacity="0.15"/>
+              <text x="160" y="218" text-anchor="middle" font-size="6.5" fill="#C9A227" font-weight="600" font-family="Inter,sans-serif">✦ Nieuwe actie beschikbaar →</text>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Alles overzichtelijk in de Xtra-app</h3>
+            <p>De Xtra-app toont het volledige overzicht: wat Alex verdiend heeft bij elk merk, wat hij al besteed heeft, en welke nieuwe acties er zijn. Simpel en duidelijk.</p>
+            <div class="xtra-badge xb-balance">✦ Huidig saldo: 14 Xtratjes — Wat spaar je volgende?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps -->
+
+  <div class="summary-box">
+    <div class="sum-title">✦ Kort samengevat</div>
+    <div class="sum-flow">
+      <div class="sum-step"><div class="sum-icon">🏪</div><div class="sum-name">Colruyt</div><div class="sum-val">+10 Xtratjes</div></div>
+      <div class="sum-arrow">→</div>
+      <div class="sum-step"><div class="sum-icon">📱</div><div class="sum-name">Xtra-app</div><div class="sum-val">bijgehouden</div></div>
+      <div class="sum-arrow">→</div>
+      <div class="sum-step"><div class="sum-icon">💪</div><div class="sum-name">JIMS</div><div class="sum-val">−20 gebruikt</div></div>
+      <div class="sum-arrow">=</div>
+      <div class="sum-step"><div class="sum-icon">✦</div><div class="sum-name">Rest</div><div class="sum-val">14 Xtratjes</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 2 — Sara
+════════════════════════════════════════════════════ -->
+<div id="s2" class="sc">
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🛒</div>
+    <div>
+      <h3>Sara spaart bij OKay en betaalt minder bij Newpharma</h3>
+      <p>Elke zaterdag boodschappen bij OKay — en die leveren automatisch Xtratjes op. Die gebruikt Sara dan bij Newpharma voor haar maandelijkse vitaminebestelling. Zonder enige moeite.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- S2 STAP 1 — OKay kassa (viz links) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-okay">🏪</div>
+        <div class="step-line l-okay"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 1</span>
+          <span class="step-loc loc-okay">OKay buurtwinkel</span>
+          <span class="step-channel">📍 Fysiek + 📱 App</span>
+        </div>
+        <div class="viz-row">
+          <!-- VIZ: OKay kassa met winkelwagen -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="320" height="240" fill="#FFF4EE"/>
+              <!-- OKay orange floor -->
+              <rect y="195" width="320" height="45" fill="#E84010" opacity="0.08"/>
+              <!-- Store sign -->
+              <rect x="85" y="12" width="150" height="38" rx="6" fill="#E84010"/>
+              <text x="160" y="27" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Inter,sans-serif">OKay</text>
+              <text x="160" y="41" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif">buurtwinkel</text>
+
+              <!-- Shopping cart -->
+              <rect x="30" y="100" width="80" height="60" rx="4" fill="none" stroke="#E84010" stroke-width="2.5"/>
+              <line x1="30" y1="115" x2="110" y2="115" stroke="#E84010" stroke-width="1.5"/>
+              <!-- Cart handle -->
+              <path d="M 15,92 L 30,100" stroke="#E84010" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M 15,92 L 60,92" stroke="#E84010" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Cart wheels -->
+              <circle cx="45" cy="165" r="7" fill="none" stroke="#E84010" stroke-width="2"/>
+              <circle cx="95" cy="165" r="7" fill="none" stroke="#E84010" stroke-width="2"/>
+              <!-- Products in cart -->
+              <rect x="35" y="120" width="20" height="28" rx="3" fill="#F97316"/>
+              <rect x="59" y="118" width="18" height="30" rx="3" fill="#84CC16"/>
+              <rect x="81" y="122" width="22" height="26" rx="3" fill="#E84010" opacity="0.7"/>
+              <!-- Price tags on products -->
+              <text x="45" y="137" text-anchor="middle" font-size="6" fill="white" font-weight="700" font-family="Inter,sans-serif">€4</text>
+              <text x="68" y="136" text-anchor="middle" font-size="6" fill="white" font-weight="700" font-family="Inter,sans-serif">€3</text>
+              <text x="92" y="138" text-anchor="middle" font-size="6" fill="white" font-weight="700" font-family="Inter,sans-serif">€8</text>
+
+              <!-- Kassa / POS area -->
+              <rect x="155" y="80" width="140" height="100" rx="6" fill="white" stroke="#E0DDD8" stroke-width="1"/>
+              <!-- Kassa top bar -->
+              <rect x="155" y="80" width="140" height="24" rx="6" fill="#E84010"/>
+              <text x="225" y="96" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="Inter,sans-serif">OKay kassa</text>
+
+              <!-- Receipt -->
+              <rect x="165" y="110" width="70" height="66" rx="3" fill="#F9F7F5" stroke="#E0DDD8" stroke-width="0.5"/>
+              <text x="200" y="124" text-anchor="middle" font-size="6.5" font-weight="700" fill="#E84010" font-family="Inter,sans-serif">OKay</text>
+              <rect x="168" y="127" width="64" height="0.5" fill="#E0E0E0"/>
+              <text x="168" y="135" font-size="5.5" fill="#555" font-family="monospace">Groenten   €8.50</text>
+              <text x="168" y="142" font-size="5.5" fill="#555" font-family="monospace">Vlees      €12.80</text>
+              <text x="168" y="149" font-size="5.5" fill="#555" font-family="monospace">Drank      €6.40</text>
+              <rect x="168" y="152" width="64" height="0.5" fill="#E0E0E0"/>
+              <text x="168" y="160" font-size="6" font-weight="700" fill="#1A1A1A" font-family="monospace">€45.30</text>
+              <!-- Xtra block on receipt -->
+              <rect x="168" y="162" width="64" height="10" rx="2" fill="#FFF0EB"/>
+              <text x="200" y="170" text-anchor="middle" font-size="5.5" fill="#E84010" font-weight="700" font-family="Inter,sans-serif">✦ +4 Xtratjes</text>
+
+              <!-- Xtra card being held -->
+              <rect x="244" y="108" width="46" height="30" rx="5" fill="white" stroke="#E0DDD8" stroke-width="1" transform="rotate(-10,267,123)"/>
+              <rect x="248" y="112" width="38" height="4" rx="1" fill="#6D28D9" transform="rotate(-10,267,123)"/>
+              <text x="267" y="127" text-anchor="middle" font-size="6.5" fill="#1A1A1A" font-family="Inter,sans-serif" transform="rotate(-10,267,127)">Xtra</text>
+              <text x="267" y="135" text-anchor="middle" font-size="5.5" fill="#888" font-family="Inter,sans-serif" transform="rotate(-10,267,135)">Sara</text>
+
+              <!-- Wireless scan symbol -->
+              <path d="M 236,100 Q 242,95 248,100" stroke="#6D28D9" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M 233,96 Q 242,89 251,96" stroke="#6D28D9" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+              <!-- Xtratjes counter -->
+              <rect x="162" y="185" width="120" height="28" rx="8" fill="#FEF3C7" stroke="#FDE68A" stroke-width="1"/>
+              <text x="222" y="197" text-anchor="middle" font-size="7.5" font-weight="700" fill="#B45309" font-family="Inter,sans-serif">✦ +4 Xtratjes verdiend!</text>
+              <text x="222" y="208" text-anchor="middle" font-size="6.5" fill="#92400E" font-family="Inter,sans-serif">1 Xtratje per €10 aankoop</text>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Boodschappen doen levert automatisch Xtratjes op</h3>
+            <p>Sara koopt elke week voor ongeveer €45 bij OKay. Met haar Xtra-kaart spaart ze automatisch 1 Xtratje per €10. Gewoon scannen, niets meer aan te doen.</p>
+            <div class="xtra-badge xb-earn">✦ +4 Xtratjes — gewoon door boodschappen te doen</div>
+            <div class="touchpoints">
+              <div class="tp physical"><div class="tp-type">📍 Kassa</div><div class="tp-name">Xtra-kaart scan</div><div class="tp-desc">1 Xtratje per €10 — automatisch, geen actie nodig</div></div>
+              <div class="tp digital"><div class="tp-type">📱 App</div><div class="tp-name">OKay-app update</div><div class="tp-desc">"+4 Xtratjes voor je boodschappen vandaag"</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 STAP 2 — Newpharma webshop (viz rechts) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-newpharma">💊</div>
+        <div class="step-line l-newpharma"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 2</span>
+          <span class="step-loc loc-newpharma">Newpharma — online</span>
+          <span class="step-channel">🌐 Webshop</span>
+        </div>
+        <div class="viz-row viz-right">
+          <!-- VIZ: browser checkout window -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#EEF2F8"/>
+              <!-- Browser window -->
+              <rect x="20" y="16" width="280" height="210" rx="8" fill="white" stroke="#E0DDD8" stroke-width="1"/>
+              <!-- Browser chrome -->
+              <rect x="20" y="16" width="280" height="28" rx="8" fill="#F5F4F1"/>
+              <rect x="20" y="30" width="280" height="14" fill="#F5F4F1"/>
+              <!-- Traffic lights -->
+              <circle cx="36" cy="30" r="5" fill="#FF5F57"/>
+              <circle cx="50" cy="30" r="5" fill="#FEBC2E"/>
+              <circle cx="64" cy="30" r="5" fill="#28C840"/>
+              <!-- URL bar -->
+              <rect x="80" y="23" width="180" height="14" rx="7" fill="white" stroke="#E0DDD8" stroke-width="0.5"/>
+              <text x="170" y="33" text-anchor="middle" font-size="6.5" fill="#0055B3" font-family="Inter,sans-serif">🔒 newpharma.be/checkout</text>
+
+              <!-- Newpharma header -->
+              <rect x="20" y="44" width="280" height="22" fill="#0055B3"/>
+              <text x="160" y="59" text-anchor="middle" font-size="9" font-weight="700" fill="white" font-family="Inter,sans-serif">newpharma</text>
+
+              <!-- Product in cart -->
+              <rect x="28" y="72" width="180" height="54" rx="6" fill="#F8F9FA" stroke="#E0DDD8" stroke-width="0.5"/>
+              <rect x="34" y="78" width="36" height="36" rx="4" fill="#EBF2FF"/>
+              <text x="52" y="102" text-anchor="middle" font-size="18">💊</text>
+              <text x="78" y="91" font-size="8" font-weight="700" fill="#1A1A1A" font-family="Inter,sans-serif">Vitamine D3 2000 IU</text>
+              <text x="78" y="102" font-size="7" fill="#888" font-family="Inter,sans-serif">120 capsules</text>
+              <text x="78" y="115" font-size="9" font-weight="700" fill="#0055B3" font-family="Inter,sans-serif">€24.99</text>
+
+              <!-- Xtra widget -->
+              <rect x="28" y="132" width="264" height="72" rx="8" fill="#F3EFFC" stroke="rgba(109,40,217,0.25)" stroke-width="1.5"/>
+              <!-- Widget header -->
+              <rect x="28" y="132" width="264" height="22" rx="8" fill="#6D28D9" opacity="0.12"/>
+              <rect x="28" y="144" width="264" height="10" fill="#6D28D9" opacity="0.12"/>
+              <text x="38" y="147" font-size="8" font-weight="800" fill="#6D28D9" font-family="Inter,sans-serif">✦ Betaal met Xtratjes</text>
+              <text x="272" y="147" text-anchor="end" font-size="7" fill="#6D28D9" font-family="Inter,sans-serif">Saldo: 38 ✦</text>
+
+              <!-- Slider widget -->
+              <text x="38" y="163" font-size="7" fill="#4A4A4A" font-family="Inter,sans-serif">Hoeveel Xtratjes wil je inzetten?</text>
+              <rect x="38" y="168" width="170" height="6" rx="3" fill="rgba(109,40,217,0.15)"/>
+              <rect x="38" y="168" width="102" height="6" rx="3" fill="#6D28D9"/>
+              <circle cx="140" cy="171" r="7" fill="white" stroke="#6D28D9" stroke-width="2"/>
+              <text x="220" y="174" font-size="7.5" font-weight="700" fill="#6D28D9" font-family="Inter,sans-serif">30 ✦ = €15</text>
+
+              <!-- Result -->
+              <rect x="38" y="180" width="246" height="18" rx="4" fill="rgba(109,40,217,0.08)"/>
+              <text x="42" y="192" font-size="7.5" font-weight="700" fill="#6D28D9" font-family="Inter,sans-serif">Te betalen: €9.99 — korting: €15 via Xtratjes</text>
+
+              <!-- Confirm button -->
+              <rect x="215" y="72" width="69" height="54" rx="6" fill="#0055B3"/>
+              <text x="249" y="94" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="Inter,sans-serif">Bevestig</text>
+              <text x="249" y="106" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif">bestelling</text>
+              <text x="249" y="118" text-anchor="middle" font-size="8" font-weight="900" fill="#FDE68A" font-family="Inter,sans-serif">€9.99</text>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Vitamines bestellen én meteen korting via Xtratjes</h3>
+            <p>Sara bestelt op newpharma.be. In de winkelwagen ziet ze haar Xtra-saldo staan. Met één klik zet ze 30 Xtratjes in als €15 korting. Dat scheelt toch mooi.</p>
+            <div class="xtra-badge xb-spend">✦ −30 Xtratjes ingezet = €15 korting</div>
+            <div class="touchpoints">
+              <div class="tp digital"><div class="tp-type">🌐 Checkout</div><div class="tp-name">Xtra-betaalwidget</div><div class="tp-desc">Saldo zichtbaar, met schuifbalk om Xtratjes in te zetten</div></div>
+              <div class="tp digital"><div class="tp-type">✉️ Mail</div><div class="tp-name">Bestelbevestiging</div><div class="tp-desc">Overzicht van betaald bedrag en resterend Xtra-saldo</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 STAP 3 — Xtra app nieuw saldo (viz links) -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-circle c-xtra">✦</div>
+      </div>
+      <div class="step-right">
+        <div class="step-meta">
+          <span class="step-num">Stap 3</span>
+          <span class="step-loc loc-xtra">Xtra-app</span>
+          <span class="step-channel">📱 App</span>
+        </div>
+        <div class="viz-row">
+          <!-- VIZ: Xtra app with new suggestion -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F3EFFC"/>
+              <!-- Phone -->
+              <rect x="90" y="12" width="140" height="218" rx="22" fill="#1C1C1E"/>
+              <rect x="94" y="16" width="132" height="210" rx="20" fill="#0F0A1E"/>
+              <!-- Notch -->
+              <rect x="125" y="16" width="70" height="18" rx="9" fill="#1C1C1E"/>
+              <!-- Header -->
+              <rect x="94" y="34" width="132" height="48" rx="4" fill="#6D28D9"/>
+              <text x="160" y="52" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Inter,sans-serif">Xtra</text>
+              <text x="160" y="67" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">Hoi Sara! 👋</text>
+              <!-- Saldo -->
+              <rect x="100" y="86" width="120" height="42" rx="8" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <text x="160" y="100" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Saldo</text>
+              <text x="160" y="118" text-anchor="middle" font-size="18" font-weight="900" fill="#C9A227" font-family="Inter,sans-serif">★ 8</text>
+              <!-- Transaction -->
+              <text x="100" y="140" font-size="6.5" fill="rgba(255,255,255,0.4)" font-family="Inter,sans-serif" letter-spacing="0.5">LAATSTE</text>
+              <rect x="100" y="143" width="120" height="20" rx="5" fill="rgba(255,255,255,0.05)"/>
+              <text x="105" y="156" font-size="6.5" fill="white" font-family="Inter,sans-serif">💊 Newpharma</text>
+              <text x="216" y="156" text-anchor="end" font-size="6.5" fill="#F87171" font-weight="700" font-family="Inter,sans-serif">−30</text>
+              <!-- New action suggestion -->
+              <rect x="100" y="167" width="120" height="46" rx="8" fill="#2E7D32" opacity="0.25" stroke="rgba(46,125,50,0.4)" stroke-width="1"/>
+              <text x="160" y="181" text-anchor="middle" font-size="7" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">🌿 Nieuwe actie!</text>
+              <text x="160" y="192" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">Bio-Planet dit weekend:</text>
+              <text x="160" y="202" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">dubbele Xtratjes!</text>
+              <rect x="108" y="206" width="104" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+            </svg>
+          </div>
+
+          <div class="viz-text">
+            <h3>Nieuw saldo en al een volgende tip</h3>
+            <p>De Xtra-app toont het resterende saldo en stelt een nieuwe actie voor: "Ga ook langs bij Bio-Planet en verdien dit weekend dubbele Xtratjes!"</p>
+            <div class="xtra-badge xb-balance">✦ Resterend: 8 Xtratjes — Nieuwe actie beschikbaar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 3 — Tom
+════════════════════════════════════════════════════ -->
+<div id="s3" class="sc active">
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🏆</div>
+    <div>
+      <h3>Tom bezoekt 3 merken, haalt zijn Gold-status binnen</h3>
+      <p>CG lanceert een maandelijkse challenge: wie in één maand bij 3 merken langskomt, krijgt 50 bonus-Xtratjes én bereikt de Gold-tier. Tom doet mee en haalt het.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- S3 STAP 1 — Challenge uitnodiging (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-xtra">📲</div><div class="step-line l-xtra"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 1</span><span class="step-loc loc-xtra">Xtra-app</span><span class="step-channel">📱 Melding</span></div>
+        <div class="viz-row">
+          <!-- VIZ: push notification + challenge card -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F3EFFC"/>
+              <!-- Phone lock screen -->
+              <rect x="80" y="10" width="160" height="222" rx="24" fill="#1C1C1E"/>
+              <rect x="84" y="14" width="152" height="214" rx="22" fill="#1A1A2E"/>
+              <!-- Lock screen time -->
+              <text x="160" y="60" text-anchor="middle" font-size="26" font-weight="300" fill="white" font-family="Inter,sans-serif">14:38</text>
+              <text x="160" y="76" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">maandag 1 juni</text>
+              <!-- Notch -->
+              <rect x="120" y="14" width="80" height="20" rx="10" fill="#1C1C1E"/>
+
+              <!-- Push notification card -->
+              <rect x="90" y="95" width="140" height="80" rx="12" fill="white" opacity="0.92"/>
+              <!-- Notification header -->
+              <rect x="90" y="95" width="140" height="28" rx="12" fill="rgba(109,40,217,0.1)"/>
+              <rect x="90" y="107" width="140" height="16" fill="rgba(109,40,217,0.1)"/>
+              <!-- App icon small -->
+              <rect x="98" y="101" width="16" height="16" rx="4" fill="#6D28D9"/>
+              <text x="106" y="112" text-anchor="middle" font-size="8" fill="white" font-family="Inter,sans-serif">✦</text>
+              <text x="160" y="112" text-anchor="middle" font-size="7.5" font-weight="700" fill="#6D28D9" font-family="Inter,sans-serif">Xtra — Challenge!</text>
+              <text x="274" y="112" text-anchor="end" font-size="7" fill="#888" font-family="Inter,sans-serif">nu</text>
+
+              <!-- Notification content -->
+              <text x="100" y="130" font-size="7.5" font-weight="700" fill="#1A1A1A" font-family="Inter,sans-serif">🏆 Nieuwe challenge!</text>
+              <text x="100" y="142" font-size="7" fill="#4A4A4A" font-family="Inter,sans-serif">Bezoek 3 CG-merken deze</text>
+              <text x="100" y="152" font-size="7" fill="#4A4A4A" font-family="Inter,sans-serif">maand → 50 bonus-Xtratjes!</text>
+              <text x="100" y="165" font-size="7" fill="#6D28D9" font-weight="600" font-family="Inter,sans-serif">Tik om te starten →</text>
+
+              <!-- Challenge progress preview -->
+              <rect x="90" y="183" width="140" height="40" rx="10" fill="rgba(255,255,255,0.1)"/>
+              <text x="160" y="198" text-anchor="middle" font-size="7.5" font-weight="700" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">🏪 Colruyt · 🌿 Bio-Planet · 💪 JIMS</text>
+              <rect x="100" y="204" width="120" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="100" y="204" width="4" height="6" rx="3" fill="#C9A227"/>
+              <text x="160" y="218" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.4)" font-family="Inter,sans-serif">0/3 merken bezocht</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Tom krijgt een uitnodiging voor de challenge</h3>
+            <p>Push-bericht: <em>"Bezoek deze maand 3 CG-merken en ontvang 50 bonus-Xtratjes!"</em> Tom opent de app en accepteert. Hij ziet meteen welke merken meetellen en hoe ver hij staat.</p>
+            <div class="touchpoints"><div class="tp digital"><div class="tp-type">📱 App</div><div class="tp-name">Challenge kaart</div><div class="tp-desc">Voortgangsbalk met de 3 te bezoeken merken</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 STAP 2 — Colruyt (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">1️⃣</div><div class="step-line l-colruyt"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 2</span><span class="step-loc loc-colruyt">Colruyt</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row viz-right">
+          <!-- VIZ: Colruyt kassa scan + challenge update -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF5F5"/>
+              <!-- Colruyt store sign -->
+              <rect x="60" y="12" width="200" height="36" rx="6" fill="#CC0000"/>
+              <polygon points="85,20 97,46 108,46 96,20" fill="rgba(255,255,255,0.9)"/>
+              <polygon points="96,20 108,46 119,46 107,20" fill="rgba(255,255,255,0.55)"/>
+              <text x="200" y="35" text-anchor="middle" font-size="9" font-weight="700" fill="white" font-family="Inter,sans-serif">COLRUYT Laagste Prijzen</text>
+
+              <!-- Grocery bag -->
+              <rect x="30" y="100" width="70" height="80" rx="4" fill="#F5F0E8" stroke="#E0D8C8" stroke-width="1.5"/>
+              <path d="M 50,100 Q 50,85 65,85 Q 80,85 80,100" fill="none" stroke="#C8B890" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Items in bag -->
+              <rect x="36" y="115" width="22" height="32" rx="3" fill="#CC0000" opacity="0.8"/>
+              <text x="47" y="134" text-anchor="middle" font-size="6" fill="white" font-weight="700" font-family="Inter,sans-serif">C</text>
+              <rect x="62" y="118" width="18" height="28" rx="3" fill="#F5A623"/>
+              <rect x="45" y="150" width="20" height="20" rx="3" fill="#84CC16"/>
+
+              <!-- Phone with challenge update -->
+              <rect x="130" y="70" width="120" height="160" rx="18" fill="#1C1C1E"/>
+              <rect x="134" y="74" width="112" height="152" rx="16" fill="#0F0A1E"/>
+              <rect x="152" y="74" width="76" height="16" rx="8" fill="#1C1C1E"/>
+              <!-- App header -->
+              <rect x="134" y="90" width="112" height="28" fill="#CC0000"/>
+              <text x="190" y="108" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="Inter,sans-serif">Challenge Update!</text>
+              <!-- Progress visual -->
+              <rect x="140" y="122" width="100" height="56" rx="8" fill="rgba(255,255,255,0.05)"/>
+              <!-- 3 brand circles -->
+              <circle cx="160" cy="148" r="14" fill="#CC0000" opacity="0.9"/>
+              <text x="160" y="152" text-anchor="middle" font-size="12" font-family="Inter,sans-serif">✓</text>
+              <circle cx="190" cy="148" r="14" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+              <text x="190" y="152" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">🌿</text>
+              <circle cx="220" cy="148" r="14" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+              <text x="220" y="152" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">💪</text>
+              <!-- Progress bar -->
+              <rect x="140" y="182" width="100" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+              <rect x="140" y="182" width="33" height="5" rx="2" fill="#4ADE80"/>
+              <text x="190" y="198" text-anchor="middle" font-size="7.5" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">1 van 3 ✓</text>
+              <text x="190" y="210" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Zo gaan we, Tom!</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Eerste bezoek: Colruyt afgevinkt ✓</h3>
+            <p>Tom doet zijn weekboodschappen bij Colruyt en scant zijn kaart. De challenge telt het bezoek automatisch mee. In de app: <em>"1 van 3 merken gedaan. Zo gaan we!"</em></p>
+            <div class="xtra-badge xb-earn">✦ Merk 1 van 3 afgevinkt ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 STAP 3 — Bio-Planet (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-bio">2️⃣</div><div class="step-line l-bio"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 3</span><span class="step-loc loc-bio">Bio-Planet</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row">
+          <!-- VIZ: Bio-Planet store with progress 2/3 -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F0F7F0"/>
+              <!-- Store exterior / green theme -->
+              <rect x="60" y="12" width="200" height="40" rx="6" fill="#2E7D32"/>
+              <text x="160" y="29" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Inter,sans-serif">🌿 Bio-Planet</text>
+              <text x="160" y="44" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif">bio · lokaal · eerlijk</text>
+
+              <!-- Vegetables display -->
+              <rect x="25" y="72" width="120" height="100" rx="6" fill="white" stroke="#C8E6C9" stroke-width="1.5"/>
+              <text x="85" y="90" text-anchor="middle" font-size="8" font-weight="700" fill="#2E7D32" font-family="Inter,sans-serif">Bio groenten</text>
+              <!-- Veggie items -->
+              <ellipse cx="50" cy="118" rx="16" ry="22" fill="#84CC16" opacity="0.8"/>
+              <rect x="47" y="97" width="6" height="12" rx="2" fill="#2E7D32"/>
+              <ellipse cx="85" cy="122" rx="20" ry="14" fill="#F97316" opacity="0.85"/>
+              <ellipse cx="118" cy="116" rx="14" ry="18" fill="#DC2626" opacity="0.75"/>
+              <!-- Price tags -->
+              <rect x="36" y="140" width="28" height="14" rx="2" fill="white" stroke="#C8E6C9" stroke-width="0.5"/>
+              <text x="50" y="150" text-anchor="middle" font-size="6" fill="#2E7D32" font-weight="700" font-family="Inter,sans-serif">bio €2.49</text>
+              <rect x="73" y="140" width="28" height="14" rx="2" fill="white" stroke="#C8E6C9" stroke-width="0.5"/>
+              <text x="87" y="150" text-anchor="middle" font-size="6" fill="#2E7D32" font-weight="700" font-family="Inter,sans-serif">bio €1.89</text>
+
+              <!-- Xtra scan moment -->
+              <rect x="30" y="176" width="110" height="24" rx="8" fill="#2E7D32" opacity="0.15" stroke="#C8E6C9" stroke-width="1"/>
+              <text x="85" y="192" text-anchor="middle" font-size="8" font-weight="700" fill="#2E7D32" font-family="Inter,sans-serif">✓ Xtra-kaart gescand</text>
+
+              <!-- Phone progress 2/3 -->
+              <rect x="170" y="65" width="120" height="158" rx="18" fill="#1C1C1E"/>
+              <rect x="174" y="69" width="112" height="150" rx="16" fill="#0A1E0A"/>
+              <rect x="192" y="69" width="76" height="16" rx="8" fill="#1C1C1E"/>
+              <rect x="174" y="85" width="112" height="28" fill="#2E7D32"/>
+              <text x="230" y="103" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="Inter,sans-serif">Challenge Update!</text>
+              <!-- 3 circles progress -->
+              <rect x="180" y="117" width="100" height="56" rx="8" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="200" cy="143" r="13" fill="#CC0000"/>
+              <text x="200" y="147" text-anchor="middle" font-size="11">✓</text>
+              <circle cx="230" cy="143" r="13" fill="#2E7D32"/>
+              <text x="230" y="147" text-anchor="middle" font-size="11">✓</text>
+              <circle cx="260" cy="143" r="13" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+              <text x="260" y="147" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.3)">💪</text>
+              <!-- Progress bar -->
+              <rect x="180" y="177" width="100" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+              <rect x="180" y="177" width="66" height="5" rx="2" fill="#4ADE80"/>
+              <text x="230" y="193" text-anchor="middle" font-size="7.5" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">2 van 3 ✓</text>
+              <text x="230" y="205" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Nog 1 merk te gaan!</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Tweede bezoek: Bio-Planet ✓</h3>
+            <p>Tom koopt wat groenten bij Bio-Planet. Kaart gescand, bezoek geregistreerd. Push: <em>"Al 2 van 3! Ga nog langs bij JIMS en de bonus is van jou."</em></p>
+            <div class="xtra-badge xb-earn">✦ Merk 2 van 3 afgevinkt ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 STAP 4 — JIMS challenge gehaald (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-jims">3️⃣</div><div class="step-line l-jims"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 4</span><span class="step-loc loc-jims">JIMS Fitness</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row viz-right">
+          <!-- VIZ: JIMS celebration 3/3 -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="gold-bg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#FEF3C7"/>
+                  <stop offset="100%" stop-color="#FDE68A"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="240" fill="url(#gold-bg)"/>
+              <!-- Confetti celebration -->
+              <circle cx="25" cy="25" r="6" fill="#CC0000" opacity="0.7"/>
+              <rect x="280" y="18" width="8" height="8" rx="2" fill="#6D28D9" opacity="0.7" transform="rotate(20,284,22)"/>
+              <circle cx="290" cy="50" r="5" fill="#2E7D32" opacity="0.6"/>
+              <rect x="18" y="60" width="7" height="7" rx="1" fill="#C9A227" opacity="0.7" transform="rotate(30,21,63)"/>
+              <circle cx="35" cy="200" r="4" fill="#6D28D9" opacity="0.5"/>
+              <circle cx="285" cy="200" r="6" fill="#CC0000" opacity="0.4"/>
+              <text x="18" y="50" font-size="14" opacity="0.6">🎊</text>
+              <text x="278" y="55" font-size="14" opacity="0.6">🎉</text>
+              <text x="24" y="185" font-size="12" opacity="0.5">⭐</text>
+              <text x="280" y="185" font-size="12" opacity="0.5">✨</text>
+
+              <!-- Phone -->
+              <rect x="85" y="12" width="150" height="218" rx="24" fill="#1A1A2E"/>
+              <rect x="89" y="16" width="142" height="210" rx="22" fill="#1A1A2E"/>
+              <rect x="120" y="16" width="80" height="20" rx="10" fill="#0F0F1A"/>
+
+              <!-- Screen -->
+              <rect x="89" y="36" width="142" height="190" rx="6" fill="#0F0A18"/>
+
+              <!-- Gold celebration header -->
+              <rect x="89" y="36" width="142" height="58" fill="#C9A227" opacity="0.85"/>
+              <text x="160" y="60" text-anchor="middle" font-size="18">🏆</text>
+              <text x="160" y="78" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Inter,sans-serif">Challenge gehaald!</text>
+              <text x="160" y="90" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif">Tom, je bent geweldig!</text>
+
+              <!-- 3 brand checks -->
+              <rect x="95" y="98" width="130" height="46" rx="8" fill="rgba(255,255,255,0.06)"/>
+              <circle cx="118" cy="120" r="14" fill="#CC0000"/>
+              <text x="118" y="124" text-anchor="middle" font-size="12">✓</text>
+              <circle cx="160" cy="120" r="14" fill="#2E7D32"/>
+              <text x="160" y="124" text-anchor="middle" font-size="12">✓</text>
+              <circle cx="202" cy="120" r="14" fill="#1A1A2E" stroke="#C9A227" stroke-width="2"/>
+              <text x="202" y="124" text-anchor="middle" font-size="12">✓</text>
+
+              <!-- Full progress bar -->
+              <rect x="95" y="148" width="130" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="95" y="148" width="130" height="6" rx="3" fill="#C9A227"/>
+
+              <!-- Bonus -->
+              <rect x="95" y="159" width="130" height="30" rx="8" fill="rgba(201,162,39,0.15)" stroke="rgba(201,162,39,0.3)" stroke-width="1"/>
+              <text x="160" y="172" text-anchor="middle" font-size="9" font-weight="900" fill="#C9A227" font-family="Inter,sans-serif">✦ +50 bonus-Xtratjes!</text>
+              <text x="160" y="183" text-anchor="middle" font-size="7" fill="rgba(201,162,39,0.7)" font-family="Inter,sans-serif">direct op je rekening</text>
+
+              <!-- Gold tier badge -->
+              <rect x="95" y="195" width="130" height="28" rx="8" fill="#C9A227"/>
+              <text x="160" y="207" text-anchor="middle" font-size="8" font-weight="900" fill="#1A1A1A" font-family="Inter,sans-serif">👑 Je bent nu GOLD-lid!</text>
+              <text x="160" y="218" text-anchor="middle" font-size="6.5" fill="rgba(0,0,0,0.6)" font-family="Inter,sans-serif">Dubbele Xtratjes · Exclusieve deals</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Derde bezoek: JIMS — challenge gehaald! 🎉</h3>
+            <p>Tom gaat sporten bij JIMS. Na het scannen springt de app open met een feestmelding: <em>"Geweldig Tom! 50 bonus-Xtratjes staan op je rekening."</em></p>
+            <div class="xtra-badge" style="background:#FEF9E7;border:1px solid #F0D060;color:#8B6914;">🏆 Challenge gehaald! +50 bonus-Xtratjes + Gold-status!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 STAP 5 — Gold lid (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-xtra">👑</div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 5</span><span class="step-loc loc-xtra">Xtra-app</span><span class="step-channel">📱 App</span></div>
+        <div class="viz-row">
+          <!-- VIZ: Gold member card -->
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="gold-card" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#92400E"/>
+                  <stop offset="50%" stop-color="#C9A227"/>
+                  <stop offset="100%" stop-color="#92400E"/>
+                </linearGradient>
+                <linearGradient id="card-shine" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="240" fill="#1A1A2E"/>
+              <!-- Stars background -->
+              <circle cx="30" cy="30" r="1" fill="white" opacity="0.3"/>
+              <circle cx="290" cy="40" r="1.5" fill="white" opacity="0.4"/>
+              <circle cx="60" cy="200" r="1" fill="white" opacity="0.3"/>
+              <circle cx="280" cy="190" r="1.5" fill="white" opacity="0.35"/>
+              <circle cx="160" cy="20" r="1" fill="white" opacity="0.25"/>
+              <circle cx="50" cy="120" r="1" fill="white" opacity="0.2"/>
+              <circle cx="270" cy="130" r="1" fill="white" opacity="0.25"/>
+
+              <!-- Gold membership card -->
+              <rect x="40" y="50" width="240" height="148" rx="16" fill="url(#gold-card)"/>
+              <rect x="40" y="50" width="240" height="148" rx="16" fill="url(#card-shine)"/>
+              <!-- Card decorative circles -->
+              <circle cx="220" cy="80" r="60" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="240" cy="120" r="80" fill="rgba(255,255,255,0.03)"/>
+
+              <!-- Card content -->
+              <text x="60" y="80" font-size="28" opacity="0.9">👑</text>
+              <text x="240" y="84" text-anchor="end" font-size="11" font-weight="900" fill="white" font-family="Inter,sans-serif" opacity="0.9">GOLD</text>
+              <text x="240" y="98" text-anchor="end" font-size="7" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" letter-spacing="2">MEMBER</text>
+
+              <!-- Member name -->
+              <text x="60" y="118" font-size="16" font-weight="300" fill="white" font-family="Inter,sans-serif" opacity="0.9">Tom Claes</text>
+              <text x="60" y="132" font-size="8" fill="rgba(255,255,255,0.55)" font-family="Inter,sans-serif">Gold lid sinds juni 2026</text>
+
+              <!-- Xtra logo on card -->
+              <ellipse cx="60" cy="156" rx="9" ry="4.5" transform="rotate(-42,60,156)" fill="#4A90D9" opacity="0.8"/>
+              <ellipse cx="72" cy="155" rx="9" ry="4.5" transform="rotate(42,72,155)" fill="#52B040" opacity="0.8"/>
+              <ellipse cx="58" cy="165" rx="9" ry="5" transform="rotate(42,58,165)" fill="#F5A623" opacity="0.8"/>
+              <ellipse cx="71" cy="165" rx="8" ry="4.5" transform="rotate(-42,71,165)" fill="#E04010" opacity="0.8"/>
+              <text x="95" y="162" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Xtra by Colruyt Group</text>
+
+              <!-- Card number (last 4) -->
+              <text x="240" y="168" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.5)" font-family="monospace">•••• 4782</text>
+
+              <!-- Gold benefits -->
+              <rect x="40" y="206" width="240" height="28" rx="8" fill="rgba(201,162,39,0.15)" stroke="rgba(201,162,39,0.3)" stroke-width="1"/>
+              <text x="160" y="218" text-anchor="middle" font-size="8" font-weight="700" fill="#C9A227" font-family="Inter,sans-serif">2× Xtratjes · Exclusieve deals · Jaarlijks cadeau 🎁</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Tom wordt Gold-lid</h3>
+            <p>Tom heeft dit jaar al genoeg besteed bij CG-merken en wordt Gold-lid. Dat geeft hem voortaan dubbele Xtratjes, exclusieve acties en elk jaar een welkomstcadeau.</p>
+            <div class="touchpoints"><div class="tp digital" style="border-color:rgba(201,162,39,0.3);background:#FFFBEB;"><div class="tp-type" style="color:var(--jims);">👑 Gold-voordelen</div><div class="tp-name">Vanaf nu</div><div class="tp-desc">2x Xtratjes · Exclusieve deals · Jaarlijks cadeau</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps s3 -->
+
+  <div class="summary-box">
+    <div class="sum-title">🏆 Challenge in het kort</div>
+    <div class="sum-flow">
+      <div class="sum-step"><div class="sum-icon">🏪</div><div class="sum-name">Colruyt</div><div class="sum-val">Bezoek 1</div></div>
+      <div class="sum-arrow">+</div>
+      <div class="sum-step"><div class="sum-icon">🌿</div><div class="sum-name">Bio-Planet</div><div class="sum-val">Bezoek 2</div></div>
+      <div class="sum-arrow">+</div>
+      <div class="sum-step"><div class="sum-icon">💪</div><div class="sum-name">JIMS</div><div class="sum-val">Bezoek 3</div></div>
+      <div class="sum-arrow">=</div>
+      <div class="sum-step"><div class="sum-icon">👑</div><div class="sum-name">Bonus</div><div class="sum-val" style="color:#8B6914;">+50 Xtratjes!</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 4 — Marie & de Warme Bakker
+════════════════════════════════════════════════════ -->
+<div id="s4" class="sc">
+
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🥖</div>
+    <div>
+      <h3>Marie ontdekt de ovenverse broodjes bij Colruyt</h3>
+      <p>Colruyt heeft nu een warme bakker in de winkel. Via de Xtra-app krijgt Marie een persoonlijke uitnodiging. Koop 3× ovenverse broodjes deze week en verdien 20 bonus-Xtratjes. Een nieuwe ochtendroutine die loont.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- S4 STAP 1 — App-uitnodiging (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">📱</div><div class="step-line l-colruyt"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 1</span><span class="step-loc loc-colruyt">Xtra App</span><span class="step-channel">📲 Digitaal</span></div>
+        <div class="viz-row">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF8F0"/>
+              <!-- Phone -->
+              <rect x="90" y="10" width="140" height="220" rx="20" fill="#1C1C1E"/>
+              <rect x="94" y="14" width="132" height="212" rx="18" fill="#0F0A1E"/>
+              <rect x="140" y="14" width="40" height="14" rx="7" fill="#1C1C1E"/>
+              <!-- App header Xtra -->
+              <rect x="94" y="28" width="132" height="32" fill="#CC0000"/>
+              <text x="160" y="49" text-anchor="middle" font-size="9" font-weight="800" fill="white" font-family="Inter,sans-serif">✦ Xtra — Nieuw aanbod!</text>
+              <!-- Promo card -->
+              <rect x="100" y="66" width="120" height="90" rx="10" fill="rgba(255,255,255,0.07)" stroke="rgba(255,200,100,0.4)" stroke-width="1.5"/>
+              <!-- Bread icon area -->
+              <rect x="108" y="74" width="104" height="40" rx="8" fill="#B45309" opacity="0.85"/>
+              <text x="160" y="100" text-anchor="middle" font-size="26" font-family="Inter,sans-serif">🥖</text>
+              <!-- Text -->
+              <text x="160" y="130" text-anchor="middle" font-size="8.5" font-weight="800" fill="white" font-family="Inter,sans-serif">Warme Bakker actie</text>
+              <text x="160" y="143" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.65)" font-family="Inter,sans-serif">Koop 3× ovenverse broodjes</text>
+              <text x="160" y="154" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.65)" font-family="Inter,sans-serif">deze week → 20 ✦ bonus</text>
+              <!-- CTA button -->
+              <rect x="112" y="162" width="96" height="22" rx="11" fill="#CC0000"/>
+              <text x="160" y="177" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="Inter,sans-serif">Deelnemen →</text>
+              <!-- Progress indicator -->
+              <text x="160" y="212" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.35)" font-family="Inter,sans-serif">0 / 3 broodjes gekocht</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Marie krijgt een persoonlijke uitnodiging</h3>
+            <p>De Xtra-app stuurt Marie een gerichte push-notificatie: <em>"Nieuw bij Colruyt: ovenverse broodjes van onze warme bakker. Koop er 3 deze week en ontvang 20 bonus-Xtratjes!"</em></p>
+            <p>Marie kent de bakkerijhoek nog niet — dit is haar eerste kennismaking. Ze tikt op "Deelnemen" en de actie is meteen actief.</p>
+            <div class="touchpoints">
+              <div class="tp digital"><div class="tp-type">📲 Push</div><div class="tp-name">Persoonlijk aanbod</div><div class="tp-desc">Op basis van haar aankoophistoriek bij Colruyt</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 STAP 2 — Eerste aankoop bakker (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">1️⃣</div><div class="step-line l-colruyt"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 2</span><span class="step-loc loc-colruyt">Colruyt — Warme Bakker</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row viz-right">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF5EC"/>
+              <!-- Bakery counter background -->
+              <rect x="0" y="140" width="320" height="100" fill="#E8D5B7"/>
+              <rect x="0" y="140" width="320" height="4" fill="#C8A87A"/>
+              <!-- Bakery display case -->
+              <rect x="20" y="80" width="180" height="60" rx="6" fill="white" stroke="#D4B896" stroke-width="1.5"/>
+              <rect x="20" y="80" width="180" height="18" rx="6" fill="#F5E6D0"/>
+              <text x="110" y="93" text-anchor="middle" font-size="8" font-weight="700" fill="#8B5E3C" font-family="Inter,sans-serif">🥖 Ovenverse broodjes</text>
+              <!-- Bread items in case -->
+              <ellipse cx="55" cy="125" rx="22" ry="10" fill="#C8892A" opacity="0.9"/>
+              <ellipse cx="55" cy="122" rx="18" ry="7" fill="#E8A030"/>
+              <line x1="43" y1="120" x2="67" y2="120" stroke="#C8892A" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <ellipse cx="100" cy="126" rx="22" ry="10" fill="#B8782A" opacity="0.9"/>
+              <ellipse cx="100" cy="123" rx="18" ry="7" fill="#D8902A"/>
+              <ellipse cx="145" cy="125" rx="20" ry="9" fill="#C8892A" opacity="0.85"/>
+              <ellipse cx="145" cy="122" rx="16" ry="6" fill="#E0982A"/>
+              <!-- Price sign -->
+              <rect x="200" y="85" width="90" height="52" rx="6" fill="#CC0000"/>
+              <text x="245" y="105" text-anchor="middle" font-size="8.5" font-weight="700" fill="white" font-family="Inter,sans-serif">Warme Bakker</text>
+              <text x="245" y="118" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.85)" font-family="Inter,sans-serif">actie deze week</text>
+              <rect x="208" y="122" width="74" height="9" rx="4" fill="rgba(255,255,255,0.15)"/>
+              <text x="245" y="130" text-anchor="middle" font-size="7" font-weight="700" fill="#FFD700" font-family="Inter,sans-serif">+20 ✦ na 3 stuks</text>
+              <!-- Marie (simple figure) -->
+              <circle cx="260" cy="110" r="0" fill="none"/><!-- placeholder, no figure needed -->
+              <!-- Phone notification -->
+              <rect x="195" y="155" width="110" height="52" rx="8" fill="#1C1C1E"/>
+              <rect x="199" y="159" width="102" height="44" rx="6" fill="#0F0A1E"/>
+              <text x="250" y="173" text-anchor="middle" font-size="7.5" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">✓ Broodje #1 gescand!</text>
+              <rect x="205" y="177" width="90" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+              <rect x="205" y="177" width="30" height="4" rx="2" fill="#4ADE80"/>
+              <text x="250" y="192" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">1 van 3 · 2 meer te gaan</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Eerste ovenvers broodje: de actie loopt</h3>
+            <p>Marie passeert de bakkerijhoek en koopt een ovenvers pistolet. Ze scant haar Xtra-kaart aan de kassa. Meteen verschijnt in de app: <em>"Broodje #1 gescand — nog 2 te gaan voor jouw 20 bonus-Xtratjes!"</em></p>
+            <div class="xtra-badge xb-earn">✦ 1 van 3 ovenverse broodjes ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 STAP 3 — Derde aankoop, bonus verdiend (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">🎉</div><div class="step-line l-colruyt"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 3</span><span class="step-loc loc-colruyt">Colruyt — Kassa</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF8F0"/>
+              <!-- Phone big central -->
+              <rect x="85" y="8" width="150" height="224" rx="22" fill="#1C1C1E"/>
+              <rect x="89" y="12" width="142" height="216" rx="20" fill="#0F0A1E"/>
+              <rect x="143" y="12" width="44" height="14" rx="7" fill="#1C1C1E"/>
+              <!-- Header -->
+              <rect x="89" y="26" width="142" height="36" fill="#CC0000"/>
+              <text x="160" y="49" text-anchor="middle" font-size="9" font-weight="800" fill="white" font-family="Inter,sans-serif">✦ Xtra — Gelukt!</text>
+              <!-- Celebration area -->
+              <rect x="95" y="68" width="130" height="100" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,215,0,0.3)" stroke-width="1.5"/>
+              <!-- Bread + checkmarks -->
+              <text x="160" y="110" text-anchor="middle" font-size="32" font-family="Inter,sans-serif">🥖</text>
+              <circle cx="130" cy="90" r="10" fill="#4ADE80" opacity="0.9"/>
+              <text x="130" y="94" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <circle cx="160" cy="84" r="10" fill="#4ADE80" opacity="0.9"/>
+              <text x="160" y="88" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <circle cx="190" cy="90" r="10" fill="#4ADE80" opacity="0.9"/>
+              <text x="190" y="94" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <!-- Points earned -->
+              <text x="160" y="140" text-anchor="middle" font-size="9" font-weight="700" fill="white" font-family="Inter,sans-serif">3/3 broodjes gekocht</text>
+              <rect x="105" y="148" width="110" height="14" rx="7" fill="rgba(255,215,0,0.15)" stroke="rgba(255,215,0,0.3)" stroke-width="1"/>
+              <text x="160" y="159" text-anchor="middle" font-size="8.5" font-weight="800" fill="#FFD700" font-family="Inter,sans-serif">+20 ✦ Xtratjes bijgeschreven!</text>
+              <!-- New balance -->
+              <text x="160" y="180" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Nieuw saldo</text>
+              <text x="160" y="196" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Inter,sans-serif">148 ✦</text>
+              <text x="160" y="210" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.35)" font-family="Inter,sans-serif">Waarde: €0,74</text>
+              <!-- Confetti dots -->
+              <circle cx="96" cy="70" r="3" fill="#FFD700" opacity="0.7"/>
+              <circle cx="220" cy="75" r="4" fill="#4ADE80" opacity="0.6"/>
+              <circle cx="102" cy="155" r="2.5" fill="#FF6B6B" opacity="0.7"/>
+              <circle cx="215" cy="160" r="3" fill="#FFD700" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Derde broodje: 20 bonus-Xtratjes verdiend! 🎉</h3>
+            <p>Vrijdagochtend koopt Marie haar derde ovenvers broodje. Bij het afrekenen pingt haar telefoon: <em>"Gelukt! Je hebt 3 ovenverse broodjes gekocht. 20 bonus-Xtratjes zijn bijgeschreven op je Xtra-rekening."</em></p>
+            <p>Marie heeft in één week een nieuwe gewoonte opgebouwd — en wordt beloond voor haar eerste verkenning van de warme bakker.</p>
+            <div class="xtra-badge xb-earn">✦ +20 bonus-Xtratjes bijgeschreven</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 STAP 4 — Terugkeren (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">🔁</div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 4</span><span class="step-loc loc-colruyt">Volgende week</span><span class="step-channel">📍 Gewoonte</span></div>
+        <div class="viz-row viz-right">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF5EC"/>
+              <!-- Calendar visual -->
+              <rect x="30" y="20" width="260" height="200" rx="12" fill="white" stroke="#E8D5B7" stroke-width="1.5"/>
+              <rect x="30" y="20" width="260" height="36" rx="12" fill="#CC0000"/>
+              <rect x="30" y="44" width="260" height="12" fill="#CC0000"/>
+              <text x="160" y="44" text-anchor="middle" font-size="10" font-weight="800" fill="white" font-family="Inter,sans-serif">Volgende week</text>
+              <!-- Day headers -->
+              <text x="60" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Ma</text>
+              <text x="100" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Di</text>
+              <text x="140" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Wo</text>
+              <text x="180" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Do</text>
+              <text x="220" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Vr</text>
+              <text x="260" y="78" text-anchor="middle" font-size="8" fill="#888" font-family="Inter,sans-serif">Za</text>
+              <!-- Bread day markers -->
+              <circle cx="60" cy="110" r="20" fill="#FFF0E0" stroke="#E8A030" stroke-width="1.5"/>
+              <text x="60" y="116" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">🥖</text>
+              <circle cx="140" cy="110" r="20" fill="#FFF0E0" stroke="#E8A030" stroke-width="1.5"/>
+              <text x="140" y="116" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">🥖</text>
+              <circle cx="220" cy="110" r="20" fill="#FFF0E0" stroke="#E8A030" stroke-width="1.5"/>
+              <text x="220" y="116" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">🥖</text>
+              <!-- Empty days -->
+              <circle cx="100" cy="110" r="20" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+              <circle cx="180" cy="110" r="20" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+              <circle cx="260" cy="110" r="20" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+              <!-- Points per week -->
+              <rect x="50" y="152" width="220" height="50" rx="10" fill="#FEF3C7" stroke="#F5A623" stroke-width="1"/>
+              <text x="160" y="172" text-anchor="middle" font-size="9" font-weight="700" fill="#92400E" font-family="Inter,sans-serif">Elke week 3 broodjes = +20 ✦</text>
+              <text x="160" y="188" text-anchor="middle" font-size="8" fill="#B45309" font-family="Inter,sans-serif">4 weken = +80 ✦ · Waarde: €0,40/week</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Een nieuwe ochtendroutine is geboren</h3>
+            <p>De week erop koopt Marie opnieuw ovenverse broodjes. Niet meer omdat er een campagne loopt, maar omdat ze de gewoonte heeft opgebouwd. Colruyt heeft een nieuwe dagelijkse klant aan de bakker.</p>
+            <p>De actie deed haar iets nieuws ontdekken. De Xtratjes waren de trigger — de broodjes zijn de gewoonte geworden.</p>
+            <div class="touchpoints">
+              <div class="tp physical"><div class="tp-type">🥖 Bakker</div><div class="tp-name">Nieuwe routine</div><div class="tp-desc">Van promotie naar wekelijkse gewoonte</div></div>
+              <div class="tp digital"><div class="tp-type">✦ Xtratjes</div><div class="tp-name">+20/week</div><div class="tp-desc">Zolang de actie loopt</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps s4 -->
+
+  <div class="summary-box">
+    <div class="sum-title">🥖 Warme Bakker actie in het kort</div>
+    <div class="sum-flow">
+      <div class="sum-step"><div class="sum-icon">📲</div><div class="sum-name">Uitnodiging</div><div class="sum-val">Push-bericht</div></div>
+      <div class="sum-arrow">→</div>
+      <div class="sum-step"><div class="sum-icon">🥖</div><div class="sum-name">3× broodje</div><div class="sum-val">In 1 week</div></div>
+      <div class="sum-arrow">=</div>
+      <div class="sum-step"><div class="sum-icon">✦</div><div class="sum-name">Bonus</div><div class="sum-val" style="color:#B45309;">+20 Xtratjes</div></div>
+      <div class="sum-arrow">→</div>
+      <div class="sum-step"><div class="sum-icon">🔁</div><div class="sum-name">Gewoonte</div><div class="sum-val">Elke week</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 5 — Lena & Yoboo Gezondheid
+════════════════════════════════════════════════════ -->
+<div id="s5" class="sc">
+
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🌿</div>
+    <div>
+      <h3>Lena investeert in haar gezondheid — en wordt beloond</h3>
+      <p>Colruyt Group lanceert een cross-merk gezondheidsuitdaging. Besteed €50 bij gezonde merken van de groep — verspreid over Colruyt, JIMS en Newpharma — en verdien een gratis persoonlijke coaching sessie bij <strong>Yoboo</strong>, de nieuwe gezondheidszorgpartner van de groep.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- S5 STAP 1 — Uitnodiging in de app (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle" style="background:linear-gradient(135deg,#15803D,#0055B3);">📲</div><div class="step-line" style="background:linear-gradient(to bottom,#15803D,#0055B3);"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 1</span><span class="step-loc" style="background:rgba(21,128,61,0.1);color:#15803D;">Xtra App</span><span class="step-channel">📲 Digitaal</span></div>
+        <div class="viz-row">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F0FDF4"/>
+              <!-- Phone -->
+              <rect x="85" y="8" width="150" height="224" rx="22" fill="#1C1C1E"/>
+              <rect x="89" y="12" width="142" height="216" rx="20" fill="#0F0A1E"/>
+              <rect x="143" y="12" width="44" height="14" rx="7" fill="#1C1C1E"/>
+              <!-- Green header -->
+              <rect x="89" y="26" width="142" height="36" rx="0" fill="url(#gHealth)"/>
+              <defs><linearGradient id="gHealth" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#15803D"/><stop offset="100%" stop-color="#0055B3"/></linearGradient></defs>
+              <text x="160" y="49" text-anchor="middle" font-size="8.5" font-weight="800" fill="white" font-family="Inter,sans-serif">🌿 Nieuwe gezondheids-challenge!</text>
+              <!-- Challenge card -->
+              <rect x="95" y="68" width="130" height="116" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(74,222,128,0.3)" stroke-width="1.5"/>
+              <!-- Icon -->
+              <text x="160" y="102" text-anchor="middle" font-size="28" font-family="Inter,sans-serif">🧘</text>
+              <text x="160" y="122" text-anchor="middle" font-size="9" font-weight="800" fill="white" font-family="Inter,sans-serif">Gezond met CG</text>
+              <text x="160" y="134" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">Besteed €50 bij gezonde merken</text>
+              <text x="160" y="144" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">→ gratis Yoboo coaching (€75)</text>
+              <!-- Progress bar empty -->
+              <rect x="105" y="154" width="110" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="105" y="154" width="2" height="6" rx="3" fill="#4ADE80"/>
+              <text x="160" y="170" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.4)" font-family="Inter,sans-serif">€0 / €50 gespaard</text>
+              <!-- CTA -->
+              <rect x="105" y="176" width="110" height="20" rx="10" fill="url(#gHealth)"/>
+              <text x="160" y="190" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="Inter,sans-serif">Doe mee →</text>
+              <!-- Brand logos strip -->
+              <text x="112" y="218" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">🏪</text>
+              <text x="137" y="218" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">🌿</text>
+              <text x="162" y="218" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">💪</text>
+              <text x="187" y="218" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">💊</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Lena ontvangt de gezondheids-challenge</h3>
+            <p>De Xtra-app stuurt Lena een persoonlijk aanbod: <em>"Besteed €50 bij onze gezondheidsmerken — Colruyt, Bio-Planet, JIMS of Newpharma — en win een gratis Yoboo health coaching sessie ter waarde van €75."</em></p>
+            <p>Lena doet al boodschappen bij Colruyt en sport bij JIMS. Ze hoeft dus niet van gewoonte te veranderen — ze spaart gewoon verder terwijl ze leeft.</p>
+            <div class="touchpoints">
+              <div class="tp digital"><div class="tp-type">📲 App</div><div class="tp-name">Challenge kaart</div><div class="tp-desc">Voortgangsmeter met deelnemende gezondheidsmerken</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 STAP 2 — Colruyt gezonde voeding (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle c-colruyt">1️⃣</div><div class="step-line l-colruyt"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 2</span><span class="step-loc loc-colruyt">Colruyt — Gezonde voeding</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row viz-right">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#FFF5F5"/>
+              <!-- Store sign -->
+              <rect x="60" y="12" width="200" height="36" rx="6" fill="#CC0000"/>
+              <text x="180" y="35" text-anchor="middle" font-size="9" font-weight="700" fill="white" font-family="Inter,sans-serif">COLRUYT Laagste Prijzen</text>
+              <!-- Healthy food shelf -->
+              <rect x="20" y="66" width="160" height="100" rx="6" fill="white" stroke="#E0DDD8" stroke-width="1.5"/>
+              <text x="100" y="83" text-anchor="middle" font-size="8" font-weight="700" fill="#15803D" font-family="Inter,sans-serif">🥦 Gezonde keuzes</text>
+              <!-- Food items -->
+              <ellipse cx="50" cy="120" rx="18" ry="22" fill="#4ADE80" opacity="0.85"/>
+              <rect x="45" y="99" width="10" height="12" rx="2" fill="#15803D"/>
+              <ellipse cx="90" cy="122" rx="22" ry="16" fill="#F97316" opacity="0.8"/>
+              <ellipse cx="130" cy="118" rx="16" ry="20" fill="#DC2626" opacity="0.75"/>
+              <rect x="35" y="142" width="30" height="14" rx="3" fill="#DCFCE7" stroke="#BBF7D0" stroke-width="0.5"/>
+              <text x="50" y="152" text-anchor="middle" font-size="6" fill="#15803D" font-weight="700" font-family="Inter,sans-serif">Nutriscore A</text>
+              <!-- Progress phone -->
+              <rect x="190" y="60" width="110" height="150" rx="14" fill="#1C1C1E"/>
+              <rect x="194" y="64" width="102" height="142" rx="12" fill="#0F0A1E"/>
+              <rect x="228" y="64" width="34" height="10" rx="5" fill="#1C1C1E"/>
+              <rect x="194" y="74" width="102" height="24" fill="#15803D"/>
+              <text x="245" y="90" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="Inter,sans-serif">💳 €22 gescand!</text>
+              <!-- Progress bar 44% -->
+              <rect x="200" y="104" width="90" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="200" y="104" width="40" height="6" rx="3" fill="#4ADE80"/>
+              <text x="245" y="122" text-anchor="middle" font-size="8" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">€22 / €50</text>
+              <text x="245" y="134" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">44% — goed bezig!</text>
+              <!-- Brand check -->
+              <circle cx="218" cy="158" r="10" fill="#CC0000" opacity="0.9"/>
+              <text x="218" y="162" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <circle cx="245" cy="158" r="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <text x="245" y="162" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">💪</text>
+              <circle cx="272" cy="158" r="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <text x="272" y="162" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">💊</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Colruyt: €22 gezonde voeding — 44% gespaard</h3>
+            <p>Lena doet haar wekelijkse boodschappen en kiest bewust voor groenten, fruit en Nutriscore A-producten. Bij het afrekenen scant ze haar Xtra-kaart: <em>"€22 bijgeschreven voor je gezondheids-challenge — nog €28 te gaan!"</em></p>
+            <div class="xtra-badge xb-earn">✦ €22 / €50 — Colruyt ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 STAP 3 — JIMS Fitness (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle" style="background:#92650A;">2️⃣</div><div class="step-line" style="background:#92650A;"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 3</span><span class="step-loc" style="background:rgba(146,101,10,0.1);color:#92650A;">JIMS Fitness</span><span class="step-channel">📍 Fysiek</span></div>
+        <div class="viz-row">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F0FFFE"/>
+              <!-- JIMS header -->
+              <rect x="60" y="12" width="200" height="36" rx="6" fill="#00B4B8"/>
+              <text x="160" y="35" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Inter,sans-serif">💪 JIMS Fitness</text>
+              <!-- Fitness floor -->
+              <rect x="20" y="68" width="160" height="100" rx="6" fill="white" stroke="#E0F7F7" stroke-width="1.5"/>
+              <!-- Dumbbell -->
+              <rect x="55" y="105" width="70" height="14" rx="7" fill="#374151"/>
+              <circle cx="50" cy="112" r="16" fill="#1F2937" opacity="0.9"/>
+              <circle cx="135" cy="112" r="16" fill="#1F2937" opacity="0.9"/>
+              <circle cx="50" cy="112" r="10" fill="#374151"/>
+              <circle cx="135" cy="112" r="10" fill="#374151"/>
+              <!-- Person (stick figure suggestion) -->
+              <circle cx="100" cy="76" r="7" fill="#F59E0B"/>
+              <line x1="100" y1="83" x2="100" y2="100" stroke="#F59E0B" stroke-width="3"/>
+              <!-- Check-in phone -->
+              <rect x="190" y="60" width="110" height="150" rx="14" fill="#1C1C1E"/>
+              <rect x="194" y="64" width="102" height="142" rx="12" fill="#0F0A1E"/>
+              <rect x="228" y="64" width="34" height="10" rx="5" fill="#1C1C1E"/>
+              <rect x="194" y="74" width="102" height="24" fill="#00B4B8"/>
+              <text x="245" y="90" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="Inter,sans-serif">💪 JIMS check-in!</text>
+              <!-- Progress bar 72% -->
+              <rect x="200" y="104" width="90" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+              <rect x="200" y="104" width="65" height="6" rx="3" fill="#4ADE80"/>
+              <text x="245" y="122" text-anchor="middle" font-size="8" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">€36 / €50</text>
+              <text x="245" y="134" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">72% — bijna daar!</text>
+              <!-- Brand checks -->
+              <circle cx="218" cy="158" r="10" fill="#CC0000" opacity="0.9"/>
+              <text x="218" y="162" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <circle cx="245" cy="158" r="10" fill="#00B4B8" opacity="0.9"/>
+              <text x="245" y="162" text-anchor="middle" font-size="10" font-family="Inter,sans-serif">✓</text>
+              <circle cx="272" cy="158" r="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <text x="272" y="162" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">💊</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>JIMS Fitness: maandabonnement telt mee — 72% gespaard</h3>
+            <p>Lena traint zoals altijd bij JIMS. Haar maandabonnement van €14 wordt automatisch meegeteld in de gezondheids-challenge. <em>"JIMS-bijdrage bijgeschreven — nog €14 te gaan voor je Yoboo sessie!"</em></p>
+            <div class="xtra-badge xb-earn">✦ €36 / €50 — Colruyt + JIMS ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 STAP 4 — Newpharma (viz rechts) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle" style="background:#0055B3;">3️⃣</div><div class="step-line" style="background:#0055B3;"></div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 4</span><span class="step-loc" style="background:rgba(0,85,179,0.1);color:#0055B3;">Newpharma</span><span class="step-channel">💻 Online</span></div>
+        <div class="viz-row viz-right">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#EFF6FF"/>
+              <!-- Laptop / webshop -->
+              <rect x="30" y="40" width="200" height="130" rx="8" fill="#1E293B"/>
+              <rect x="35" y="45" width="190" height="120" rx="6" fill="#F8FAFC"/>
+              <!-- Newpharma header in browser -->
+              <rect x="35" y="45" width="190" height="22" rx="6" fill="#0055B3"/>
+              <rect x="35" y="56" width="190" height="11" fill="#0055B3"/>
+              <text x="130" y="61" text-anchor="middle" font-size="7.5" font-weight="800" fill="white" font-family="Inter,sans-serif">💊 Newpharma — Gezondheidsshop</text>
+              <!-- Product cards -->
+              <rect x="42" y="73" width="52" height="55" rx="4" fill="white" stroke="#DBEAFE" stroke-width="1"/>
+              <text x="68" y="96" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">💊</text>
+              <text x="68" y="108" text-anchor="middle" font-size="6" fill="#1A1A1A" font-weight="700" font-family="Inter,sans-serif">Vitamine D</text>
+              <text x="68" y="118" text-anchor="middle" font-size="6.5" fill="#0055B3" font-weight="800" font-family="Inter,sans-serif">€8,99</text>
+              <rect x="100" y="73" width="52" height="55" rx="4" fill="white" stroke="#DBEAFE" stroke-width="1"/>
+              <text x="126" y="96" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">🫐</text>
+              <text x="126" y="108" text-anchor="middle" font-size="6" fill="#1A1A1A" font-weight="700" font-family="Inter,sans-serif">Omega-3</text>
+              <text x="126" y="118" text-anchor="middle" font-size="6.5" fill="#0055B3" font-weight="800" font-family="Inter,sans-serif">€12,49</text>
+              <rect x="158" y="73" width="52" height="55" rx="4" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+              <text x="184" y="96" text-anchor="middle" font-size="18" font-family="Inter,sans-serif">🌿</text>
+              <text x="184" y="108" text-anchor="middle" font-size="6" fill="#1A1A1A" font-weight="700" font-family="Inter,sans-serif">Magnesium</text>
+              <text x="184" y="118" text-anchor="middle" font-size="6.5" fill="#0055B3" font-weight="800" font-family="Inter,sans-serif">€9,99</text>
+              <!-- Xtra checkout banner -->
+              <rect x="40" y="134" width="180" height="22" rx="4" fill="#DCFCE7" stroke="#BBF7D0" stroke-width="1"/>
+              <text x="130" y="149" text-anchor="middle" font-size="7" font-weight="700" fill="#15803D" font-family="Inter,sans-serif">✦ Xtra-korting actief · Bestelling telt mee voor challenge</text>
+              <!-- Progress phone -->
+              <rect x="240" y="60" width="68" height="110" rx="10" fill="#1C1C1E"/>
+              <rect x="243" y="63" width="62" height="104" rx="8" fill="#0F0A1E"/>
+              <rect x="254" y="63" width="20" height="7" rx="3" fill="#1C1C1E"/>
+              <rect x="243" y="70" width="62" height="18" fill="#15803D"/>
+              <text x="274" y="83" text-anchor="middle" font-size="6.5" font-weight="700" fill="white" font-family="Inter,sans-serif">Challenge 100%!</text>
+              <rect x="249" y="94" width="50" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+              <rect x="249" y="94" width="50" height="5" rx="2" fill="#4ADE80"/>
+              <text x="274" y="110" text-anchor="middle" font-size="7.5" font-weight="900" fill="#4ADE80" font-family="Inter,sans-serif">€51 / €50 ✓</text>
+              <text x="274" y="122" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.5)" font-family="Inter,sans-serif">Gelukt!</text>
+              <text x="274" y="155" text-anchor="middle" font-size="16" font-family="Inter,sans-serif">🎉</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Newpharma: vitamines besteld — challenge volbracht!</h3>
+            <p>Lena bestelt online Vitamine D en Omega-3 bij Newpharma (€15). De teller springt naar €51 — de drempel van €50 is bereikt. Haar app trilt: <em>"Gefeliciteerd! Je hebt de Gezond met CG-challenge volbracht. Je gratis Yoboo coaching sessie staat klaar."</em></p>
+            <div class="xtra-badge xb-earn">✦ €51 / €50 — Challenge volbracht! 🎉</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 STAP 5 — Yoboo sessie (viz links) -->
+    <div class="step">
+      <div class="step-left"><div class="step-circle" style="background:linear-gradient(135deg,#15803D,#0055B3);">🧘</div></div>
+      <div class="step-right">
+        <div class="step-meta"><span class="step-num">Stap 5</span><span class="step-loc" style="background:rgba(21,128,61,0.1);color:#15803D;">Yoboo Health Coaching</span><span class="step-channel">🎁 Reward</span></div>
+        <div class="viz-row">
+          <div class="viz-panel">
+            <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="240" fill="#F0FDF4"/>
+              <!-- Yoboo card in app -->
+              <rect x="55" y="12" width="210" height="216" rx="18" fill="#1C1C1E"/>
+              <rect x="59" y="16" width="202" height="208" rx="16" fill="#0F0A1E"/>
+              <rect x="113" y="16" width="34" height="10" rx="5" fill="#1C1C1E"/>
+              <!-- Green top banner -->
+              <rect x="59" y="26" width="202" height="50" rx="0" fill="url(#gYoboo)"/>
+              <defs><linearGradient id="gYoboo" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#15803D"/><stop offset="100%" stop-color="#166534"/></linearGradient></defs>
+              <text x="160" y="47" text-anchor="middle" font-size="9" font-weight="800" fill="white" font-family="Inter,sans-serif">🎁 Jouw reward is klaar!</text>
+              <text x="160" y="62" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.75)" font-family="Inter,sans-serif">Je hebt de gezondheids-challenge volbracht</text>
+              <!-- Yoboo logo area -->
+              <rect x="75" y="84" width="170" height="80" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(74,222,128,0.2)" stroke-width="1"/>
+              <text x="160" y="118" text-anchor="middle" font-size="30" font-family="Inter,sans-serif">🧘</text>
+              <text x="160" y="136" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Inter,sans-serif">Yoboo Coaching</text>
+              <text x="160" y="149" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif">1 sessie van 60 min · Waarde €75</text>
+              <!-- Coupon code -->
+              <rect x="75" y="172" width="170" height="28" rx="8" fill="rgba(74,222,128,0.1)" stroke="rgba(74,222,128,0.3)" stroke-width="1"/>
+              <text x="160" y="186" text-anchor="middle" font-size="8" font-weight="700" fill="#4ADE80" font-family="Inter,sans-serif">Code: YOBOO-CG-LENA-2026</text>
+              <text x="160" y="196" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.4)" font-family="Inter,sans-serif">Geldig t.e.m. 31/12/2026</text>
+              <!-- Bonus xtratjes -->
+              <text x="160" y="216" text-anchor="middle" font-size="7.5" font-weight="700" fill="#FFD700" font-family="Inter,sans-serif">+ 100 bonus ✦ bijgeschreven</text>
+            </svg>
+          </div>
+          <div class="viz-text">
+            <h3>Lena boekt haar gratis Yoboo coaching sessie 🧘</h3>
+            <p>Via de Xtra-app opent Lena haar persoonlijke Yoboo-voucher. Ze kiest een tijdslot bij een coach die gespecialiseerd is in voeding en beweging. De sessie van 60 minuten is volledig gratis — gefinancierd door de Colruyt Group gezondheids-challenge.</p>
+            <p>Bovenop de coaching ontvangt Lena ook 100 bonus-Xtratjes, die ze kan inzetten bij elk merk van de groep.</p>
+            <div class="touchpoints">
+              <div class="tp digital" style="border-color:rgba(21,128,61,0.3);background:#F0FDF4;"><div class="tp-type" style="color:#15803D;">🧘 Yoboo</div><div class="tp-name">Gratis coaching (€75)</div><div class="tp-desc">60 min. persoonlijke health coaching — volledig gratis</div></div>
+              <div class="tp digital"><div class="tp-type">✦ Bonus</div><div class="tp-name">+100 Xtratjes</div><div class="tp-desc">Extra beloning bovenop de coaching sessie</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps s5 -->
+
+  <div class="summary-box">
+    <div class="sum-title">🌿 Gezond met CG — Samenvatting</div>
+    <div class="sum-flow">
+      <div class="sum-step"><div class="sum-icon">🏪</div><div class="sum-name">Colruyt</div><div class="sum-val">€22</div></div>
+      <div class="sum-arrow">+</div>
+      <div class="sum-step"><div class="sum-icon">💪</div><div class="sum-name">JIMS</div><div class="sum-val">€14</div></div>
+      <div class="sum-arrow">+</div>
+      <div class="sum-step"><div class="sum-icon">💊</div><div class="sum-name">Newpharma</div><div class="sum-val">€15</div></div>
+      <div class="sum-arrow">=</div>
+      <div class="sum-step"><div class="sum-icon">🧘</div><div class="sum-name">Yoboo</div><div class="sum-val" style="color:#15803D;">Gratis sessie (€75)</div></div>
+      <div class="sum-arrow">+</div>
+      <div class="sum-step"><div class="sum-icon">✦</div><div class="sum-name">Bonus</div><div class="sum-val" style="color:#B45309;">+100 ✦</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCENARIO 6 — Hyperpersonalisatie
+════════════════════════════════════════════════════ -->
+<div id="s6" class="sc">
+
+  <div class="sc-intro">
+    <div class="sc-intro-icon">🎯</div>
+    <div>
+      <h3>Geen twee klanten krijgen dezelfde nudge</h3>
+      <p>De Xtra-engine analyseert aankoopgedrag, zoekpatronen en duurzaamheidssignalen. Het resultaat: elke klant krijgt een boodschap die voelt alsof ze voor hem of haar persoonlijk werd geschreven — want dat is ook zo.</p>
+    </div>
+  </div>
+
+  <!-- PERSONA ROW 1: Jana -->
+  <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:28px 28px 20px;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(232,64,16,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;">🛒</div>
+      <div>
+        <div style="font-size:16px;font-weight:800;">Jana, 38 — De verzadigde OKay-loyalist</div>
+        <div style="font-size:13px;color:var(--text-muted);">Trouwe wekelijkse shopper, enkel OKay, nooit een ander CG-merk bezocht</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(232,64,16,0.08);border:1px solid rgba(232,64,16,0.2);color:var(--okay);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">OKay → JIMS</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
+      <!-- Signal panel -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:12px;">📊 Wat de engine ziet</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+            <span style="color:var(--text-mid);">OKay bezoeken/jaar</span>
+            <span style="font-weight:800;color:var(--okay);">52×</span>
+          </div>
+          <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;width:92%;background:var(--okay);border-radius:3px;"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+            <span style="color:var(--text-mid);">Jaaruitgaven CG</span>
+            <span style="font-weight:800;color:var(--text);">€1.380</span>
+          </div>
+          <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;width:78%;background:var(--okay);border-radius:3px;"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:4px;">
+            <span style="color:var(--text-mid);">Cross-brand gebruik</span>
+            <span style="font-weight:800;color:#888;">0%</span>
+          </div>
+          <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;width:0%;background:#888;border-radius:3px;"></div></div>
+        </div>
+        <div style="margin-top:12px;padding:8px 10px;background:rgba(232,64,16,0.06);border:1px solid rgba(232,64,16,0.15);border-radius:8px;font-size:12px;color:var(--text-mid);">
+          💡 <strong>Inzicht:</strong> Jana is maximaal gesatureerd bij OKay. Meer OKay-communicatie heeft nul effect. Expansie naar nieuw merk = enige groeikans.
+        </div>
+      </div>
+      <!-- Arrow -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="font-size:24px;">→</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Nudge</div>
+      </div>
+      <!-- Nudge output -->
+      <div>
+        <div style="background:linear-gradient(135deg,#1A2535,#0F1820);border-radius:16px;padding:4px;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+          <div style="background:#0F1820;border-radius:13px;padding:14px 16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:#1A2535;display:flex;align-items:center;justify-content:center;font-size:14px;">💪</div>
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);">JIMS FITNESS · Via Xtra App</div>
+              <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3);">Nu</div>
+            </div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:12px;">
+              <strong style="color:white;">Jana, jij bent onze topklant bij OKay.</strong> Maar heb je al geweten dat je Xtratjes ook voor JIMS werken? Één dagpas is volledig gratis vandaag.
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;background:rgba(201,162,39,0.25);border:1px solid rgba(201,162,39,0.4);border-radius:8px;padding:8px 12px;text-align:center;font-size:12px;font-weight:700;color:#F0C040;">Probeer gratis →</div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-size:12px;color:rgba(255,255,255,0.4);">Later</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text-muted);text-align:center;">📱 Push notificatie + in-app kaart</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA ROW 2: Koen -->
+  <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:28px 28px 20px;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(204,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;">🍺</div>
+      <div>
+        <div style="font-size:16px;font-weight:800;">Koen, 44 — De smalle koper</div>
+        <div style="font-size:13px;color:var(--text-muted);">Koopt enkel bier en WC-papier bij Colruyt, regelmatig maar smal assortiment</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);color:var(--colruyt);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;">Colruyt → Bakkerij</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:12px;">📊 Wat de engine ziet</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-mid);"><span>Bier aankopen</span><span style="font-weight:700;">24×/jaar</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-mid);"><span>WC-papier aankopen</span><span style="font-weight:700;">8×/jaar</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-mid);"><span>Versafdeling bezocht</span><span style="font-weight:700;color:#888;">0×</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-mid);"><span>Categorieën ooit gekocht</span><span style="font-weight:700;">2 van 18</span></div>
+        </div>
+        <div style="margin-top:12px;padding:8px 10px;background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);border-radius:8px;font-size:12px;color:var(--text-mid);">
+          💡 <strong>Inzicht:</strong> Enorm uitbreidingspotentieel binnen Colruyt zelf. Nudge naar versproducten verhoogt mandgrootte zonder extra merk nodig.
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="font-size:24px;">→</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Nudge</div>
+      </div>
+      <div>
+        <div style="background:linear-gradient(135deg,#1A0808,#1A0808);border-radius:16px;padding:4px;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+          <div style="background:#1A0808;border-radius:13px;padding:14px 16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:#2A0808;display:flex;align-items:center;justify-content:center;font-size:14px;">🍞</div>
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);">COLRUYT · Spaaractie</div>
+            </div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:12px;">
+              <strong style="color:white;">Koen, probeer eens ons dagvers brood.</strong> Koop 5× — en we geven je 10 Xtratjes cadeau. Wacht, dat is al €5 waarde.
+            </div>
+            <div style="background:rgba(204,0,0,0.3);border:1px solid rgba(204,0,0,0.5);border-radius:8px;padding:8px 12px;text-align:center;font-size:12px;font-weight:700;color:#FCA5A5;">Actie activeren →</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text-muted);text-align:center;">🏪 Digitale actie + bordje in versafdeling</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA ROW 3+4 — side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+    <!-- Mia: health signals → Newpharma -->
+    <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,85,179,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">🥗</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Mia, 31 — De gezondheidszoeker</div>
+          <div style="font-size:12px;color:var(--text-muted);">Zoekt "glutenvrij" & "plantaardig" in de Xtra app</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,85,179,0.05);border:1px solid rgba(0,85,179,0.15);border-radius:10px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#3B82F6;margin-bottom:8px;">Signalen</div>
+        <div style="font-size:12px;color:var(--text-mid);display:flex;flex-direction:column;gap:4px;">
+          <div>🔍 Zoektermen: "glutenvrij", "lactosevrij", "omega-3"</div>
+          <div>📖 Browsed gezondheidsrubriek 3×/week</div>
+          <div>🚫 Nog nooit aankoop bij Newpharma</div>
+        </div>
+      </div>
+      <div style="background:#EFF6FF;border:1px solid rgba(0,85,179,0.25);border-radius:10px;padding:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#2563EB;margin-bottom:6px;">💊 Nudge → Newpharma</div>
+        <div style="font-size:13px;color:#1E3A5F;line-height:1.5;">"Mia, op basis van jouw zoekgedrag: ons glutenvrij supplement-aanbod — 15% korting vandaag. Betaal met Xtratjes."</div>
+      </div>
+    </div>
+
+    <!-- Tim: sustainability → Bio-Planet -->
+    <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(46,125,50,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">🌳</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Tim, 52 — De groene koper</div>
+          <div style="font-size:12px;color:var(--text-muted);">Green Champion, heeft al 2 bomen gesponsord via Xtra</div>
+        </div>
+      </div>
+      <div style="background:rgba(46,125,50,0.05);border:1px solid rgba(46,125,50,0.15);border-radius:10px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#22C55E;margin-bottom:8px;">Signalen</div>
+        <div style="font-size:12px;color:var(--text-mid);display:flex;flex-direction:column;gap:4px;">
+          <div>🌿 Duurzaamheidstier: Green Champion</div>
+          <div>🌳 2 bomen gesponsord, €4 gedoneerd</div>
+          <div>🚫 Bio-Planet nog niet in winkelpatroon</div>
+        </div>
+      </div>
+      <div style="background:#F0FDF4;border:1px solid rgba(46,125,50,0.25);border-radius:10px;padding:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#16A34A;margin-bottom:6px;">🌿 Nudge → Bio-Planet</div>
+        <div style="font-size:13px;color:#14532D;line-height:1.5;">"Tim, jij gelooft in impact. Bio-Planet bio-weekbox nu: dubbele Xtratjes + 1 boom geplant via jouw aankoop."</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Engine legenda -->
+  <div class="summary-box">
+    <div class="sum-title">🎯 De Hyperpersonalisatie Engine — Hoe het werkt</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:24px;margin-bottom:8px;">📥</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">1. Signalen verzamelen</div>
+        <div style="font-size:12px;color:var(--text-muted);">Aankoophistoriek, zoekgedrag, duurzaamheidsprofiel, merk-interacties</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;margin-bottom:8px;">🧠</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">2. Kloof detecteren</div>
+        <div style="font-size:12px;color:var(--text-muted);">Wie is verzadigd? Wie heeft uitbreidingspotentieel? Welk merk ontbreekt in het patroon?</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;margin-bottom:8px;">✉️</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">3. Nudge genereren</div>
+        <div style="font-size:12px;color:var(--text-muted);">Persoonlijke boodschap, relevant aanbod, correct kanaal (push, email, in-store)</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;margin-bottom:8px;">📈</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">4. Meten & bijsturen</div>
+        <div style="font-size:12px;color:var(--text-muted);">Klikte de klant? Kocht hij? Verbeterde het patroon? Loop begint opnieuw.</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-mid);">
+      🔐 <strong>Privacy:</strong> Enkel 1e-partijdata van de Xtra-kaart. Geen cookies, geen tracking buiten het CG-ecosysteem. Klanten kunnen hun profiel ten allen tijde inzien en aanpassen in de Xtra app.
+    </div>
+  </div>
+
+</div><!-- end s6 -->
+
+</div><!-- end content -->
+
+<script>
+function toon(id, btn) {
+  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sc-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // scroll tab into view
+  btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+// Auto-open tab from URL parameter
+(function() {
+  const tab = new URLSearchParams(window.location.search).get('tab');
+  if (tab) {
+    const el = document.getElementById(tab);
+    const tabs = document.querySelectorAll('.sc-tab');
+    const scenarios = document.querySelectorAll('.sc');
+    // find matching button by checking which onclick has this id
+    tabs.forEach((btn, i) => {
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + tab + "'")) {
+        scenarios.forEach(s => s.classList.remove('active'));
+        tabs.forEach(b => b.classList.remove('active'));
+        if (el) el.classList.add('active');
+        btn.classList.add('active');
+        setTimeout(() => btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }), 100);
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

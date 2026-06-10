@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duurzaamheids-Manager — CG Impact Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F5F4F1;
+  --white: #FFFFFF;
+  --border: #E0DDD8;
+  --text: #1A1A1A;
+  --text-mid: #4A4A4A;
+  --text-muted: #888;
+  --green: #16A34A;
+  --green-light: #22C55E;
+  --green-pale: #DCFCE7;
+  --green-deep: #052E16;
+  --blue: #0EA5E9;
+  --orange: #EA580C;
+  --purple: #7C3AED;
+  --gold: #B45309;
+}
+
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+nav {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 48px; display: flex; align-items: center; height: 64px;
+  position: sticky; top: 0; z-index: 50; gap: 12px;
+}
+.nav-back { font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 600; }
+.nav-back:hover { color: var(--text); }
+.nav-sep { color: var(--border); }
+.nav-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.nav-badge { background: var(--green-pale); color: var(--green); border: 1px solid rgba(22,163,74,0.2); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+.nav-period {
+  background: var(--white); border: 1.5px solid var(--border); padding: 6px 14px;
+  border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-mid);
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+
+/* HERO BAND */
+.hero-band {
+  background: linear-gradient(135deg, #052E16 0%, #14532D 55%, #166534 100%);
+  padding: 40px 48px 36px; position: relative; overflow: hidden;
+}
+.hero-band::before {
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-band::after {
+  content: ''; position: absolute; bottom: -60px; left: 200px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hb-inner { max-width: 1120px; margin: 0 auto; position: relative; z-index: 1; }
+.hb-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(74,222,128,0.8); margin-bottom: 10px; }
+.hb-title { font-size: 32px; font-weight: 900; color: white; letter-spacing: -0.8px; margin-bottom: 6px; }
+.hb-sub { font-size: 15px; color: rgba(255,255,255,0.55); margin-bottom: 32px; }
+
+.kpi-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.kpi-card {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px; padding: 16px 18px;
+  backdrop-filter: blur(10px);
+}
+.kpi-val { font-size: 28px; font-weight: 900; color: white; line-height: 1; letter-spacing: -1px; }
+.kpi-unit { font-size: 13px; font-weight: 700; color: #86EFAC; margin-left: 3px; }
+.kpi-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 4px; }
+.kpi-delta { font-size: 11px; font-weight: 700; color: #4ADE80; margin-top: 6px; }
+.kpi-delta.neg { color: #F87171; }
+
+/* TABS */
+.tab-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 48px; display: flex; gap: 0;
+  position: sticky; top: 64px; z-index: 40;
+}
+.tab {
+  padding: 16px 20px; font-size: 13px; font-weight: 700;
+  color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.2s; white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+/* MAIN CONTENT */
+.main { max-width: 1120px; margin: 0 auto; padding: 32px 48px 60px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* GRID LAYOUTS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-3-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+
+/* SECTION */
+.sec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px; }
+
+/* WHITE CARD */
+.wcard {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px; margin-bottom: 0;
+}
+.wcard-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.wcard-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+
+/* BAR CHART */
+.bar-chart { display: flex; flex-direction: column; gap: 12px; }
+.bc-row { display: flex; align-items: center; gap: 10px; }
+.bc-label { font-size: 12px; color: var(--text-mid); width: 120px; flex-shrink: 0; font-weight: 500; }
+.bc-label.sm { width: 90px; }
+.bc-track { flex: 1; height: 8px; background: #F0EDE8; border-radius: 4px; overflow: hidden; }
+.bc-fill { height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+.bc-val { font-size: 12px; font-weight: 800; color: var(--text); width: 50px; text-align: right; flex-shrink: 0; }
+.bc-val.sm { width: 38px; }
+
+/* TIER BLOCKS */
+.tier-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.tier-block { border-radius: 14px; padding: 16px; text-align: center; }
+.tier-icon { font-size: 24px; margin-bottom: 6px; }
+.tier-name { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+.tier-count { font-size: 26px; font-weight: 900; line-height: 1; }
+.tier-pct { font-size: 12px; font-weight: 600; margin-top: 3px; opacity: 0.7; }
+.tier-prog-bg { height: 4px; border-radius: 2px; margin-top: 10px; background: rgba(0,0,0,0.06); }
+.tier-prog-fill { height: 100%; border-radius: 2px; }
+
+/* TREND CHART (CSS bar chart) */
+.trend-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.trend-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
+.trend-bar-track { flex: 1; display: flex; align-items: flex-end; width: 100%; }
+.trend-bar { width: 100%; border-radius: 6px 6px 0 0; transition: height 0.6s ease; min-height: 4px; }
+.trend-label { font-size: 9px; color: var(--text-muted); font-weight: 600; }
+
+/* SCORE DONUT (CSS) */
+.donut-wrap { display: flex; justify-content: center; align-items: center; margin: 12px 0; }
+.donut { position: relative; width: 120px; height: 120px; }
+.donut svg { transform: rotate(-90deg); }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.donut-val { font-size: 22px; font-weight: 900; color: var(--text); line-height: 1; }
+.donut-label { font-size: 10px; color: var(--text-muted); }
+
+/* SCORE PILLS */
+.score-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.sc-pill { padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 800; border: 2px solid; }
+.sc-A { background: #DCFCE7; color: #15803D; border-color: #86EFAC; }
+.sc-B { background: #D1FAE5; color: #065F46; border-color: #6EE7B7; }
+.sc-C { background: #FEF3C7; color: #92400E; border-color: #FCD34D; }
+.sc-D { background: #FEE2E2; color: #991B1B; border-color: #FCA5A5; }
+.sc-E { background: #F3F4F6; color: #6B7280; border-color: #D1D5DB; }
+.sc-pill.dim { opacity: 0.35; }
+
+/* PROMISE PROGRESS */
+.promise-card { background: var(--green-deep); border-radius: 20px; padding: 28px; color: white; }
+.promise-title { font-size: 18px; font-weight: 900; color: white; margin-bottom: 4px; }
+.promise-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+.promise-item { margin-bottom: 20px; }
+.promise-item:last-child { margin-bottom: 0; }
+.pi-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.pi-label { font-size: 13px; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px; }
+.pi-pct { font-size: 13px; font-weight: 900; color: #86EFAC; }
+.pi-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.pi-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #4ADE80, #22C55E); transition: width 0.8s ease; }
+.pi-nums { display: flex; justify-content: space-between; margin-top: 5px; }
+.pi-curr { font-size: 11px; color: rgba(255,255,255,0.6); }
+.pi-target { font-size: 11px; color: rgba(74,222,128,0.7); }
+
+/* DONATION TABLE */
+.donation-table { width: 100%; border-collapse: collapse; }
+.donation-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.donation-table td { padding: 12px; border-bottom: 1px solid #F5F4F1; font-size: 13px; }
+.donation-table tr:last-child td { border-bottom: none; }
+.dt-cause { font-weight: 700; color: var(--text); }
+.dt-match { font-weight: 800; color: var(--green); }
+
+/* INLINE STAT */
+.inline-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.is-block { background: #F8F7F4; border-radius: 12px; padding: 14px 16px; }
+.is-val { font-size: 22px; font-weight: 900; color: var(--text); line-height: 1; }
+.is-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+/* HEALTH BRAND ROW */
+.brand-health-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.brand-health-row:last-child { border-bottom: none; }
+.bhr-icon { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; overflow: hidden; }
+.bhr-name { font-size: 13px; font-weight: 700; color: var(--text); width: 90px; flex-shrink: 0; }
+.bhr-bar-wrap { flex: 1; }
+.bhr-bar-bg { height: 6px; background: #F0EDE8; border-radius: 3px; margin-bottom: 3px; }
+.bhr-bar-fill { height: 100%; border-radius: 3px; }
+.bhr-label { font-size: 10px; color: var(--text-muted); }
+.bhr-val { font-size: 13px; font-weight: 800; color: var(--text); width: 40px; text-align: right; flex-shrink: 0; }
+
+/* ALERT */
+.alert { border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; margin-bottom: 20px; font-size: 13px; }
+.alert-green { background: var(--green-pale); border: 1px solid rgba(22,163,74,0.2); color: #166534; }
+.alert-orange { background: #FFF7ED; border: 1px solid rgba(234,88,12,0.2); color: #9A3412; }
+.alert-icon { font-size: 18px; flex-shrink: 0; }
+.alert-body strong { display: block; font-weight: 800; margin-bottom: 2px; }
+
+/* SPACER */
+.sp16 { height: 16px; }
+.sp24 { height: 24px; }
+.sp32 { height: 32px; }
+
+@media (max-width: 900px) {
+  nav, .hero-band, .tab-bar, .main { padding-left: 20px; padding-right: 20px; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  .grid-2, .grid-3, .grid-3-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .tier-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← Terug</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">🌍 Duurzaamheids-Manager — Impact Dashboard</span>
+  <div class="nav-right">
+    <div class="nav-period">📅 Mei 2026 ▾</div>
+    <div class="nav-badge">🌱 Perspectief 4</div>
+  </div>
+</nav>
+
+<!-- HERO KPI BAND -->
+<div class="hero-band">
+  <div class="hb-inner">
+    <div class="hb-eyebrow">Colruyt Group — Geaggregeerd Impact Rapport</div>
+    <div class="hb-title">Gezondheid & Duurzaamheid in cijfers</div>
+    <div class="hb-sub">3.200.000 klanten · Mei 2026 · Alle CG-merken gecombineerd</div>
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div><span class="kpi-val">48,2K</span><span class="kpi-unit">🌳</span></div>
+        <div class="kpi-label">Bomen geplant via klanten</div>
+        <div class="kpi-delta">↑ +3.200 vs. vorige maand</div>
+      </div>
+      <div class="kpi-card">
+        <div><span class="kpi-val">126K</span><span class="kpi-unit">🍽️</span></div>
+        <div class="kpi-label">Maaltijden geschonken</div>
+        <div class="kpi-delta">↑ +8.400 vs. vorige maand</div>
+      </div>
+      <div class="kpi-card">
+        <div><span class="kpi-val">34%</span><span class="kpi-unit">📈</span></div>
+        <div class="kpi-label">Nutriscore A+B aandeel</div>
+        <div class="kpi-delta">↑ +2,1 pp vs. vorige maand</div>
+      </div>
+      <div class="kpi-card">
+        <div><span class="kpi-val">428t</span><span class="kpi-unit">CO₂</span></div>
+        <div class="kpi-label">CO₂ bespaard (schatting)</div>
+        <div class="kpi-delta">↑ +38t vs. vorige maand</div>
+      </div>
+      <div class="kpi-card">
+        <div><span class="kpi-val">2.840</span><span class="kpi-unit">💪</span></div>
+        <div class="kpi-label">Gezondheidscoachings gestart</div>
+        <div class="kpi-delta">↑ +210 vs. vorige maand</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('overzicht', this)">📊 Overzicht</div>
+  <div class="tab" onclick="switchTab('gezondheid', this)">💚 Gezondheid</div>
+  <div class="tab" onclick="switchTab('planeet', this)">🌍 Planeet</div>
+  <div class="tab" onclick="switchTab('gemeenschap', this)">🤝 Gemeenschap</div>
+  <div class="tab" onclick="switchTab('belofte', this)">🏆 CG Belofte</div>
+</div>
+
+<div class="main">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 1: OVERZICHT -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-overzicht">
+
+    <div class="sp24"></div>
+
+    <!-- Tier verdeling -->
+    <div class="sec-title">Impact-Tier verdeling — alle klanten</div>
+    <div class="tier-grid" style="margin-bottom:20px;">
+      <div class="tier-block" style="background:#F0FDF4;border:1px solid #BBF7D0;">
+        <div class="tier-icon">🌱</div>
+        <div class="tier-name" style="color:#15803D;">Starter</div>
+        <div class="tier-count" style="color:#14532D;">1.568K</div>
+        <div class="tier-pct" style="color:#15803D;">49,0%</div>
+        <div class="tier-prog-bg"><div class="tier-prog-fill" style="width:49%;background:#86EFAC;"></div></div>
+      </div>
+      <div class="tier-block" style="background:#DCFCE7;border:1px solid #86EFAC;">
+        <div class="tier-icon">🌿</div>
+        <div class="tier-name" style="color:#16A34A;">Green</div>
+        <div class="tier-count" style="color:#14532D;">960K</div>
+        <div class="tier-pct" style="color:#16A34A;">30,0%</div>
+        <div class="tier-prog-bg"><div class="tier-prog-fill" style="width:30%;background:#4ADE80;"></div></div>
+      </div>
+      <div class="tier-block" style="background:#FEF9C3;border:1px solid #FDE047;">
+        <div class="tier-icon">🏆</div>
+        <div class="tier-name" style="color:#854D0E;">Champion</div>
+        <div class="tier-count" style="color:#713F12;">512K</div>
+        <div class="tier-pct" style="color:#854D0E;">16,0%</div>
+        <div class="tier-prog-bg"><div class="tier-prog-fill" style="width:16%;background:#FDE047;"></div></div>
+      </div>
+      <div class="tier-block" style="background:#EFF6FF;border:1px solid #BFDBFE;">
+        <div class="tier-icon">🌍</div>
+        <div class="tier-name" style="color:#1D4ED8;">Pioneer</div>
+        <div class="tier-count" style="color:#1E3A8A;">160K</div>
+        <div class="tier-pct" style="color:#1D4ED8;">5,0%</div>
+        <div class="tier-prog-bg"><div class="tier-prog-fill" style="width:5%;background:#60A5FA;"></div></div>
+      </div>
+    </div>
+
+    <div class="grid-3-1" style="margin-bottom:20px;">
+
+      <!-- Maandelijkse impact trend -->
+      <div class="wcard">
+        <div class="wcard-title">Maandelijkse impact-score groei</div>
+        <div class="wcard-sub">Gemiddelde score per actieve klant · Jan–Mei 2026</div>
+        <div class="trend-chart">
+          <div class="trend-bar-wrap">
+            <div class="trend-bar-track"><div class="trend-bar" style="height:38%;background:linear-gradient(180deg,#4ADE80,#16A34A);"></div></div>
+            <div class="trend-label">Jan</div>
+          </div>
+          <div class="trend-bar-wrap">
+            <div class="trend-bar-track"><div class="trend-bar" style="height:49%;background:linear-gradient(180deg,#4ADE80,#16A34A);"></div></div>
+            <div class="trend-label">Feb</div>
+          </div>
+          <div class="trend-bar-wrap">
+            <div class="trend-bar-track"><div class="trend-bar" style="height:56%;background:linear-gradient(180deg,#4ADE80,#16A34A);"></div></div>
+            <div class="trend-label">Mrt</div>
+          </div>
+          <div class="trend-bar-wrap">
+            <div class="trend-bar-track"><div class="trend-bar" style="height:70%;background:linear-gradient(180deg,#4ADE80,#16A34A);"></div></div>
+            <div class="trend-label">Apr</div>
+          </div>
+          <div class="trend-bar-wrap">
+            <div class="trend-bar-track"><div class="trend-bar" style="height:88%;background:linear-gradient(180deg,#22C55E,#16A34A);box-shadow:0 0 12px rgba(34,197,94,0.4);"></div></div>
+            <div class="trend-label" style="color:var(--green);font-weight:700;">Mei</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--text-muted);">
+          <span>Gemiddeld: <strong style="color:var(--text);">612 pts</strong></span>
+          <span style="color:var(--green);font-weight:700;">↑ +28% YTD</span>
+        </div>
+      </div>
+
+      <!-- Snel overzicht scores -->
+      <div class="wcard">
+        <div class="wcard-title">Gemiddelde scores</div>
+        <div class="wcard-sub">Per dimensie</div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label sm" style="color:var(--blue);">Gezondheid</span>
+            <div class="bc-track"><div class="bc-fill" style="width:56%;background:linear-gradient(90deg,#22D3EE,#0EA5E9);"></div></div>
+            <span class="bc-val sm">56/100</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label sm" style="color:var(--green);">Planeet</span>
+            <div class="bc-track"><div class="bc-fill" style="width:48%;background:linear-gradient(90deg,#4ADE80,#16A34A);"></div></div>
+            <span class="bc-val sm">48/100</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label sm" style="color:var(--orange);">Gemeenschap</span>
+            <div class="bc-track"><div class="bc-fill" style="width:32%;background:linear-gradient(90deg,#FB923C,#EA580C);"></div></div>
+            <span class="bc-val sm">32/100</span>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+          Laagste dimensie: <strong style="color:var(--orange);">Gemeenschap</strong> — groei-opportunity
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 5 acties -->
+    <div class="grid-2">
+      <div class="wcard">
+        <div class="wcard-title">Top acties deze maand</div>
+        <div class="wcard-sub">Meest gescoorde impact-acties in Mei 2026</div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label">🥗 Nutriscore A</span>
+            <div class="bc-track"><div class="bc-fill" style="width:88%;background:var(--blue);"></div></div>
+            <span class="bc-val">284K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">♻️ Herbruikbare zak</span>
+            <div class="bc-track"><div class="bc-fill" style="width:76%;background:var(--green);"></div></div>
+            <span class="bc-val">246K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🌿 Greenscore A</span>
+            <div class="bc-track"><div class="bc-fill" style="width:61%;background:var(--green-light);"></div></div>
+            <span class="bc-val">198K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🛒 Leeggoed inleveren</span>
+            <div class="bc-track"><div class="bc-fill" style="width:52%;background:#A78BFA;"></div></div>
+            <span class="bc-val">168K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🚲 Fiets naar winkel</span>
+            <div class="bc-track"><div class="bc-fill" style="width:28%;background:var(--orange);"></div></div>
+            <span class="bc-val">90K</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-title">Xtratjes-stroom via Impact</div>
+        <div class="wcard-sub">Verdiend en gespendeerd via het Impact Platform · incl. CG Foundation kerst benefit (dec prognose)</div>
+        <div class="inline-stats">
+          <div class="is-block">
+            <div class="is-val" style="color:var(--green);">4,2M ✦</div>
+            <div class="is-label">Verdiend via impact-acties</div>
+          </div>
+          <div class="is-block">
+            <div class="is-val" style="color:#7C3AED;">1,8M ✦</div>
+            <div class="is-label">Gespendeerd aan goede doelen</div>
+          </div>
+          <div class="is-block">
+            <div class="is-val" style="color:var(--gold);">3,6M ✦</div>
+            <div class="is-label">CG match-bijdrage totaal</div>
+          </div>
+        </div>
+        <div style="padding-top:16px;border-top:1px solid var(--border);">
+          <div class="bar-chart">
+            <div class="bc-row">
+              <span class="bc-label sm">Planeet</span>
+              <div class="bc-track"><div class="bc-fill" style="width:72%;background:var(--green);"></div></div>
+              <span class="bc-val sm">3,0M ✦</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Gezondheid</span>
+              <div class="bc-track"><div class="bc-fill" style="width:48%;background:var(--blue);"></div></div>
+              <span class="bc-val sm">2,0M ✦</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Gemeenschap</span>
+              <div class="bc-track"><div class="bc-fill" style="width:28%;background:var(--orange);"></div></div>
+              <span class="bc-val sm">1,2M ✦</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /overzicht -->
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 2: GEZONDHEID -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-gezondheid">
+    <div class="sp24"></div>
+
+    <div class="alert alert-green">
+      <span class="alert-icon">💚</span>
+      <div class="alert-body">
+        <strong>Positieve trend: Nutriscore-adoptie stijgt elke maand</strong>
+        Het aandeel Nutriscore A+B aankopen steeg van 29% (jan) naar 34% (mei). Dat is +2,1 pp meer dan het marktgemiddelde in België.
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="wcard">
+        <div class="wcard-title">Nutriscore-verdeling aankopen</div>
+        <div class="wcard-sub">% van totale voedingsaankopen via Xtra · Mei 2026</div>
+        <div class="score-pills">
+          <span class="sc-pill sc-A">A — 18,4%</span>
+          <span class="sc-pill sc-B">B — 15,7%</span>
+          <span class="sc-pill sc-C">C — 29,1%</span>
+          <span class="sc-pill sc-D">D — 22,3%</span>
+          <span class="sc-pill sc-E">E — 14,5%</span>
+        </div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label">Nutriscore A</span>
+            <div class="bc-track"><div class="bc-fill" style="width:73%;background:#16A34A;"></div></div>
+            <span class="bc-val">18,4%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Nutriscore B</span>
+            <div class="bc-track"><div class="bc-fill" style="width:63%;background:#4ADE80;"></div></div>
+            <span class="bc-val">15,7%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Nutriscore C</span>
+            <div class="bc-track"><div class="bc-fill" style="width:100%;background:#FCD34D;"></div></div>
+            <span class="bc-val">29,1%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Nutriscore D</span>
+            <div class="bc-track"><div class="bc-fill" style="width:76%;background:#FB923C;"></div></div>
+            <span class="bc-val">22,3%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Nutriscore E</span>
+            <div class="bc-track"><div class="bc-fill" style="width:50%;background:#D1D5DB;"></div></div>
+            <span class="bc-val">14,5%</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+          A+B gecombineerd: <strong style="color:var(--green);font-size:14px;">34,1%</strong> — stijging van +5,1 pp t.o.v. jan 2026
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-title">Nutriscore A+B adoptie per merk</div>
+        <div class="wcard-sub">% van aankopen van dat merk met score A of B</div>
+        <div class="brand-health-row">
+          <div class="bhr-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="30" cy="30" r="30" fill="#2E7D32"/><path d="M30,10 Q46,24 30,50 Q14,24 30,10" fill="rgba(255,255,255,0.3)"/><ellipse cx="30" cy="30" rx="26" ry="9" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3"/></svg></div>
+          <span class="bhr-name">Bio-Planet</span>
+          <div class="bhr-bar-wrap">
+            <div class="bhr-bar-bg"><div class="bhr-bar-fill" style="width:72%;background:linear-gradient(90deg,#4ADE80,#16A34A);"></div></div>
+            <div class="bhr-label">Hogere bio-standaard = hogere score</div>
+          </div>
+          <span class="bhr-val" style="color:var(--green);">72%</span>
+        </div>
+        <div class="brand-health-row">
+          <div class="bhr-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="60" height="60" rx="9" fill="#0066B3"/><circle cx="30" cy="30" r="18" fill="none" stroke="#FF6600" stroke-width="9"/></svg></div>
+          <span class="bhr-name">OKay</span>
+          <div class="bhr-bar-wrap">
+            <div class="bhr-bar-bg"><div class="bhr-bar-fill" style="width:38%;background:linear-gradient(90deg,#4ADE80,#16A34A);"></div></div>
+            <div class="bhr-label">Groeiend aandeel gezonde keuzes</div>
+          </div>
+          <span class="bhr-val" style="color:var(--green);">38%</span>
+        </div>
+        <div class="brand-health-row">
+          <div class="bhr-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="60" height="60" rx="9" fill="#CC0000"/><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg></div>
+          <span class="bhr-name">Colruyt</span>
+          <div class="bhr-bar-wrap">
+            <div class="bhr-bar-bg"><div class="bhr-bar-fill" style="width:31%;background:linear-gradient(90deg,#4ADE80,#16A34A);"></div></div>
+            <div class="bhr-label">Brede assortiment = diverse mix</div>
+          </div>
+          <span class="bhr-val" style="color:var(--green);">31%</span>
+        </div>
+        <div class="brand-health-row">
+          <div class="bhr-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="60" height="60" rx="9" fill="#003087"/><rect x="24" y="12" width="12" height="36" rx="5" fill="#00A651"/><rect x="12" y="24" width="36" height="12" rx="5" fill="rgba(255,255,255,0.9)"/></svg></div>
+          <span class="bhr-name">Newpharma</span>
+          <div class="bhr-bar-wrap">
+            <div class="bhr-bar-bg"><div class="bhr-bar-fill" style="width:88%;background:linear-gradient(90deg,#22D3EE,#0EA5E9);"></div></div>
+            <div class="bhr-label">Supplementen en para-pharma</div>
+          </div>
+          <span class="bhr-val" style="color:var(--blue);">88%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="wcard">
+        <div class="wcard-title">10.000 stappen challenge</div>
+        <div class="wcard-sub">Deelname en resultaten</div>
+        <div class="inline-stats" style="grid-template-columns:1fr 1fr;">
+          <div class="is-block"><div class="is-val">142K</div><div class="is-label">Actieve deelnemers</div></div>
+          <div class="is-block"><div class="is-val" style="color:var(--green);">68%</div><div class="is-label">Haalt 10K stappen doel</div></div>
+        </div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label sm">Wk 1 (mei)</span>
+            <div class="bc-track"><div class="bc-fill" style="width:61%;background:var(--blue);"></div></div>
+            <span class="bc-val sm">61%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label sm">Wk 2</span>
+            <div class="bc-track"><div class="bc-fill" style="width:65%;background:var(--blue);"></div></div>
+            <span class="bc-val sm">65%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label sm">Wk 3</span>
+            <div class="bc-track"><div class="bc-fill" style="width:69%;background:var(--blue);"></div></div>
+            <span class="bc-val sm">69%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label sm">Wk 4</span>
+            <div class="bc-track"><div class="bc-fill" style="width:72%;background:var(--blue);"></div></div>
+            <span class="bc-val sm">72%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-title">Gezondheidscoaching</div>
+        <div class="wcard-sub">2.840 trajecten gestart in 2026</div>
+        <div class="inline-stats" style="grid-template-columns:1fr 1fr;">
+          <div class="is-block"><div class="is-val">2.840</div><div class="is-label">Trajecten gestart</div></div>
+          <div class="is-block"><div class="is-val" style="color:var(--green);">91%</div><div class="is-label">Voltooiingsratio</div></div>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="bar-chart">
+            <div class="bc-row">
+              <span class="bc-label sm">Voeding</span>
+              <div class="bc-track"><div class="bc-fill" style="width:72%;background:#7C3AED;"></div></div>
+              <span class="bc-val sm">2.048</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Beweging</span>
+              <div class="bc-track"><div class="bc-fill" style="width:48%;background:#7C3AED;"></div></div>
+              <span class="bc-val sm">547</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Mentaal</span>
+              <div class="bc-track"><div class="bc-fill" style="width:25%;background:#7C3AED;"></div></div>
+              <span class="bc-val sm">245</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-title">JIMS Fitness — Xtra koppeling</div>
+        <div class="wcard-sub">Impact via sport-gedrag</div>
+        <div class="inline-stats" style="grid-template-columns:1fr 1fr;">
+          <div class="is-block"><div class="is-val">84K</div><div class="is-label">Bezoeken via Xtra</div></div>
+          <div class="is-block"><div class="is-val" style="color:var(--gold);">3,2x</div><div class="is-label">Meer bezoeken vs. controle</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--text-mid);line-height:1.6;">
+          Klanten die Xtratjes spenderen bij JIMS bezoeken het fitness <strong>3,2× vaker</strong> dan leden zonder Xtra-koppeling. Sterk signaal voor gedragsverandering.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /gezondheid -->
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 3: PLANEET -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-planeet">
+    <div class="sp24"></div>
+
+    <div class="alert alert-orange">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-body">
+        <strong>Aandachtspunt: fiets check-ins blijven laag in steden</strong>
+        Buiten de centrumsteden (Gent, Antwerpen, Brussel) zijn fiets check-ins 4× lager. Overweeg een gerichte activatiecampagne voor stedelijke klanten.
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="wcard">
+        <div class="wcard-title">Greenscore-verdeling aankopen</div>
+        <div class="wcard-sub">% van aankopen via Xtra met eco-score A of B · Mei 2026</div>
+        <div class="score-pills">
+          <span class="sc-pill sc-A">A — 12,8%</span>
+          <span class="sc-pill sc-B">B — 19,4%</span>
+          <span class="sc-pill sc-C">C — 31,2%</span>
+          <span class="sc-pill sc-D">D — 24,1%</span>
+          <span class="sc-pill sc-E">E — 12,5%</span>
+        </div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label">Greenscore A</span>
+            <div class="bc-track"><div class="bc-fill" style="width:51%;background:#16A34A;"></div></div>
+            <span class="bc-val">12,8%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Greenscore B</span>
+            <div class="bc-track"><div class="bc-fill" style="width:77%;background:#4ADE80;"></div></div>
+            <span class="bc-val">19,4%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Greenscore C</span>
+            <div class="bc-track"><div class="bc-fill" style="width:100%;background:#FCD34D;"></div></div>
+            <span class="bc-val">31,2%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Greenscore D</span>
+            <div class="bc-track"><div class="bc-fill" style="width:77%;background:#FB923C;"></div></div>
+            <span class="bc-val">24,1%</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">Greenscore E</span>
+            <div class="bc-track"><div class="bc-fill" style="width:50%;background:#D1D5DB;"></div></div>
+            <span class="bc-val">12,5%</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+          A+B gecombineerd: <strong style="color:var(--green);font-size:14px;">32,2%</strong> — doel voor 2026: 38% (+5,8 pp nog te gaan)
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-title">Eco-gedrag buiten aankopen</div>
+        <div class="wcard-sub">Aantal geregistreerde eco-acties per maand · Mei 2026</div>
+        <div class="bar-chart">
+          <div class="bc-row">
+            <span class="bc-label">♻️ Herbruikbare zak</span>
+            <div class="bc-track"><div class="bc-fill" style="width:100%;background:var(--green);"></div></div>
+            <span class="bc-val">246K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🛒 Leeggoed</span>
+            <div class="bc-track"><div class="bc-fill" style="width:68%;background:var(--green-light);"></div></div>
+            <span class="bc-val">168K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🚲 Fiets naar winkel</span>
+            <div class="bc-track"><div class="bc-fill" style="width:37%;background:var(--orange);"></div></div>
+            <span class="bc-val">90K</span>
+          </div>
+          <div class="bc-row">
+            <span class="bc-label">🌱 Plastiekvrij week</span>
+            <div class="bc-track"><div class="bc-fill" style="width:22%;background:#A78BFA;"></div></div>
+            <span class="bc-val">54K</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+          <div class="inline-stats">
+            <div class="is-block">
+              <div class="is-val" style="color:var(--green);">428t</div>
+              <div class="is-label">CO₂ bespaard (schatting)</div>
+            </div>
+            <div class="is-block">
+              <div class="is-val">1.240</div>
+              <div class="is-label">Minder plastic zakken/dag</div>
+            </div>
+            <div class="is-block">
+              <div class="is-val">90K</div>
+              <div class="is-label">Fiets check-ins totaal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-title">Boom-planting via Treedom — maandelijks overzicht 2026</div>
+      <div class="wcard-sub">Bomen gesponsord via Xtratjes-donaties + CG-match · Cumulatief</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:100px;margin-bottom:12px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;">
+          <div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div style="width:100%;height:18%;background:linear-gradient(180deg,#4ADE80,#16A34A);border-radius:6px 6px 0 0;"></div></div>
+          <span style="font-size:9px;color:var(--text-muted);font-weight:600;">Jan<br>8,6K</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;">
+          <div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div style="width:100%;height:38%;background:linear-gradient(180deg,#4ADE80,#16A34A);border-radius:6px 6px 0 0;"></div></div>
+          <span style="font-size:9px;color:var(--text-muted);font-weight:600;">Feb<br>18,4K</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;">
+          <div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div style="width:100%;height:56%;background:linear-gradient(180deg,#4ADE80,#16A34A);border-radius:6px 6px 0 0;"></div></div>
+          <span style="font-size:9px;color:var(--text-muted);font-weight:600;">Mrt<br>28,0K</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;">
+          <div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div style="width:100%;height:78%;background:linear-gradient(180deg,#4ADE80,#16A34A);border-radius:6px 6px 0 0;"></div></div>
+          <span style="font-size:9px;color:var(--text-muted);font-weight:600;">Apr<br>39,2K</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;">
+          <div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div style="width:100%;height:96%;background:linear-gradient(180deg,#22C55E,#16A34A);border-radius:6px 6px 0 0;box-shadow:0 0 12px rgba(34,197,94,0.35);"></div></div>
+          <span style="font-size:9px;color:var(--green);font-weight:800;">Mei<br>48,2K</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);">
+        <span>Doel 2026: <strong style="color:var(--text);">100.000 bomen</strong></span>
+        <span style="color:var(--green);font-weight:700;">48,2% bereikt · Op schema 🌳</span>
+      </div>
+    </div>
+
+  </div><!-- /planeet -->
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 4: GEMEENSCHAP -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-gemeenschap">
+    <div class="sp24"></div>
+
+    <div class="grid-3-1" style="margin-bottom:20px;">
+      <div class="wcard">
+        <div class="wcard-title">Donaties per goed doel — Mei 2026</div>
+        <div class="wcard-sub">Xtratjes gespendeerd door klanten + CG ×2 match</div>
+        <table class="donation-table">
+          <thead>
+            <tr>
+              <th>Goed doel</th>
+              <th>Klanten</th>
+              <th>Xtratjes</th>
+              <th>CG Match</th>
+              <th>Totaal €</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="dt-cause">🌳 Treedom — Bomen</span></td>
+              <td style="color:var(--text-mid);">18.420</td>
+              <td>368K ✦</td>
+              <td class="dt-match">368K ✦</td>
+              <td style="font-weight:700;">€368K</td>
+            </tr>
+            <tr>
+              <td><span class="dt-cause">🍽️ Voedselbank</span></td>
+              <td style="color:var(--text-mid);">22.100</td>
+              <td>221K ✦</td>
+              <td class="dt-match">221K ✦</td>
+              <td style="font-weight:700;">€221K</td>
+            </tr>
+            <tr>
+              <td><span class="dt-cause">💪 Gezondheidscoaching</span></td>
+              <td style="color:var(--text-mid);">2.840</td>
+              <td>284K ✦</td>
+              <td class="dt-match">284K ✦</td>
+              <td style="font-weight:700;">€284K</td>
+            </tr>
+            <tr>
+              <td><span class="dt-cause">🏫 Scholen — moestuin</span></td>
+              <td style="color:var(--text-mid);">8.640</td>
+              <td>86K ✦</td>
+              <td class="dt-match">86K ✦</td>
+              <td style="font-weight:700;">€86K</td>
+            </tr>
+            <tr>
+              <td><span class="dt-cause">🐝 BeeConnect</span></td>
+              <td style="color:var(--text-mid);">5.210</td>
+              <td>52K ✦</td>
+              <td class="dt-match">52K ✦</td>
+              <td style="font-weight:700;">€52K</td>
+            </tr>
+            <tr>
+              <td><span class="dt-cause">🏘️ Lokale vzw's</span></td>
+              <td style="color:var(--text-mid);">12.300</td>
+              <td>185K ✦</td>
+              <td class="dt-match">185K ✦</td>
+              <td style="font-weight:700;">€185K</td>
+            </tr>
+            <tr style="background:#FEF2F2;">
+              <td>
+                <span class="dt-cause">🎄 CG Foundation kerst benefit</span>
+                <span style="font-size:10px;font-weight:700;background:#DC2626;color:white;padding:2px 6px;border-radius:4px;margin-left:6px;">DEC</span>
+              </td>
+              <td style="color:var(--text-mid);">34.800</td>
+              <td>348K ✦</td>
+              <td class="dt-match">348K ✦</td>
+              <td style="font-weight:700;color:#DC2626;">€348K</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text-muted);">Totaal CG-match bijdrage (Mei + Dec prognose)</span>
+          <span style="font-weight:900;color:var(--green);font-size:16px;">€1.544K</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="wcard">
+          <div class="wcard-title">Match fund benutting</div>
+          <div class="wcard-sub">Beschikbaar budget 2026</div>
+          <div style="margin:12px 0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:12px;color:var(--text-muted);">Gebruikt</span>
+              <span style="font-size:12px;font-weight:800;color:var(--green);">62%</span>
+            </div>
+            <div style="height:10px;background:#F0EDE8;border-radius:5px;overflow:hidden;">
+              <div style="width:62%;height:100%;background:linear-gradient(90deg,#4ADE80,#16A34A);border-radius:5px;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px;">
+              <span style="font-size:11px;color:var(--text-muted);">€7,4M gebruikt</span>
+              <span style="font-size:11px;color:var(--text-muted);">€12M budget</span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-mid);line-height:1.5;">
+            Nog <strong style="color:var(--text);">€4,6M beschikbaar</strong> voor H2 2026. Goed tempo om het volledige budget te benutten.
+          </div>
+        </div>
+
+        <div class="wcard">
+          <div class="wcard-title">Challenge participatie</div>
+          <div class="wcard-sub">Cross-brand challenges</div>
+          <div class="bar-chart">
+            <div class="bc-row">
+              <span class="bc-label sm">Mei challenge</span>
+              <div class="bc-track"><div class="bc-fill" style="width:82%;background:var(--purple);"></div></div>
+              <span class="bc-val sm">82K</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Apr challenge</span>
+              <div class="bc-track"><div class="bc-fill" style="width:68%;background:var(--purple);opacity:0.7;"></div></div>
+              <span class="bc-val sm">68K</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label sm">Mrt challenge</span>
+              <div class="bc-track"><div class="bc-fill" style="width:54%;background:var(--purple);opacity:0.5;"></div></div>
+              <span class="bc-val sm">54K</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /gemeenschap -->
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 5: CG BELOFTE -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-belofte">
+    <div class="sp24"></div>
+
+    <div class="grid-1-2" style="margin-bottom:20px;">
+      <div class="promise-card">
+        <div class="promise-title">🏆 CG Belofte 2026</div>
+        <div class="promise-sub">Voortgang op onze drie kerndoelstellingen</div>
+
+        <div class="promise-item">
+          <div class="pi-head">
+            <span class="pi-label">🌳 100.000 bomen planten</span>
+            <span class="pi-pct">48,2%</span>
+          </div>
+          <div class="pi-track"><div class="pi-fill" style="width:48.2%;"></div></div>
+          <div class="pi-nums">
+            <span class="pi-curr">48.200 bomen geplant</span>
+            <span class="pi-target">Doel: 100.000 voor eind 2026</span>
+          </div>
+        </div>
+
+        <div class="promise-item">
+          <div class="pi-head">
+            <span class="pi-label">♻️ −40% plastic verpakking</span>
+            <span class="pi-pct">61%</span>
+          </div>
+          <div class="pi-track"><div class="pi-fill" style="width:61%;background:linear-gradient(90deg,#22D3EE,#0EA5E9);"></div></div>
+          <div class="pi-nums">
+            <span class="pi-curr">−24,4% gerealiseerd</span>
+            <span class="pi-target">Doel: −40% t.o.v. 2022</span>
+          </div>
+        </div>
+
+        <div class="promise-item">
+          <div class="pi-head">
+            <span class="pi-label">💪 10.000 coaching-trajecten</span>
+            <span class="pi-pct">28,4%</span>
+          </div>
+          <div class="pi-track"><div class="pi-fill" style="width:28.4%;background:linear-gradient(90deg,#F472B6,#EC4899);"></div></div>
+          <div class="pi-nums">
+            <span class="pi-curr">2.840 trajecten gestart</span>
+            <span class="pi-target">Doel: 10.000 voor eind 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="wcard">
+          <div class="wcard-title">Prognose einde 2026</div>
+          <div class="wcard-sub">Op basis van huidige groeisnelheid</div>
+          <div class="bar-chart">
+            <div class="bc-row">
+              <span class="bc-label">🌳 Bomen</span>
+              <div class="bc-track"><div class="bc-fill" style="width:96%;background:var(--green);"></div></div>
+              <span class="bc-val">~96K</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label">♻️ Plastic reductie</span>
+              <div class="bc-track"><div class="bc-fill" style="width:86%;background:var(--blue);"></div></div>
+              <span class="bc-val">~34%</span>
+            </div>
+            <div class="bc-row">
+              <span class="bc-label">💪 Coaching</span>
+              <div class="bc-track"><div class="bc-fill" style="width:62%;background:#EC4899;"></div></div>
+              <span class="bc-val">~6.200</span>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+            ⚠️ <strong style="color:var(--orange);">Coaching</strong> heeft extra activatie nodig om 10K-doel te halen.
+            🌳 <strong style="color:var(--green);">Bomen</strong> haalt doel niet — ~4K tekort bij huidige snelheid.
+          </div>
+        </div>
+
+        <div class="wcard">
+          <div class="wcard-title">Aanbevolen acties</div>
+          <div class="wcard-sub">Om alle doelen te halen vóór eind 2026</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;">
+              <span style="background:#FEF3C7;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;">Boom</span>
+              <span style="color:var(--text-mid);">Verhoog de Treedom-bonus van 20 naar 15 Xtratjes om donaties te stimuleren.</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;">
+              <span style="background:#FCE7F3;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:#9D174D;flex-shrink:0;">Coach</span>
+              <span style="color:var(--text-mid);">Lanceer een push-campagne naar Starter-klanten met coaching-bonus van +50 Xtratjes.</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;">
+              <span style="background:var(--green-pale);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--green);flex-shrink:0;">Fiets</span>
+              <span style="color:var(--text-mid);">Partner met gemeenten voor fiets-check-in punten bij OKay-winkels buiten steden.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /belofte -->
+
+</div><!-- /main -->
+
+<script>
+  function switchTab(id, el) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

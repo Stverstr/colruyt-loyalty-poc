@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xtra App — Klant Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F4F1;
+    --white: #FFFFFF;
+    --border: #E0DDD8;
+    --text: #1A1917;
+    --text-mid: #4B4845;
+    --text-muted: #8C8784;
+    --xtra: #6D28D9;
+    --gold: #B45309;
+    --green: #15803D;
+    /* Dynamic brand vars — default = Xtra */
+    --brand-accent: #6D28D9;
+    --brand-accent-pale: #EDE9FE;
+    --brand-accent-mid: #7C3AED;
+    --brand-header-bg: linear-gradient(150deg, #F0EBFF 0%, #F9F8FD 100%);
+    --brand-bal-grad: linear-gradient(135deg, #5B21B6 0%, #7C3AED 60%, rgba(245,166,35,0.85) 100%);
+    --brand-nav-active: #6D28D9;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── PAGE NAV ─────────────────────────────── */
+  nav {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 32px; display: flex; align-items: center; height: 56px;
+    position: sticky; top: 0; z-index: 100; gap: 12px;
+  }
+  .nav-back { font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 600; }
+  .nav-back:hover { color: var(--text); }
+  .nav-sep { color: var(--border); }
+  .nav-cur { font-size: 13px; font-weight: 700; color: var(--text); }
+  .nav-tag { margin-left: auto; background: #EDE9FE; color: var(--xtra); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+
+  /* ── PAGE LAYOUT ──────────────────────────── */
+  .page-wrap {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    padding: 40px 24px 60px;
+    gap: 32px;
+  }
+  .page-header {
+    text-align: center; max-width: 640px;
+  }
+  .page-header h1 {
+    font-size: clamp(22px, 4vw, 32px); font-weight: 800; color: var(--text);
+    line-height: 1.2; margin-bottom: 10px;
+  }
+  .page-header p {
+    font-size: 15px; color: var(--text-mid); line-height: 1.6;
+  }
+
+  /* ── BRAND TOGGLE ─────────────────────────── */
+  .brand-toggle-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    width: 100%; max-width: 680px;
+  }
+  .brand-toggle-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .brand-toggle {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  }
+  .bt-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 100px;
+    border: 2px solid var(--border);
+    background: var(--white); cursor: pointer;
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--text-mid);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .bt-btn:hover { border-color: var(--text-muted); color: var(--text); }
+  .bt-btn.active {
+    border-color: var(--brand-accent);
+    background: var(--brand-accent-pale);
+    color: var(--brand-accent);
+  }
+  .bt-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+  }
+  .bt-btn[data-brand="xtra"] .bt-dot { background: #6D28D9; }
+  .bt-btn[data-brand="colruyt"] .bt-dot { background: #CC0000; }
+  .bt-btn[data-brand="okay"] .bt-dot { background: #0066B3; }
+  .bt-btn[data-brand="bio"] .bt-dot { background: #15803D; }
+  .bt-btn[data-brand="jims"] .bt-dot { background: #00B4B8; }
+  .bt-btn[data-brand="newpharma"] .bt-dot { background: #003087; }
+  .bt-btn.active .bt-dot { background: var(--brand-accent) !important; }
+
+  .brand-context-note {
+    font-size: 12px; color: var(--text-muted); text-align: center;
+    max-width: 440px; line-height: 1.5;
+    min-height: 18px; transition: opacity 0.3s;
+  }
+
+  /* ── PHONE SHELL ──────────────────────────── */
+  .phone-wrap {
+    display: flex; justify-content: center;
+  }
+  .phone {
+    width: 360px; height: 720px;
+    background: #FAFAF8;
+    border-radius: 40px;
+    box-shadow:
+      0 0 0 10px #1A1917,
+      0 0 0 12px #2A2A2A,
+      0 24px 60px rgba(0,0,0,0.32),
+      0 6px 18px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  /* notch */
+  .phone::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px;
+    background: #1A1917;
+    border-radius: 0 0 18px 18px;
+    z-index: 20;
+  }
+
+  /* ── APP HEADER ───────────────────────────── */
+  .app-header {
+    background: var(--brand-header-bg);
+    padding: 36px 16px 10px;
+    transition: background 0.4s ease;
+    position: relative;
+  }
+  .app-header-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .app-logo-area {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .app-logo-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden;
+    transition: background 0.4s ease;
+  }
+  .app-brand-name-text {
+    font-size: 15px; font-weight: 800; color: var(--brand-accent);
+    transition: color 0.4s ease;
+    line-height: 1;
+  }
+  .app-brand-tagline {
+    font-size: 9px; font-weight: 500; color: var(--text-muted);
+    margin-top: 1px; display: block;
+  }
+  .app-header-actions {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .app-icon-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.7); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative;
+  }
+  .app-icon-btn svg { width: 18px; height: 18px; color: var(--text-mid); }
+  .app-notif-badge {
+    position: absolute; top: 4px; right: 4px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #EF4444; border: 1.5px solid white;
+  }
+
+  /* greeting */
+  .app-greeting {
+    margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .app-greeting strong {
+    display: inline; font-size: 13px; font-weight: 700; color: var(--text);
+    margin-left: 4px;
+  }
+
+  /* ── BALANCE CARD ─────────────────────────── */
+  .balance-card {
+    margin: 10px 16px 0;
+    background: var(--brand-bal-grad);
+    border-radius: 16px; padding: 14px 16px;
+    position: relative; overflow: hidden;
+    transition: background 0.4s ease;
+  }
+  .balance-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='160' cy='40' r='80' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='20' cy='160' r='60' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") no-repeat center/cover;
+    pointer-events: none;
+  }
+  .bc-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.06em; }
+  .bc-amount { font-size: 30px; font-weight: 800; color: #fff; line-height: 1.1; margin: 4px 0 2px; }
+  .bc-amount span { font-size: 15px; font-weight: 600; opacity: 0.7; }
+  .bc-sub { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .bc-row { display: flex; justify-content: space-between; align-items: flex-end; }
+  .bc-pills { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+  .bc-pill {
+    background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9);
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
+    backdrop-filter: blur(4px);
+  }
+  .bc-pill.highlight { background: rgba(255,255,255,0.25); }
+  .bc-card-logo {
+    width: 40px; height: 40px; opacity: 0.9;
+  }
+
+  /* ── APP SCREENS ──────────────────────────── */
+  .app-screens {
+    flex: 1; overflow: hidden; position: relative;
+  }
+  .app-screen {
+    display: none; flex-direction: column;
+    height: 100%; overflow-y: auto;
+    padding-bottom: 80px;
+    scrollbar-width: none;
+  }
+  .app-screen::-webkit-scrollbar { display: none; }
+  .app-screen.active { display: flex; }
+
+  /* ── SECTION HEADERS ──────────────────────── */
+  .app-section {
+    padding: 12px 16px 0;
+  }
+  .app-section-title {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 12px;
+  }
+  .app-section-title .badge {
+    background: var(--brand-accent-pale);
+    color: var(--brand-accent);
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 100px;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+  .app-section-more {
+    margin-left: auto; font-size: 11px; font-weight: 600;
+    color: var(--brand-accent); cursor: pointer; text-decoration: none;
+    transition: color 0.4s ease;
+  }
+
+  /* ── QUICK ACTIONS ────────────────────────── */
+  .quick-actions {
+    display: flex; gap: 8px; padding: 10px 16px 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .quick-actions::-webkit-scrollbar { display: none; }
+  .qa-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    min-width: 52px; cursor: pointer; padding: 8px 6px;
+    background: var(--white); border-radius: 12px;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .qa-btn:hover { border-color: var(--brand-accent); transform: translateY(-1px); }
+  .qa-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--brand-accent-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: background 0.4s ease;
+  }
+  .qa-label { font-size: 9px; font-weight: 600; color: var(--text-mid); text-align: center; line-height: 1.2; }
+
+  /* ── PERSONAL NUDGE CARDS ────────────────── */
+  .nudge-card {
+    border-radius: 14px; border: 1.5px solid; margin-bottom: 8px;
+    overflow: hidden; padding: 11px 12px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .nudge-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .nudge-body { flex: 1; min-width: 0; }
+  .nudge-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .nudge-text { font-size: 12px; font-weight: 600; line-height: 1.45; margin-bottom: 6px; }
+  .nudge-cta { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+
+  /* ── CAMPAIGN CARDS ───────────────────────── */
+  .campaign-card {
+    background: var(--white); border-radius: 16px;
+    border: 1.5px solid var(--border);
+    overflow: hidden; margin-bottom: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .campaign-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .cc-header {
+    padding: 10px 12px 8px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .cc-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+  .cc-body { flex: 1; min-width: 0; }
+  .cc-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .cc-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .cc-footer {
+    padding: 8px 12px;
+    background: var(--brand-accent-pale);
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s ease;
+  }
+  .cc-reward { font-size: 12px; font-weight: 700; color: var(--brand-accent); transition: color 0.4s ease; }
+  .cc-cta {
+    font-size: 11px; font-weight: 700; color: var(--white);
+    background: var(--brand-accent); padding: 5px 12px; border-radius: 100px;
+    transition: background 0.4s ease;
+  }
+  .cc-progress { height: 3px; background: #E5E7EB; }
+  .cc-progress-bar { height: 100%; background: var(--brand-accent); transition: background 0.4s ease; border-radius: 2px; }
+
+  /* ── ACTIVITY LIST ────────────────────────── */
+  .activity-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .act-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--brand-accent-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+    transition: background 0.4s ease;
+  }
+  .act-info { flex: 1; min-width: 0; }
+  .act-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .act-date { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .act-amount { font-size: 13px; font-weight: 700; }
+  .act-amount.earn { color: var(--brand-accent); transition: color 0.4s ease; }
+  .act-amount.spend { color: var(--text-mid); }
+  .act-brand-chip {
+    font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 100px;
+    background: var(--brand-accent-pale); color: var(--brand-accent);
+    transition: background 0.4s ease, color 0.4s ease;
+    margin-top: 2px; display: inline-block;
+  }
+
+  /* ── EARN/SPEND SCREENS ───────────────────── */
+  .earn-hero {
+    background: var(--brand-header-bg);
+    padding: 20px; margin-bottom: 0;
+    transition: background 0.4s ease;
+  }
+  .earn-hero-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .earn-hero-sub { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .earn-hero-stat {
+    margin-top: 12px;
+    background: rgba(255,255,255,0.7); border-radius: 12px;
+    padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .ehs-label { font-size: 11px; color: var(--text-muted); }
+  .ehs-val { font-size: 16px; font-weight: 800; color: var(--brand-accent); transition: color 0.4s ease; }
+
+  /* ── EARN OPTION CARDS ────────────────────── */
+  .earn-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 14px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .earn-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .earn-card-icon { font-size: 28px; flex-shrink: 0; }
+  .earn-card-info { flex: 1; min-width: 0; }
+  .earn-card-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .earn-card-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.3; }
+  .earn-card-reward {
+    font-size: 12px; font-weight: 700;
+    background: var(--brand-accent-pale); color: var(--brand-accent);
+    padding: 4px 10px; border-radius: 100px; white-space: nowrap;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+  .earn-divider {
+    padding: 6px 20px; display: flex; align-items: center; gap: 10px;
+  }
+  .earn-divider span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); white-space: nowrap; }
+  .earn-divider::before, .earn-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── REWARD CARDS (Besteden) ──────────────── */
+  .reward-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 16px; overflow: hidden; margin-bottom: 12px;
+  }
+  .rc-image {
+    height: 80px; background: var(--brand-header-bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    transition: background 0.4s ease;
+  }
+  .rc-body { padding: 12px 14px; }
+  .rc-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .rc-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.3; }
+  .rc-footer {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .rc-cost { font-size: 13px; font-weight: 800; color: var(--brand-accent); transition: color 0.4s ease; }
+  .rc-btn {
+    font-size: 11px; font-weight: 700; color: var(--white);
+    background: var(--brand-accent); padding: 6px 14px; border-radius: 100px;
+    transition: background 0.4s ease;
+  }
+
+  /* ── BESTEDEN CATEGORY CHIPS ─────────────── */
+  .besteden-cats {
+    display: flex; gap: 8px; padding: 14px 20px 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .besteden-cats::-webkit-scrollbar { display: none; }
+  .bcat {
+    padding: 6px 14px; border-radius: 100px; border: 1.5px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--text-mid);
+    white-space: nowrap; cursor: pointer; background: var(--white);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .bcat.active {
+    background: var(--brand-accent-pale); border-color: var(--brand-accent);
+    color: var(--brand-accent);
+  }
+
+  /* ── IMPACT SCREEN ────────────────────────── */
+  .impact-hero {
+    background: linear-gradient(135deg, #14532D 0%, #15803D 60%, #22C55E 100%);
+    padding: 20px; color: white;
+  }
+  .impact-hero h2 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .impact-hero p { font-size: 12px; opacity: 0.75; line-height: 1.4; }
+  .impact-kpis {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;
+  }
+  .ikpi {
+    background: rgba(255,255,255,0.15); border-radius: 10px; padding: 10px 12px;
+    backdrop-filter: blur(4px);
+  }
+  .ikpi-val { font-size: 20px; font-weight: 800; color: white; }
+  .ikpi-label { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .impact-actions { padding: 14px 20px 0; }
+  .impact-action-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 14px 16px;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 14px;
+  }
+  .iac-icon { font-size: 26px; flex-shrink: 0; }
+  .iac-info { flex: 1; }
+  .iac-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .iac-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .iac-reward {
+    font-size: 11px; font-weight: 700;
+    background: #DCFCE7; color: #15803D;
+    padding: 4px 9px; border-radius: 100px; white-space: nowrap;
+  }
+  .impact-link-btn {
+    margin: 16px 20px; display: block;
+    background: linear-gradient(90deg, #14532D, #15803D);
+    color: white; text-align: center; text-decoration: none;
+    padding: 14px; border-radius: 14px;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* ── ACTIVITY SCREEN ──────────────────────── */
+  .activity-screen-header {
+    background: var(--brand-header-bg);
+    padding: 20px; transition: background 0.4s ease;
+  }
+  .ash-title { font-size: 16px; font-weight: 800; color: var(--text); }
+  .ash-period {
+    display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; scrollbar-width: none;
+  }
+  .ash-period::-webkit-scrollbar { display: none; }
+  .ash-pill {
+    padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 600;
+    border: 1.5px solid var(--border); background: white; color: var(--text-mid);
+    white-space: nowrap; cursor: pointer; flex-shrink: 0;
+  }
+  .ash-pill.active {
+    background: var(--brand-accent); border-color: var(--brand-accent); color: white;
+  }
+  .activity-summary {
+    display: flex; gap: 10px; padding: 14px 20px 0;
+  }
+  .act-sum-card {
+    flex: 1; background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 12px;
+  }
+  .asc-label { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+  .asc-val { font-size: 18px; font-weight: 800; color: var(--brand-accent); margin-top: 4px; transition: color 0.4s ease; }
+  .asc-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── BOTTOM NAV ───────────────────────────── */
+  .app-bottom-nav {
+    position: sticky; bottom: 0; z-index: 10;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex; padding: 6px 0 8px;
+  }
+  .bn-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 4px; padding: 4px 0; cursor: pointer; border: none; background: none;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .bn-icon {
+    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .bn-icon svg { width: 20px; height: 20px; stroke: var(--text-muted); transition: stroke 0.3s; }
+  .bn-label { font-size: 9px; font-weight: 600; color: var(--text-muted); transition: color 0.3s; }
+  .bn-item.active .bn-icon svg { stroke: var(--brand-nav-active); }
+  .bn-item.active .bn-label { color: var(--brand-nav-active); }
+  .bn-badge {
+    position: absolute; top: -2px; right: -4px;
+    background: #EF4444; color: white;
+    font-size: 8px; font-weight: 700;
+    width: 14px; height: 14px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid white;
+  }
+
+  /* ── EXPLANATION STRIP ────────────────────── */
+  .explanation-strip {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 24px; max-width: 680px; width: 100%;
+  }
+  .es-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+  .es-steps { display: flex; gap: 12px; }
+  .es-step {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    text-align: center; gap: 8px; position: relative;
+  }
+  .es-step:not(:last-child)::after {
+    content: '→'; position: absolute; right: -10px; top: 14px;
+    font-size: 16px; color: var(--text-muted);
+  }
+  .es-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--brand-accent-pale); color: var(--brand-accent);
+    font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+  .es-step-label { font-size: 11px; font-weight: 600; color: var(--text-mid); line-height: 1.3; }
+
+  /* ── ANIMATIONS ───────────────────────────── */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+  .app-screen.active { animation: fadeIn 0.25s ease; }
+
+  /* utility */
+  .mt8 { margin-top: 8px; }
+  .mt12 { margin-top: 12px; }
+  .mt16 { margin-top: 16px; }
+  .activity-list { padding: 0 20px; }
+  .date-label {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 12px 0 6px;
+  }
+
+  /* ── Xtra logo SVG inline ─────────────────── */
+  .xtra-logo-svg { width: 36px; height: 36px; }
+
+</style>
+</head>
+<body>
+
+<!-- ── PAGE NAVIGATION ──────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-back">← Overzicht</a>
+  <span class="nav-sep">|</span>
+  <span class="nav-cur">Xtra App — Klant Experience</span>
+  <span class="nav-tag">Mockup</span>
+</nav>
+
+<!-- ── MAIN PAGE CONTENT ────────────────────── -->
+<div class="page-wrap">
+
+  <div class="page-header">
+    <h1>De Xtra app — jouw loyaliteitshub</h1>
+    <p>Spaar Xtratjes bij elk Colruyt Group-merk en besteed ze waar jij wil. Kies hieronder jouw merkbeleving.</p>
+  </div>
+
+  <!-- ── BRAND TOGGLE ──────────────────────── -->
+  <div class="brand-toggle-wrap">
+    <div class="brand-toggle-label">Bekijk als klant van</div>
+    <div class="brand-toggle" id="brandToggle">
+      <button class="bt-btn active" data-brand="xtra" onclick="switchBrand('xtra')">
+        <span class="bt-dot"></span> Xtra (groep)
+      </button>
+      <button class="bt-btn" data-brand="colruyt" onclick="switchBrand('colruyt')">
+        <span class="bt-dot"></span> Colruyt
+      </button>
+      <button class="bt-btn" data-brand="okay" onclick="switchBrand('okay')">
+        <span class="bt-dot"></span> OKay
+      </button>
+      <button class="bt-btn" data-brand="bio" onclick="switchBrand('bio')">
+        <span class="bt-dot"></span> Bio-Planet
+      </button>
+      <button class="bt-btn" data-brand="jims" onclick="switchBrand('jims')">
+        <span class="bt-dot"></span> JIMS
+      </button>
+      <button class="bt-btn" data-brand="newpharma" onclick="switchBrand('newpharma')">
+        <span class="bt-dot"></span> Newpharma
+      </button>
+    </div>
+    <div class="brand-context-note" id="brandNote">
+      Xtra-modus: focus op cross-merk verdienen & besteden, groepsecosysteem, duurzaamheid en gezondheid.
+    </div>
+  </div>
+
+  <!-- ── PHONE ─────────────────────────────── -->
+  <div class="phone-wrap">
+    <div class="phone" id="phoneRoot">
+
+      <!-- APP HEADER -->
+      <div class="app-header" id="appHeader">
+        <div class="app-header-row">
+          <div class="app-logo-area">
+            <div class="app-logo-icon" id="appLogoIcon">
+              <!-- filled by JS -->
+            </div>
+            <div>
+              <div class="app-brand-name-text" id="appBrandName">Xtra</div>
+              <span class="app-brand-tagline" id="appBrandTagline">Groepsvoordeel voor iedereen</span>
+            </div>
+          </div>
+          <div class="app-header-actions">
+            <button class="app-icon-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <div class="app-notif-badge"></div>
+            </button>
+            <button class="app-icon-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="app-greeting">
+          Goeiemorgen,
+          <strong id="appGreeting">Sophie 👋</strong>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card" id="balanceCard">
+          <div class="bc-row">
+            <div>
+              <div class="bc-label">Jouw Xtratjes</div>
+              <div class="bc-amount" id="balanceAmount">2.340 <span>✦</span></div>
+              <div class="bc-sub" id="balanceSub">≈ €11,70 te besteden</div>
+            </div>
+            <div id="balCardLogo" style="font-size:36px; opacity:0.85; line-height:1;">✦</div>
+          </div>
+          <div class="bc-pills" id="balancePills">
+            <span class="bc-pill highlight">+120 ✦ deze week</span>
+            <span class="bc-pill">Geldig t.e.m. dec 2025</span>
+            <span class="bc-pill">5 merken actief</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREENS WRAPPER -->
+      <div class="app-screens">
+
+        <!-- ════════════════ SCREEN: THUIS ════════════════ -->
+        <div class="app-screen active" id="screen-home">
+
+          <!-- Personalized nudges — direct zichtbaar -->
+          <div class="app-section mt12" id="homePersonal">
+            <!-- filled by JS -->
+          </div>
+
+          <!-- Quick actions -->
+          <div class="quick-actions">
+            <div class="qa-btn">
+              <div class="qa-icon">🛒</div>
+              <div class="qa-label">Scan & Spaar</div>
+            </div>
+            <div class="qa-btn">
+              <div class="qa-icon">🎁</div>
+              <div class="qa-label">Besteden</div>
+            </div>
+            <div class="qa-btn">
+              <div class="qa-icon">🌱</div>
+              <div class="qa-label">Impact</div>
+            </div>
+            <div class="qa-btn">
+              <div class="qa-icon">👥</div>
+              <div class="qa-label">Vrienden</div>
+            </div>
+            <div class="qa-btn">
+              <div class="qa-icon">📊</div>
+              <div class="qa-label">Analyse</div>
+            </div>
+          </div>
+
+          <!-- Campaigns -->
+          <div class="app-section mt16" id="homeCampaigns">
+            <!-- filled by JS -->
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="app-section mt8" id="homeActivity">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════ SCREEN: SPAREN ════════════════ -->
+        <div class="app-screen" id="screen-sparen">
+          <div class="earn-hero" id="earnHero">
+            <div class="earn-hero-title" id="earnHeroTitle">Spaar Xtratjes overal</div>
+            <div class="earn-hero-sub" id="earnHeroSub">Bij elk Colruyt Group-merk verdien je Xtratjes. Hoe meer je doet, hoe sneller je bespaart.</div>
+            <div class="earn-hero-stat">
+              <div>
+                <div class="ehs-label">Verdiend deze maand</div>
+                <div class="ehs-val" id="earnMonthStat">+480 ✦</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="ehs-label">Beste categorie</div>
+                <div class="ehs-val" id="earnBestCat">Boodschappen</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-section mt12" id="sparenPrimary">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════ SCREEN: BESTEDEN ════════════════ -->
+        <div class="app-screen" id="screen-besteden">
+          <div class="earn-hero" id="bestedenHero">
+            <div class="earn-hero-title" id="bestedenHeroTitle">Besteed jouw Xtratjes</div>
+            <div class="earn-hero-sub" id="bestedenHeroSub">Zet je Xtratjes om in kortingen, gratis producten of donaties. Jij kiest.</div>
+          </div>
+          <div class="besteden-cats" id="bestedenCats">
+            <!-- filled by JS -->
+          </div>
+          <div class="app-section mt12" id="bestedenPrimary">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════ SCREEN: ACTIVITEIT ════════════════ -->
+        <div class="app-screen" id="screen-activiteit">
+          <div class="activity-screen-header" id="actScreenHeader">
+            <div class="ash-title">Mijn Activiteit</div>
+            <div class="ash-period">
+              <div class="ash-pill active">Deze maand</div>
+              <div class="ash-pill">Vorige maand</div>
+              <div class="ash-pill">3 maanden</div>
+              <div class="ash-pill">Dit jaar</div>
+            </div>
+          </div>
+          <div class="activity-summary" id="actSummary">
+            <div class="act-sum-card">
+              <div class="asc-label">Verdiend</div>
+              <div class="asc-val" id="actEarnVal">+480 ✦</div>
+              <div class="asc-sub" id="actEarnBrands">5 merken</div>
+            </div>
+            <div class="act-sum-card">
+              <div class="asc-label">Besteed</div>
+              <div class="asc-val" style="color: var(--text-mid);" id="actSpendVal">−120 ✦</div>
+              <div class="asc-sub" id="actSpendBrands">3 inlossingen</div>
+            </div>
+            <div class="act-sum-card">
+              <div class="asc-label">Saldo</div>
+              <div class="asc-val" id="actBalVal">2.340 ✦</div>
+              <div class="asc-sub">totaal</div>
+            </div>
+          </div>
+          <div class="activity-list" id="activityFullList">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════ SCREEN: IMPACT ════════════════ -->
+        <div class="app-screen" id="screen-impact">
+          <div class="impact-hero">
+            <h2>🌿 Jouw impact telt</h2>
+            <p>Elk duurzaam en gezond gedrag levert Xtratjes op. Samen maken we het verschil.</p>
+            <div class="impact-kpis">
+              <div class="ikpi">
+                <div class="ikpi-val">48.2K</div>
+                <div class="ikpi-label">🌳 bomen geplant</div>
+              </div>
+              <div class="ikpi">
+                <div class="ikpi-val">126K</div>
+                <div class="ikpi-label">🍽️ maaltijden gered</div>
+              </div>
+              <div class="ikpi">
+                <div class="ikpi-val">34%</div>
+                <div class="ikpi-label">🥗 Nutriscore adoptie</div>
+              </div>
+              <div class="ikpi">
+                <div class="ikpi-val">428t</div>
+                <div class="ikpi-label">♻️ CO₂ bespaard</div>
+              </div>
+            </div>
+          </div>
+          <div class="impact-actions">
+            <div class="impact-action-card">
+              <div class="iac-icon">🚲</div>
+              <div class="iac-info">
+                <div class="iac-title">Fiets naar de winkel</div>
+                <div class="iac-desc">Scan je fietsapp bij het inchecken voor extra Xtratjes</div>
+              </div>
+              <div class="iac-reward">+25 ✦</div>
+            </div>
+            <div class="impact-action-card">
+              <div class="iac-icon">🥗</div>
+              <div class="iac-info">
+                <div class="iac-title">Nutriscore A/B kopen</div>
+                <div class="iac-desc">75% van je boodschappen groen scoren deze maand</div>
+              </div>
+              <div class="iac-reward">+50 ✦</div>
+            </div>
+            <div class="impact-action-card">
+              <div class="iac-icon">📦</div>
+              <div class="iac-info">
+                <div class="iac-title">Leeggoed retour</div>
+                <div class="iac-desc">Geef je flessen en potten terug via het retourpunt</div>
+              </div>
+              <div class="iac-reward">+15 ✦</div>
+            </div>
+            <div class="impact-action-card">
+              <div class="iac-icon">🌍</div>
+              <div class="iac-info">
+                <div class="iac-title">Doneer aan goed doel</div>
+                <div class="iac-desc">Voedselbanken, Rode Kruis, CG Foundation...</div>
+              </div>
+              <div class="iac-reward">vrij</div>
+            </div>
+          </div>
+          <a href="impact.html" class="impact-link-btn">Bekijk volledig Impact platform →</a>
+        </div>
+
+      </div><!-- /app-screens -->
+
+      <!-- BOTTOM NAV -->
+      <div class="app-bottom-nav">
+        <button class="bn-item active" onclick="showScreen('home', this)">
+          <div class="bn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="bn-label">Thuis</span>
+        </button>
+        <button class="bn-item" onclick="showScreen('sparen', this)">
+          <div class="bn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <div class="bn-badge">3</div>
+          </div>
+          <span class="bn-label">Sparen</span>
+        </button>
+        <button class="bn-item" onclick="showScreen('besteden', this)">
+          <div class="bn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <span class="bn-label">Besteden</span>
+        </button>
+        <button class="bn-item" onclick="showScreen('activiteit', this)">
+          <div class="bn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <span class="bn-label">Activiteit</span>
+        </button>
+        <button class="bn-item" onclick="showScreen('impact', this)">
+          <div class="bn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span class="bn-label">Impact</span>
+        </button>
+      </div>
+
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  <!-- ── EXPLANATION ──────────────────────────── -->
+  <div class="explanation-strip">
+    <div class="es-title">Hoe werkt de merkbeleving?</div>
+    <div class="es-steps">
+      <div class="es-step">
+        <div class="es-num">1</div>
+        <div class="es-step-label">Xtra als groepsmodus: cross-merk focus, duurzaamheid voorop</div>
+      </div>
+      <div class="es-step">
+        <div class="es-num">2</div>
+        <div class="es-step-label">Merkspecifieke modus: kleuren & content van jouw voorkeursmerk eerst</div>
+      </div>
+      <div class="es-step">
+        <div class="es-num">3</div>
+        <div class="es-step-label">Cross-merk opportuniteiten altijd aanwezig, maar secundair getoond</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+// ──────────────────────────────────────────────────
+//  BRAND DATA
+// ──────────────────────────────────────────────────
+const BRANDS = {
+  xtra: {
+    name: 'Xtra',
+    tagline: 'Groepsvoordeel voor iedereen',
+    accent: '#6D28D9',
+    accentMid: '#7C3AED',
+    accentPale: '#EDE9FE',
+    navActive: '#6D28D9',
+    headerBg: 'linear-gradient(150deg, #F0EBFF 0%, #F9F8FD 100%)',
+    balGrad: 'linear-gradient(135deg, #5B21B6 0%, #7C3AED 60%, rgba(245,166,35,0.85) 100%)',
+    greeting: 'Sophie 👋',
+    balance: '2.340', balSub: '≈ €11,70 te besteden',
+    balPills: ['✦ +120 ✦ deze week', 'Geldig t.e.m. dec 2025', '5 merken actief'],
+    balLogoChar: '✦',
+    note: 'Xtra-modus: focus op cross-merk verdienen & besteden, groepsecosysteem, duurzaamheid en gezondheid.',
+    earnHeroTitle: 'Spaar Xtratjes overal',
+    earnHeroSub: 'Bij elk Colruyt Group-merk verdien je Xtratjes. Hoe meer je doet, hoe sneller je bespaart.',
+    earnMonthStat: '+480 ✦',
+    earnBestCat: 'Boodschappen',
+    bestedenHeroTitle: 'Besteed jouw Xtratjes',
+    bestedenHeroSub: 'Zet je Xtratjes om in kortingen, gratis producten of donaties. Jij kiest.',
+    bestedenCats: ['Alle merken', 'Colruyt', 'OKay', 'Bio-Planet', 'JIMS', 'Newpharma', 'Goed doel'],
+    campaigns: [
+      { emoji: '🛒', title: 'Cross-merk Weekchallenge', desc: 'Koop bij 3 verschillende merken deze week en verdien bonus Xtratjes', reward: '+150 ✦ bonus', cta: 'Doe mee', progress: 60 },
+      { emoji: '🌱', title: 'Greenscore Challenge', desc: 'Breng je gemiddelde Nutriscore naar A deze maand en win extra voordeel', reward: '+200 ✦ bij doel', cta: 'Activeer', progress: 45 }
+    ],
+    recentActivity: [
+      { emoji: '🛒', name: 'Colruyt Halle', date: 'Gisteren, 18:42', amount: '+45 ✦', type: 'earn', chip: 'Colruyt' },
+      { emoji: '🏋️', name: 'JIMS Mechelen', date: 'Gisteren, 07:15', amount: '+30 ✦', type: 'earn', chip: 'JIMS' },
+      { emoji: '🌿', name: 'Bio-Planet Gent', date: '3 nov, 14:20', amount: '+28 ✦', type: 'earn', chip: 'Bio-Planet' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '🛒', title: 'Aankopen bij Colruyt', desc: '1 Xtratje per €0,50 aankoop', reward: '2 ✦ / €1' },
+      { primary: true, emoji: '🏋️', title: 'JIMS-abonnement', desc: 'Maandelijkse bonus op je abo', reward: '+80 ✦/maand' },
+      { primary: true, emoji: '🌿', title: 'Groene producten', desc: 'Nutriscore A/B of bio-label = bonus', reward: '3× bonus' },
+      { primary: false, emoji: '🚲', title: 'Fiets naar de winkel', desc: 'Registreer via fietsapp', reward: '+25 ✦' },
+      { primary: false, emoji: '💊', title: 'Newpharma bestelling', desc: 'Elke online apothekersbestelling', reward: '1,5 ✦ / €1' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '🎁', title: 'Korting bij Colruyt', desc: '100 ✦ = €0,50 korting aan kassa', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '💪', title: 'Gratis JIMS-dag', desc: 'Nodig een vriend uit voor een gratis dagpas', cost: '400 ✦', cta: 'Activeer' },
+      { primary: true, emoji: '🥗', title: 'Gratis Bio-Planet product', desc: 'Kies uit selectie seizoensproducten', cost: '250 ✦', cta: 'Kies' },
+      { primary: false, emoji: '💊', title: 'Korting Newpharma', desc: '5% extra bij volgende bestelling', cost: '300 ✦', cta: 'Wissel in' },
+      { primary: false, emoji: '🎄', title: 'CG Foundation kerst benefit', desc: 'Jouw Xtratjes voor een goed doel', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '🌿', label: 'Ontdek Bio-Planet', text: 'Je winkelt al bij 4 merken, maar Bio-Planet nog niet. Probeer de bio-weekbox — je eerste aankoop levert dubbele Xtratjes op.', bg: 'rgba(46,125,50,0.07)', border: 'rgba(46,125,50,0.2)', labelColor: '#16A34A', ctaBg: 'rgba(46,125,50,0.15)', ctaColor: '#15803D', cta: 'Ontdek →' },
+      { icon: '💪', label: 'Voor jou → JIMS', text: 'Jij scoort hoog op Nutriscore A aankopen. Een gratis JIMS-dagpas past perfect bij jouw lifestyle.', bg: 'rgba(0,180,184,0.07)', border: 'rgba(0,180,184,0.2)', labelColor: '#0891B2', ctaBg: 'rgba(0,180,184,0.15)', ctaColor: '#0E7490', cta: 'Claim dagpas →' }
+    ]
+  },
+
+  colruyt: {
+    name: 'Colruyt',
+    tagline: 'Voordelig boodschappen doen',
+    accent: '#CC0000',
+    accentMid: '#E53535',
+    accentPale: '#FFF0F0',
+    navActive: '#CC0000',
+    headerBg: 'linear-gradient(150deg, #FFF0F0 0%, #FFFAFA 100%)',
+    balGrad: 'linear-gradient(135deg, #991B1B 0%, #CC0000 60%, #E53535 100%)',
+    greeting: 'Sophie 👋',
+    balance: '1.840', balSub: '≈ €9,20 te besteden',
+    balPills: ['+85 ✦ bij Colruyt', '3 acties actief', 'Colruyt-klant'],
+    balLogoChar: 'C',
+    note: 'Colruyt-modus: Colruyt-acties & broodstempel voorop. Cross-merk opportuniteiten secundair beschikbaar.',
+    earnHeroTitle: 'Spaar bij Colruyt',
+    earnHeroSub: 'Bij elke aankoop aan de kassa spaar je automatisch Xtratjes. Extra bonus bij weekacties.',
+    earnMonthStat: '+340 ✦',
+    earnBestCat: 'Vers & vlees',
+    bestedenHeroTitle: 'Wissel in bij Colruyt',
+    bestedenHeroSub: 'Gebruik jouw Xtratjes aan de Colruyt-kassa of in de app. Of kies voor een ander merk.',
+    bestedenCats: ['Bij Colruyt', 'Andere merken', 'Goed doel'],
+    campaigns: [
+      { emoji: '🥖', title: 'Broodstempelkaart × Xtratjes', desc: 'Koop 10 broden en ontvang Xtratjes + gratis brood', reward: '+200 ✦ + 1 gratis brood', cta: 'Activeer', progress: 70 },
+      { emoji: '🥩', title: 'Vlees & grill weekend', desc: 'Dubbele Xtratjes op vlees dit weekend bij Colruyt', reward: '2× Xtratjes', cta: 'Bekijk', progress: 30 }
+    ],
+    recentActivity: [
+      { emoji: '🛒', name: 'Colruyt Halle', date: 'Gisteren, 18:42', amount: '+45 ✦', type: 'earn', chip: 'Colruyt' },
+      { emoji: '🛒', name: 'Colruyt Leuven', date: '2 nov, 11:00', amount: '+60 ✦', type: 'earn', chip: 'Colruyt' },
+      { emoji: '🎁', name: 'Inlossing kassabon', date: '1 nov, 09:30', amount: '−100 ✦', type: 'spend', chip: 'Colruyt' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '🛒', title: 'Dagelijkse aankopen', desc: 'Elke €0,50 = 1 Xtratje bij de kassa', reward: '2 ✦ / €1' },
+      { primary: true, emoji: '🥖', title: 'Versafdeling bonus', desc: 'Bakkerij, slagerij en groenten: 3× bonus', reward: '6 ✦ / €1' },
+      { primary: true, emoji: '🏷️', title: 'Weekacties', desc: 'Geselecteerde producten met extra Xtratjes', reward: 'tot 10× bonus' },
+      { primary: false, emoji: '🏋️', title: 'Spaar ook bij JIMS', desc: 'Als Colruyt-klant ook beschikbaar', reward: '+80 ✦/maand' },
+      { primary: false, emoji: '🌿', title: 'Spaar ook bij Bio-Planet', desc: 'Meerwaarde voor bewuste keuzes', reward: '3 ✦ / €1' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '💳', title: 'Kassabon Colruyt', desc: 'Direkt korting aan de kassa, zonder gedoe', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '🥖', title: 'Gratis bakkerijproduct', desc: 'Kies bij de bakkerij van jouw keuze', cost: '250 ✦', cta: 'Kies' },
+      { primary: true, emoji: '🏷️', title: 'Exclusieve Colruyt-actie', desc: 'Vroeg toegang tot weekpromotie', cost: '400 ✦', cta: 'Activeer' },
+      { primary: false, emoji: '💪', title: 'Gratis JIMS-dag', desc: 'Cross-merk: gratis dagpas bij JIMS', cost: '400 ✦', cta: 'Activeer' },
+      { primary: false, emoji: '🎄', title: 'CG Foundation kerst benefit', desc: 'Jouw Xtratjes voor een goed doel', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '🥖', label: 'Ontdek de versafdeling', text: 'Je koopt al regelmatig bij Colruyt, maar de versafdeling staat nog niet in je patroon. 5× brood = 10 gratis Xtratjes.', bg: 'rgba(204,0,0,0.06)', border: 'rgba(204,0,0,0.18)', labelColor: '#CC0000', ctaBg: 'rgba(204,0,0,0.12)', ctaColor: '#9B0000', cta: 'Actie activeren →' },
+      { icon: '💪', label: 'Jij + JIMS = match', text: 'Je hebt genoeg Xtratjes voor een gratis JIMS-dagpas. Ideaal na je boodschappen — zelfde dag, zelfde wijk.', bg: 'rgba(0,180,184,0.07)', border: 'rgba(0,180,184,0.2)', labelColor: '#0891B2', ctaBg: 'rgba(0,180,184,0.15)', ctaColor: '#0E7490', cta: 'Gebruik punten →' }
+    ]
+  },
+
+  okay: {
+    name: 'OKay',
+    tagline: 'De buurtwinkel met voordeel',
+    accent: '#0066B3',
+    accentMid: '#0077CC',
+    accentPale: '#EFF6FF',
+    navActive: '#0066B3',
+    headerBg: 'linear-gradient(150deg, #EFF6FF 0%, #FAFCFF 100%)',
+    balGrad: 'linear-gradient(135deg, #004D99 0%, #0066B3 60%, #FF6600 100%)',
+    greeting: 'Sophie 👋',
+    balance: '980', balSub: '≈ €4,90 te besteden',
+    balPills: ['+42 ✦ bij OKay', 'Dichtbij huis', 'OKay-klant'],
+    balLogoChar: 'OK',
+    note: 'OKay-modus: buurtwinkel acties voorop. Wekelijkse OKay-aanbiedingen + cross-merk besteden.',
+    earnHeroTitle: 'Spaar bij OKay',
+    earnHeroSub: 'Jouw buurtwinkel beloont trouwe klanten. Dagelijkse boodschappen = dagelijkse Xtratjes.',
+    earnMonthStat: '+210 ✦',
+    earnBestCat: 'Dagelijkse boodschappen',
+    bestedenHeroTitle: 'Wissel in via OKay',
+    bestedenHeroSub: 'Kortingen aan je OKay-kassa of besteed bij het hele Colruyt Group netwerk.',
+    bestedenCats: ['Bij OKay', 'Andere merken', 'Goed doel'],
+    campaigns: [
+      { emoji: '🏠', title: 'Buurtkampioen actie', desc: 'Doe 5 aankopen bij OKay deze week en ontvang dubbele bonus', reward: '2× Xtratjes (5×)', cta: 'Doe mee', progress: 60 },
+      { emoji: '🍎', title: 'Vers fruit & groenten', desc: 'Extra Xtratjes op seizoensgroenten uit het OKay-assortiment', reward: '+3 ✦ / product', cta: 'Bekijk', progress: 20 }
+    ],
+    recentActivity: [
+      { emoji: '🏠', name: 'OKay Mechelen-Noord', date: 'Vandaag, 08:12', amount: '+22 ✦', type: 'earn', chip: 'OKay' },
+      { emoji: '🏠', name: 'OKay Lier', date: 'Gisteren, 17:55', amount: '+18 ✦', type: 'earn', chip: 'OKay' },
+      { emoji: '🎁', name: 'Inlossing kassabon', date: '30 okt, 10:00', amount: '−100 ✦', type: 'spend', chip: 'OKay' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '🏠', title: 'Dagelijkse boodschappen', desc: 'Elke aankoop in jouw OKay-buurtwinkel', reward: '2 ✦ / €1' },
+      { primary: true, emoji: '🍎', title: 'Vers & seizoen', desc: 'Groenten en fruit van het seizoen: extra punten', reward: '+3 ✦ / product' },
+      { primary: true, emoji: '📅', title: 'Wekelijkse actie', desc: 'Geselecteerde OKay-producten met bonus', reward: 'wisselend' },
+      { primary: false, emoji: '🛒', title: 'Spaar ook bij Colruyt', desc: 'Groter assortiment bij Colruyt', reward: '2 ✦ / €1' },
+      { primary: false, emoji: '💊', title: 'Spaar ook bij Newpharma', desc: 'Gezond leven: ook online', reward: '1,5 ✦ / €1' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '💳', title: 'Kassabon OKay', desc: 'Direkt korting bij jouw buurtwinkel', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '🍎', title: 'Gratis versproduct', desc: 'Kies een product uit het versassortiment', cost: '200 ✦', cta: 'Kies' },
+      { primary: false, emoji: '🛒', title: 'Korting bij Colruyt', desc: 'Cross-merk: €0,50 aan de Colruyt-kassa', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: false, emoji: '🎄', title: 'CG Foundation kerst benefit', desc: 'Jouw Xtratjes voor een goed doel', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '💪', label: 'Jij + JIMS is logisch', text: 'Je bent onze trouwste OKay-klant. Wist je dat jouw Xtratjes ook gelden bij JIMS? Eén gratis dagpas staat klaar.', bg: 'rgba(0,180,184,0.07)', border: 'rgba(0,180,184,0.2)', labelColor: '#0891B2', ctaBg: 'rgba(0,180,184,0.15)', ctaColor: '#0E7490', cta: 'Probeer gratis →' },
+      { icon: '💊', label: 'Ontdek Newpharma', text: 'Jij let op je gezondheid — Newpharma heeft supplementen die je OKay-patroon perfect aanvullen.', bg: 'rgba(0,85,179,0.07)', border: 'rgba(0,85,179,0.18)', labelColor: '#2563EB', ctaBg: 'rgba(0,85,179,0.12)', ctaColor: '#1D4ED8', cta: '15% korting vandaag →' }
+    ]
+  },
+
+  bio: {
+    name: 'Bio-Planet',
+    tagline: 'Bio & bewust winkelen',
+    accent: '#15803D',
+    accentMid: '#16A34A',
+    accentPale: '#F0FDF4',
+    navActive: '#15803D',
+    headerBg: 'linear-gradient(150deg, #F0FDF4 0%, #FAFFFE 100%)',
+    balGrad: 'linear-gradient(135deg, #14532D 0%, #15803D 60%, #22C55E 100%)',
+    greeting: 'Sophie 👋',
+    balance: '1.260', balSub: '≈ €6,30 te besteden',
+    balPills: ['+55 ✦ bij Bio-Planet', 'Bewuste keuzes', 'Bio-klant'],
+    balLogoChar: '🌿',
+    note: 'Bio-Planet-modus: biologische & duurzame producten voorop. Greenscore en gezond gedrag extra beloond.',
+    earnHeroTitle: 'Spaar bij Bio-Planet',
+    earnHeroSub: 'Bewust leven wordt beloond. Biologische producten, Nutriscore A/B en duurzame keuzes leveren extra Xtratjes op.',
+    earnMonthStat: '+290 ✦',
+    earnBestCat: 'Bio & gezond',
+    bestedenHeroTitle: 'Besteed bij Bio-Planet',
+    bestedenHeroSub: 'Jouw Xtratjes zijn welkom bij Bio-Planet of besteed ze bij het hele groepsnetwerk.',
+    bestedenCats: ['Bij Bio-Planet', 'Andere merken', 'Goed doel'],
+    campaigns: [
+      { emoji: '🌾', title: 'Seizoensbox challenge', desc: 'Koop 5 seizoensgroenten deze week en win een biologische productbox', reward: '+250 ✦ + box', cta: 'Doe mee', progress: 50 },
+      { emoji: '🥗', title: 'Nutriscore A-maand', desc: 'Haal 80% Nutriscore A/B aankopen in november en win bonus', reward: '+300 ✦', cta: 'Activeer', progress: 65 }
+    ],
+    recentActivity: [
+      { emoji: '🌿', name: 'Bio-Planet Gent', date: '3 nov, 14:20', amount: '+55 ✦', type: 'earn', chip: 'Bio-Planet' },
+      { emoji: '🌿', name: 'Bio-Planet Leuven', date: '1 nov, 10:05', amount: '+40 ✦', type: 'earn', chip: 'Bio-Planet' },
+      { emoji: '🎁', name: 'Gratis product', date: '28 okt, 11:30', amount: '−250 ✦', type: 'spend', chip: 'Bio-Planet' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '🌿', title: 'Bio-producten', desc: 'Elk biologisch product = bonus Xtratjes', reward: '3 ✦ / €1' },
+      { primary: true, emoji: '🥗', title: 'Nutriscore A/B', desc: 'Extra bonus bij elke gezonde keuze', reward: '2× bonus' },
+      { primary: true, emoji: '🌍', title: 'Duurzaamheidsscore', desc: 'Hoog scorende producten leveren extra op', reward: '+25% bonus' },
+      { primary: false, emoji: '🛒', title: 'Spaar ook bij Colruyt', desc: 'Grotere keuze, zelfde spaarsysteem', reward: '2 ✦ / €1' },
+      { primary: false, emoji: '🏋️', title: 'Spaar ook bij JIMS', desc: 'Gezond leven in één ecosysteem', reward: '+80 ✦/maand' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '🌾', title: 'Gratis biologisch product', desc: 'Kies uit curated seizoensassortiment', cost: '250 ✦', cta: 'Kies' },
+      { primary: true, emoji: '🌿', title: 'Korting bij Bio-Planet', desc: 'Direkt in te lossen bij de kassa', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '🌍', title: 'Plant een boom', desc: 'Draag bij aan herbebossing via Treedom', cost: '500 ✦', cta: 'Plant' },
+      { primary: false, emoji: '🥑', title: 'Korting bij Colruyt', desc: 'Cross-merk: €0,50 kortingbon', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: false, emoji: '❤️', title: 'Voedselbank donatie', desc: 'Jouw Xtratjes als voedselhulp', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '🌳', label: 'Jouw volgende stap', text: 'Je bent Green Champion. Plant jouw 3e boom via Xtra — Colruyt Group verdubbelt je donatie. Slechts 500 ✦.', bg: 'rgba(46,125,50,0.07)', border: 'rgba(46,125,50,0.2)', labelColor: '#16A34A', ctaBg: 'rgba(46,125,50,0.15)', ctaColor: '#15803D', cta: 'Plant boom →' },
+      { icon: '💊', label: 'Gezond profiel → Newpharma', text: 'Jouw Nutriscore A-patroon is indrukwekkend. Newpharma heeft supplementen die bij jouw bewuste keuzes passen.', bg: 'rgba(0,85,179,0.07)', border: 'rgba(0,85,179,0.18)', labelColor: '#2563EB', ctaBg: 'rgba(0,85,179,0.12)', ctaColor: '#1D4ED8', cta: 'Ontdek Newpharma →' }
+    ]
+  },
+
+  jims: {
+    name: 'JIMS',
+    tagline: 'Jouw fitnessmerk',
+    accent: '#00B4B8',
+    accentMid: '#00C4C8',
+    accentPale: '#F0FFFE',
+    navActive: '#00B4B8',
+    headerBg: 'linear-gradient(150deg, #F0FFFE 0%, #F8FFFE 100%)',
+    balGrad: 'linear-gradient(135deg, #0D1F35 0%, #1A2535 50%, #00B4B8 100%)',
+    greeting: 'Sophie 💪',
+    balance: '760', balSub: '≈ €3,80 te besteden',
+    balPills: ['+30 ✦ bij JIMS', '3 workouts/week', 'JIMS-lid'],
+    balLogoChar: 'J',
+    note: 'JIMS-modus: fitness & gezondheid centraal. Workouts, coaching en voedings-challenges voorop.',
+    earnHeroTitle: 'Spaar bij JIMS',
+    earnHeroSub: 'Jouw sportprestaties worden beloond. Workouts, coaching en gezonde voeding leveren Xtratjes op.',
+    earnMonthStat: '+180 ✦',
+    earnBestCat: 'Workouts',
+    bestedenHeroTitle: 'Wissel in via JIMS',
+    bestedenHeroSub: 'Van gratis maandabonnement tot sportuitrusting. Of besteed bij de andere groepsmerken.',
+    bestedenCats: ['Bij JIMS', 'Voeding & health', 'Andere merken'],
+    campaigns: [
+      { emoji: '🏋️', title: '30-daagse fitness challenge', desc: 'Train 20x in november en ontvang een maand gratis abo', reward: '+1 maand gratis', cta: 'Start', progress: 55 },
+      { emoji: '🥗', title: 'Healthy combo deal', desc: 'Combineer JIMS-training met Nutriscore A-boodschappen bij Colruyt', reward: '+100 ✦ bonus', cta: 'Activeer', progress: 40 }
+    ],
+    recentActivity: [
+      { emoji: '🏋️', name: 'JIMS Mechelen', date: 'Gisteren, 07:15', amount: '+30 ✦', type: 'earn', chip: 'JIMS' },
+      { emoji: '🏋️', name: 'JIMS Gent', date: '2 nov, 18:30', amount: '+30 ✦', type: 'earn', chip: 'JIMS' },
+      { emoji: '🎁', name: 'Protein shake korting', date: '1 nov, 09:00', amount: '−150 ✦', type: 'spend', chip: 'JIMS' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '🏋️', title: 'Elke workout', desc: 'Inchecken bij JIMS levert direct Xtratjes op', reward: '+30 ✦ / bezoek' },
+      { primary: true, emoji: '📱', title: 'JIMS-coaching sessie', desc: 'Online of in club met een personal trainer', reward: '+80 ✦ / sessie' },
+      { primary: true, emoji: '🥗', title: 'Healthy lifestyle score', desc: 'Combineer sporten met gezonde voeding bij CG', reward: '+100 ✦/maand' },
+      { primary: false, emoji: '🛒', title: 'Spaar ook bij Colruyt', desc: 'Eten en sporten: een sterk duo', reward: '2 ✦ / €1' },
+      { primary: false, emoji: '💊', title: 'Spaar ook bij Newpharma', desc: 'Supplementen en gezondheidsproducten', reward: '1,5 ✦ / €1' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '💪', title: 'Gratis JIMS-maand', desc: 'Wissel in voor een maand gratis lidmaatschap', cost: '1.200 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '👕', title: 'JIMS-merchandise', desc: 'T-shirt, bidon of sporttas uit de JIMS shop', cost: '600 ✦', cta: 'Kies' },
+      { primary: true, emoji: '🧴', title: 'Protein supplement korting', desc: '25% korting op je volgende supplement aankoop', cost: '300 ✦', cta: 'Activeer' },
+      { primary: false, emoji: '🛒', title: 'Korting bij Colruyt', desc: 'Cross-merk: €0,50 kortingbon boodschappen', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: false, emoji: '❤️', title: 'Doneer aan goed doel', desc: 'Sport for good: Rode Kruis & meer', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '💊', label: 'Sport + voeding = alles', text: 'Jij traint 3×/week. Newpharma heeft het proteïne-aanbod dat perfect aansluit. 15% korting met jouw Xtratjes.', bg: 'rgba(0,85,179,0.07)', border: 'rgba(0,85,179,0.18)', labelColor: '#2563EB', ctaBg: 'rgba(0,85,179,0.12)', ctaColor: '#1D4ED8', cta: '15% korting →' },
+      { icon: '🛒', label: 'Eten & sporten', text: 'Je sport goed, maar je boodschappen-patroon kan beter. Nutriscore A aankopen bij Colruyt leveren bonus Xtratjes voor je volgende JIMS-maand.', bg: 'rgba(204,0,0,0.06)', border: 'rgba(204,0,0,0.18)', labelColor: '#CC0000', ctaBg: 'rgba(204,0,0,0.12)', ctaColor: '#9B0000', cta: 'Activeer bonus →' }
+    ]
+  },
+
+  newpharma: {
+    name: 'Newpharma',
+    tagline: 'Online apotheek & gezondheid',
+    accent: '#003087',
+    accentMid: '#004099',
+    accentPale: '#EFF6FF',
+    navActive: '#003087',
+    headerBg: 'linear-gradient(150deg, #EFF6FF 0%, #F8FBFF 100%)',
+    balGrad: 'linear-gradient(135deg, #001A5C 0%, #003087 60%, #00A651 100%)',
+    greeting: 'Sophie 👋',
+    balance: '540', balSub: '≈ €2,70 te besteden',
+    balPills: ['+25 ✦ bij Newpharma', 'Online apotheek', 'NP-klant'],
+    balLogoChar: 'N',
+    note: 'Newpharma-modus: gezondheid & welzijn voorop. Apothekersadvies, supplementen en gezonde lifestyle beloond.',
+    earnHeroTitle: 'Spaar bij Newpharma',
+    earnHeroSub: 'Elke aankoop bij Newpharma levert Xtratjes op. Gezondheidsadvies en supplementen extra beloond.',
+    earnMonthStat: '+120 ✦',
+    earnBestCat: 'Geneesmiddelen & supplements',
+    bestedenHeroTitle: 'Wissel in bij Newpharma',
+    bestedenHeroSub: 'Kortingen op supplementen en gezondheidsproducten, of besteed bij het groepsnetwerk.',
+    bestedenCats: ['Bij Newpharma', 'Gezondheid', 'Andere merken'],
+    campaigns: [
+      { emoji: '💊', title: 'Wintergezondheid actie', desc: 'Koop je vitamine D en zinc voorraad + ontvang bonus Xtratjes', reward: '+80 ✦ bonus', cta: 'Bekijk', progress: 35 },
+      { emoji: '🧴', title: 'Skincare maand', desc: 'Dubbele Xtratjes op huidverzorging in november', reward: '2× Xtratjes', cta: 'Activeer', progress: 25 }
+    ],
+    recentActivity: [
+      { emoji: '💊', name: 'Newpharma order', date: '4 nov, 10:30', amount: '+25 ✦', type: 'earn', chip: 'Newpharma' },
+      { emoji: '💊', name: 'Vitamine D pakket', date: '28 okt, 14:00', amount: '+18 ✦', type: 'earn', chip: 'Newpharma' },
+      { emoji: '🎁', name: 'Korting supplement', date: '20 okt, 09:00', amount: '−200 ✦', type: 'spend', chip: 'Newpharma' }
+    ],
+    sparenItems: [
+      { primary: true, emoji: '💊', title: 'Apothekersaankoop', desc: 'Geneesmiddelen en supplements online', reward: '1,5 ✦ / €1' },
+      { primary: true, emoji: '🧴', title: 'Huidverzorging & beauty', desc: 'Curated selectie merken', reward: '2 ✦ / €1' },
+      { primary: true, emoji: '📋', title: 'Gezondheidsadvies', desc: 'Apotheker online consultation = bonus', reward: '+60 ✦' },
+      { primary: false, emoji: '🏋️', title: 'Spaar ook bij JIMS', desc: 'Gecombineerd gezond leven', reward: '+80 ✦/maand' },
+      { primary: false, emoji: '🌿', title: 'Spaar ook bij Bio-Planet', desc: 'Biologisch en gezond in één', reward: '3 ✦ / €1' }
+    ],
+    bestedenItems: [
+      { primary: true, emoji: '💊', title: 'Korting bij Newpharma', desc: '€2 korting op je volgende bestelling', cost: '200 ✦', cta: 'Wissel in' },
+      { primary: true, emoji: '🧴', title: 'Gratis supplement sample', desc: 'Kies uit curated selectie proefpakketten', cost: '300 ✦', cta: 'Kies' },
+      { primary: true, emoji: '📦', title: 'Gratis levering (3×)', desc: '3 leveringen zonder extra kost', cost: '150 ✦', cta: 'Activeer' },
+      { primary: false, emoji: '🛒', title: 'Korting bij Colruyt', desc: 'Cross-merk: €0,50 kortingbon', cost: '100 ✦', cta: 'Wissel in' },
+      { primary: false, emoji: '🎄', title: 'CG Foundation kerst benefit', desc: 'Jouw Xtratjes voor een goed doel', cost: 'vrij', cta: 'Doneer' }
+    ],
+    personalNudges: [
+      { icon: '💪', label: 'Gezondheid × fitness', text: 'Jij kiest bewust voor je gezondheid. JIMS past perfect — combineer jouw Newpharma-Xtratjes voor een gratis JIMS-dagpas.', bg: 'rgba(0,180,184,0.07)', border: 'rgba(0,180,184,0.2)', labelColor: '#0891B2', ctaBg: 'rgba(0,180,184,0.15)', ctaColor: '#0E7490', cta: 'Gratis dagpas →' },
+      { icon: '🌿', label: 'Gezondheid × bio', text: 'Je zoekt naar gezonde producten. Bio-Planet heeft glutenvrije opties die aansluiten bij jouw patroon.', bg: 'rgba(46,125,50,0.07)', border: 'rgba(46,125,50,0.2)', labelColor: '#16A34A', ctaBg: 'rgba(46,125,50,0.15)', ctaColor: '#15803D', cta: 'Ontdek Bio-Planet →' }
+    ]
+  }
+};
+
+// ──────────────────────────────────────────────────
+//  SCREEN STATE
+// ──────────────────────────────────────────────────
+let currentBrand = 'xtra';
+let currentScreen = 'home';
+
+// ──────────────────────────────────────────────────
+//  HELPER: SVG LOGOS
+// ──────────────────────────────────────────────────
+function getBrandLogoSVG(brand) {
+  const logos = {
+    xtra: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#6D28D9"/>
+      <text x="18" y="25" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="16" fill="white">✦</text>
+    </svg>`,
+    colruyt: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#CC0000"/>
+      <text x="18" y="25" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="14" fill="white">C</text>
+    </svg>`,
+    okay: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#0066B3"/>
+      <text x="18" y="25" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="11" fill="white">OK</text>
+    </svg>`,
+    bio: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#15803D"/>
+      <text x="18" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="18" fill="white">🌿</text>
+    </svg>`,
+    jims: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#0D1F35"/>
+      <text x="18" y="25" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="15" fill="#00B4B8">J</text>
+    </svg>`,
+    newpharma: `<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#003087"/>
+      <text x="18" y="25" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="14" fill="white">N</text>
+    </svg>`
+  };
+  return logos[brand] || logos.xtra;
+}
+
+// ──────────────────────────────────────────────────
+//  RENDER HELPERS
+// ──────────────────────────────────────────────────
+function renderPersonalNudges(nudges) {
+  if (!nudges || nudges.length === 0) return '';
+  return nudges.map(n => `
+    <div class="nudge-card" style="background:${n.bg};border-color:${n.border};">
+      <div class="nudge-icon">${n.icon}</div>
+      <div class="nudge-body">
+        <div class="nudge-label" style="color:${n.labelColor};">${n.label}</div>
+        <div class="nudge-text">${n.text}</div>
+        <span class="nudge-cta" style="background:${n.ctaBg};color:${n.ctaColor};">${n.cta}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCampaigns(campaigns) {
+  return campaigns.map(c => `
+    <div class="campaign-card">
+      <div class="cc-progress"><div class="cc-progress-bar" style="width:${c.progress}%"></div></div>
+      <div class="cc-header">
+        <div class="cc-emoji">${c.emoji}</div>
+        <div class="cc-body">
+          <div class="cc-title">${c.title}</div>
+          <div class="cc-desc">${c.desc}</div>
+        </div>
+      </div>
+      <div class="cc-footer">
+        <div class="cc-reward">${c.reward}</div>
+        <div class="cc-cta">${c.cta}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderActivity(items) {
+  return items.map(a => `
+    <div class="activity-item">
+      <div class="act-icon">${a.emoji}</div>
+      <div class="act-info">
+        <div class="act-name">${a.name}</div>
+        <div class="act-date">${a.date}
+          <span class="act-brand-chip">${a.chip}</span>
+        </div>
+      </div>
+      <div class="act-amount ${a.type}">${a.amount}</div>
+    </div>
+  `).join('');
+}
+
+function renderEarnItems(items) {
+  const primary = items.filter(i => i.primary);
+  const secondary = items.filter(i => !i.primary);
+  let html = primary.map(i => `
+    <div class="earn-card">
+      <div class="earn-card-icon">${i.emoji}</div>
+      <div class="earn-card-info">
+        <div class="earn-card-title">${i.title}</div>
+        <div class="earn-card-desc">${i.desc}</div>
+      </div>
+      <div class="earn-card-reward">${i.reward}</div>
+    </div>
+  `).join('');
+  if (secondary.length) {
+    html += `<div class="earn-divider"><span>Ook beschikbaar via andere merken</span></div>`;
+    html += secondary.map(i => `
+      <div class="earn-card" style="opacity:0.8;">
+        <div class="earn-card-icon">${i.emoji}</div>
+        <div class="earn-card-info">
+          <div class="earn-card-title">${i.title}</div>
+          <div class="earn-card-desc">${i.desc}</div>
+        </div>
+        <div class="earn-card-reward">${i.reward}</div>
+      </div>
+    `).join('');
+  }
+  return html;
+}
+
+function renderBestedenItems(items) {
+  const primary = items.filter(i => i.primary);
+  const secondary = items.filter(i => !i.primary);
+  let html = primary.map(i => `
+    <div class="reward-card">
+      <div class="rc-image">${i.emoji}</div>
+      <div class="rc-body">
+        <div class="rc-title">${i.title}</div>
+        <div class="rc-desc">${i.desc}</div>
+      </div>
+      <div class="rc-footer">
+        <div class="rc-cost">${i.cost}</div>
+        <div class="rc-btn">${i.cta}</div>
+      </div>
+    </div>
+  `).join('');
+  if (secondary.length) {
+    html += `<div class="earn-divider"><span>Cross-merk opportuniteiten</span></div>`;
+    html += secondary.map(i => `
+      <div class="reward-card" style="opacity:0.8;">
+        <div class="rc-image">${i.emoji}</div>
+        <div class="rc-body">
+          <div class="rc-title">${i.title}</div>
+          <div class="rc-desc">${i.desc}</div>
+        </div>
+        <div class="rc-footer">
+          <div class="rc-cost">${i.cost}</div>
+          <div class="rc-btn">${i.cta}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  return html;
+}
+
+function renderActivityFull(items) {
+  return `<div class="date-label">November 2024</div>` + renderActivity(items) +
+    `<div class="date-label">Oktober 2024</div>` +
+    `<div class="activity-item">
+      <div class="act-icon">🎁</div>
+      <div class="act-info">
+        <div class="act-name">Inlossing kortingbon</div>
+        <div class="act-date">28 okt, 09:00 <span class="act-brand-chip">Xtra</span></div>
+      </div>
+      <div class="act-amount spend">−200 ✦</div>
+    </div>
+    <div class="activity-item">
+      <div class="act-icon">🛒</div>
+      <div class="act-info">
+        <div class="act-name">Colruyt Halle</div>
+        <div class="act-date">25 okt, 17:20 <span class="act-brand-chip">Colruyt</span></div>
+      </div>
+      <div class="act-amount earn">+38 ✦</div>
+    </div>`;
+}
+
+// ──────────────────────────────────────────────────
+//  SWITCH BRAND
+// ──────────────────────────────────────────────────
+function switchBrand(brand) {
+  currentBrand = brand;
+  const b = BRANDS[brand];
+  const root = document.getElementById('phoneRoot');
+
+  // CSS vars
+  root.style.setProperty('--brand-accent', b.accent);
+  root.style.setProperty('--brand-accent-mid', b.accentMid);
+  root.style.setProperty('--brand-accent-pale', b.accentPale);
+  root.style.setProperty('--brand-nav-active', b.navActive);
+  root.style.setProperty('--brand-header-bg', b.headerBg);
+  root.style.setProperty('--brand-bal-grad', b.balGrad);
+
+  // Toggle buttons
+  document.querySelectorAll('.bt-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.brand === brand);
+  });
+  // toggle button border color uses CSS var too
+  document.querySelectorAll('.bt-btn.active').forEach(btn => {
+    btn.style.borderColor = b.accent;
+    btn.style.background = b.accentPale;
+    btn.style.color = b.accent;
+  });
+  document.querySelectorAll('.bt-btn:not(.active)').forEach(btn => {
+    btn.style.borderColor = '';
+    btn.style.background = '';
+    btn.style.color = '';
+  });
+
+  // Note
+  document.getElementById('brandNote').textContent = b.note;
+
+  // Logo
+  document.getElementById('appLogoIcon').innerHTML = getBrandLogoSVG(brand);
+  document.getElementById('appBrandName').textContent = b.name;
+  document.getElementById('appBrandTagline').textContent = b.tagline;
+
+  // Balance card
+  document.getElementById('balanceAmount').innerHTML = `${b.balance} <span>✦</span>`;
+  document.getElementById('balanceSub').textContent = b.balSub;
+  document.getElementById('balCardLogo').textContent = b.balLogoChar;
+  document.getElementById('balancePills').innerHTML = b.balPills.map(p => `<span class="bc-pill">${p}</span>`).join('');
+
+  // Greeting
+  document.getElementById('appGreeting').textContent = b.greeting;
+
+  // Home personal nudges
+  const personalEl = document.getElementById('homePersonal');
+  if (personalEl && b.personalNudges && b.personalNudges.length) {
+    personalEl.innerHTML = `
+      <div class="app-section-title">✨ Voor jou — op maat</div>
+      ${renderPersonalNudges(b.personalNudges)}
+    `;
+  } else if (personalEl) {
+    personalEl.innerHTML = '';
+  }
+
+  // Home campaigns
+  document.getElementById('homeCampaigns').innerHTML = `
+    <div class="app-section-title">
+      🔥 Actieve challenges
+      <span class="badge">2</span>
+      <a class="app-section-more">Alle →</a>
+    </div>
+    ${renderCampaigns(b.campaigns)}
+  `;
+
+  // Home activity
+  document.getElementById('homeActivity').innerHTML = `
+    <div class="app-section-title">
+      Recente activiteit
+      <a class="app-section-more">Alles →</a>
+    </div>
+    ${renderActivity(b.recentActivity)}
+  `;
+
+  // Sparen screen
+  document.getElementById('earnHeroTitle').textContent = b.earnHeroTitle;
+  document.getElementById('earnHeroSub').textContent = b.earnHeroSub;
+  document.getElementById('earnMonthStat').textContent = b.earnMonthStat;
+  document.getElementById('earnBestCat').textContent = b.earnBestCat;
+  document.getElementById('sparenPrimary').innerHTML = `
+    <div class="app-section-title">Spaarmogelijkheden</div>
+    ${renderEarnItems(b.sparenItems)}
+  `;
+
+  // Besteden screen
+  document.getElementById('bestedenHeroTitle').textContent = b.bestedenHeroTitle;
+  document.getElementById('bestedenHeroSub').textContent = b.bestedenHeroSub;
+  document.getElementById('bestedenCats').innerHTML = b.bestedenCats.map((c, i) =>
+    `<div class="bcat ${i===0?'active':''}">${c}</div>`
+  ).join('');
+  document.getElementById('bestedenPrimary').innerHTML = `
+    <div class="app-section-title">Bestedingspunten</div>
+    ${renderBestedenItems(b.bestedenItems)}
+  `;
+
+  // Activity screen
+  document.getElementById('activityFullList').innerHTML = renderActivityFull(b.recentActivity);
+
+  // Summary stats — brand-specific
+  document.getElementById('actEarnVal').textContent = b.earnMonthStat;
+}
+
+// ──────────────────────────────────────────────────
+//  SCREEN NAV
+// ──────────────────────────────────────────────────
+function showScreen(screen, btn) {
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  btn.classList.add('active');
+  currentScreen = screen;
+}
+
+// ──────────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────────
+switchBrand('xtra');
+</script>
+</body>
+</html>

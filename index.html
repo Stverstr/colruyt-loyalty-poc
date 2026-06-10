@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xtra Loyalty — Colruyt Group POC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #F5F4F1;
+    --white: #FFFFFF;
+    --border: #E0DDD8;
+    --text: #1A1A1A;
+    --text-mid: #4A4A4A;
+    --text-muted: #888;
+    --xtra: #6D28D9;
+    --xtra-light: #7C3AED;
+    --xtra-pale: #F3EFFC;
+    --gold: #B45309;
+    --gold-bg: #FEF3C7;
+    --cg-blue: #366FB7;
+    --colruyt: #CC0000;
+    --okay: #E84010;
+    --bioplanet: #2E7D32;
+    --jims: #C9A227;
+    --newpharma: #0055B3;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 48px; display: flex; align-items: center; height: 64px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; }
+  .x-mark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #0F0A1E;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; padding: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .nav-name { font-size: 17px; font-weight: 800; color: var(--text); }
+  .nav-sub { font-size: 12px; color: var(--text-muted); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .nav-badge {
+    background: var(--xtra-pale); color: var(--xtra); border: 1px solid rgba(109,40,217,0.2);
+    padding: 5px 14px; border-radius: 100px; font-size: 12px; font-weight: 600;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 80px 48px 72px; text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gold-bg); color: var(--gold);
+    border: 1px solid #FDE68A; padding: 6px 16px; border-radius: 100px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 5vw, 68px); font-weight: 900; line-height: 1.05;
+    color: var(--text); margin-bottom: 20px; letter-spacing: -1.5px;
+    min-height: 2.15em;
+  }
+  .hero h1 span { color: var(--xtra); }
+  .h1-wrap { transition: opacity 0.45s ease, transform 0.45s ease; }
+  .h1-wrap.fade-out { opacity: 0; transform: translateY(-6px); }
+  .h1-wrap.fade-in { opacity: 1; transform: translateY(0); }
+
+  /* Dot indicators */
+  .hero-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 28px; }
+  .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: default; }
+  .hero-dot.active { width: 18px; border-radius: 3px; background: var(--xtra); }
+  .hero-sub {
+    font-size: 18px; color: var(--text-mid); max-width: 560px;
+    margin: 0 auto 48px; line-height: 1.65;
+  }
+
+  /* Brand flow — 3-step bidirectional */
+  .brand-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; flex-wrap: nowrap;
+  }
+  .bf-side {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .bf-side-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-muted);
+  }
+  .bf-chips {
+    display: flex; flex-direction: column; gap: 6px; align-items: center;
+  }
+  .bf-chips-row { display: flex; gap: 6px; }
+  .b-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 13px; border-radius: 100px; border: 1.5px solid;
+    font-size: 12px; font-weight: 600; background: var(--white);
+    white-space: nowrap;
+  }
+  .b-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .b-colruyt { border-color: rgba(204,0,0,0.3); color: var(--colruyt); }
+  .b-colruyt .b-dot { background: var(--colruyt); }
+  .b-okay { border-color: rgba(232,64,16,0.3); color: var(--okay); }
+  .b-okay .b-dot { background: var(--okay); }
+  .b-bio { border-color: rgba(46,125,50,0.3); color: var(--bioplanet); }
+  .b-bio .b-dot { background: var(--bioplanet); }
+  .b-jims { border-color: rgba(201,162,39,0.35); color: var(--jims); }
+  .b-jims .b-dot { background: var(--jims); }
+  .b-new { border-color: rgba(0,85,179,0.3); color: var(--newpharma); }
+  .b-new .b-dot { background: var(--newpharma); }
+
+  /* Connector with double arrow */
+  .bf-connector {
+    display: flex; align-items: center; gap: 0; padding: 0 6px; flex-shrink: 0;
+  }
+  .bf-conn-line {
+    width: 36px; height: 1.5px;
+    background: linear-gradient(90deg, var(--border), #C4BFB8);
+  }
+  .bf-conn-line.rev { background: linear-gradient(90deg, #C4BFB8, var(--border)); }
+  .bf-conn-arrow {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 0 4px;
+  }
+  .bf-conn-arrow-row {
+    display: flex; align-items: center; gap: 2px;
+    font-size: 11px; color: #C4BFB8; font-weight: 700; line-height: 1;
+  }
+  .bf-conn-arrow-row span { letter-spacing: -1px; }
+
+  /* Center Xtratjes hub */
+  .b-xtra-center {
+    background: #0F0A1E;
+    color: white; padding: 12px 24px 12px 14px; border-radius: 100px;
+    font-size: 15px; font-weight: 800; letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
+  .b-xtra-center .xtra-icon {
+    width: 28px; height: 28px; background: transparent;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Flow note */
+  .bf-note {
+    margin-top: 16px; font-size: 12px; color: var(--text-muted);
+    font-weight: 500; text-align: center;
+  }
+
+  /* STATS */
+  .stats {
+    display: flex; justify-content: center; gap: 0;
+    border-bottom: 1px solid var(--border); background: var(--white);
+  }
+  .stat-item {
+    padding: 28px 48px; text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-val { font-size: 28px; font-weight: 800; color: var(--text); }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; letter-spacing: 0.3px; }
+
+  /* SECTION */
+  .section { padding: 64px 48px; max-width: 1120px; margin: 0 auto; }
+  .section-eyebrow {
+    text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;
+  }
+  .section-title { text-align: center; font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .section-sub { text-align: center; color: var(--text-mid); font-size: 16px; margin-bottom: 48px; line-height: 1.6; }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    text-decoration: none; color: var(--text);
+    transition: all 0.25s ease; display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.09); border-color: #C8C3BA; }
+
+  .card-top { height: 6px; }
+  .card-top-1 { background: linear-gradient(90deg, #6D28D9, #9333EA); }
+  .card-top-2 { background: linear-gradient(90deg, #B45309, #D97706); }
+  .card-top-3 { background: linear-gradient(90deg, #15803D, #22C55E); }
+
+  .card-body { padding: 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+  .card-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+  }
+  .ci-1 { background: var(--xtra-pale); }
+  .ci-2 { background: var(--gold-bg); }
+  .ci-3 { background: #DCFCE7; }
+
+  .card-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 4px; width: fit-content;
+  }
+  .ct-1 { background: var(--xtra-pale); color: var(--xtra); }
+  .ct-2 { background: var(--gold-bg); color: var(--gold); }
+  .ct-3 { background: #DCFCE7; color: #15803D; }
+
+  .card-body h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .card-body p { color: var(--text-mid); font-size: 14px; line-height: 1.65; }
+
+  .card-features { display: flex; flex-direction: column; gap: 8px; }
+  .feat { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--text-mid); }
+  .feat-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .fd-1 { background: var(--xtra); }
+  .fd-2 { background: var(--gold); }
+  .fd-3 { background: #15803D; }
+
+  .card-footer {
+    padding: 20px 32px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 700;
+  }
+  .cf-1 { color: var(--xtra); }
+  .cf-2 { color: var(--gold); }
+  .cf-3 { color: #15803D; }
+  .cf-arrow { font-size: 16px; transition: transform 0.2s; }
+  .card:hover .cf-arrow { transform: translateX(4px); }
+
+  /* FEATURED CARD (4th perspective) */
+  .card-featured {
+    margin-top: 24px;
+    background: linear-gradient(135deg, #052E16 0%, #14532D 50%, #166534 100%);
+    border-radius: 20px; overflow: hidden;
+    text-decoration: none; color: white;
+    transition: all 0.25s ease; display: flex; flex-direction: column;
+    border: 1px solid rgba(74,222,128,0.15);
+    position: relative;
+  }
+  .card-featured::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(74,222,128,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .card-featured:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.18); border-color: rgba(74,222,128,0.3); }
+  .card-featured:hover .cf-arrow { transform: translateX(4px); }
+  .card-featured-inner {
+    padding: 36px 40px;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .cf-left { display: flex; flex-direction: column; gap: 14px; }
+  .cf-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; background: rgba(74,222,128,0.2); color: #86EFAC; width: fit-content; border: 1px solid rgba(74,222,128,0.25); }
+  .card-featured h2 { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; color: white; margin: 0; }
+  .card-featured p { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.6; max-width: 580px; }
+  .cf-feats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .cf-feat { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7); }
+  .cf-feat-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ADE80; flex-shrink: 0; }
+  .cf-footer-link { display: flex; align-items: center; gap: 10px; color: #86EFAC; font-size: 14px; font-weight: 800; margin-top: 4px; }
+  .cf-arrow-green { font-size: 18px; transition: transform 0.2s; }
+  .card-featured:hover .cf-arrow-green { transform: translateX(4px); }
+
+  .cf-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex-shrink: 0; }
+  .cf-kpi { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 14px 16px; text-align: center; }
+  .cf-kpi-val { font-size: 22px; font-weight: 900; color: white; line-height: 1; }
+  .cf-kpi-unit { font-size: 11px; color: #86EFAC; font-weight: 700; }
+  .cf-kpi-label { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+
+  /* APP SECTION */
+  .app-section {
+    background: #0D0D1A; border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .app-section-inner {
+    max-width: 1120px; margin: 0 auto; padding: 56px 48px;
+    display: grid; grid-template-columns: 1fr 420px; gap: 64px; align-items: center;
+  }
+  .as-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(109,40,217,0.2); color: #A78BFA;
+    border: 1px solid rgba(109,40,217,0.3); padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .as-title { font-size: 36px; font-weight: 900; color: white; letter-spacing: -0.8px; line-height: 1.1; margin-bottom: 16px; }
+  .as-title span { color: #A78BFA; }
+  .as-desc { font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 28px; max-width: 480px; }
+  .as-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .as-feat { display: flex; align-items: center; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .as-feat-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(109,40,217,0.2); border: 1px solid rgba(109,40,217,0.3); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .as-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #6D28D9, #9333EA); color: white;
+    padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 800;
+    text-decoration: none; transition: all 0.25s; letter-spacing: 0.2px;
+    box-shadow: 0 8px 24px rgba(109,40,217,0.35);
+  }
+  .as-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(109,40,217,0.45); }
+
+  /* Mini phone preview */
+  .as-phone-wrap { display: flex; justify-content: center; }
+  .as-phone {
+    width: 200px; background: #0D0D1A; border-radius: 32px;
+    border: 4px solid #2A2A3A; overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    position: relative;
+  }
+  .as-ph-di { background: #0D0D1A; height: 28px; display: flex; align-items: center; justify-content: center; }
+  .as-ph-di-pill { width: 70px; height: 18px; background: #000; border-radius: 12px; }
+  .as-ph-status { padding: 3px 16px 6px; display: flex; justify-content: space-between; }
+  .as-ph-time { font-size: 11px; font-weight: 700; color: white; }
+  .as-ph-batt { font-size: 9px; color: rgba(255,255,255,0.6); }
+  .as-ph-header { padding: 10px 16px 14px; background: linear-gradient(160deg, #1A0D3A 0%, #0D0D1A 60%); }
+  .as-ph-logo { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+  .as-ph-logo-text { font-size: 12px; font-weight: 900; color: white; letter-spacing: 0.5px; }
+  .as-ph-bal-label { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.8px; }
+  .as-ph-bal-num { font-size: 38px; font-weight: 900; color: white; line-height: 1; letter-spacing: -1px; }
+  .as-ph-bal-unit { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .as-ph-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.1); border-radius: 20px; padding: 3px 8px; margin-top: 6px; }
+  .as-ph-badge-text { font-size: 9px; font-weight: 800; color: #FFC107; }
+  .as-ph-body { padding: 12px 14px; }
+  .as-ph-tx { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .as-ph-tx:last-child { border-bottom: none; }
+  .as-ph-tx-icon { width: 26px; height: 26px; border-radius: 7px; overflow: hidden; flex-shrink: 0; }
+  .as-ph-tx-desc { flex: 1; font-size: 10px; color: rgba(255,255,255,0.7); }
+  .as-ph-tx-brand { font-size: 8px; color: rgba(255,255,255,0.35); }
+  .as-ph-tx-val { font-size: 11px; font-weight: 800; }
+  .as-ph-tx-earn { color: #4ADE80; }
+  .as-ph-tx-spend { color: #A78BFA; }
+  .as-ph-nav { display: flex; background: rgba(20,20,35,0.95); border-top: 1px solid rgba(255,255,255,0.07); padding: 6px 0 14px; }
+  .as-ph-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .as-ph-nav-icon { font-size: 14px; }
+  .as-ph-nav-label { font-size: 7px; color: rgba(255,255,255,0.35); font-weight: 600; }
+  .as-ph-nav-item.active .as-ph-nav-label { color: #A78BFA; }
+
+  @media (max-width: 900px) {
+    .app-section-inner { grid-template-columns: 1fr; gap: 32px; padding: 40px 20px; }
+    .as-phone-wrap { display: none; }
+  }
+
+  /* IMPACT SECTION */
+  .impact-section {
+    background: linear-gradient(135deg, #052E16 0%, #14532D 50%, #166534 100%);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .impact-section-inner {
+    max-width: 1120px; margin: 0 auto; padding: 56px 48px;
+    display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: center;
+  }
+  .is-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(74,222,128,0.15); color: #86EFAC;
+    border: 1px solid rgba(74,222,128,0.25); padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .is-title { font-size: 36px; font-weight: 900; color: white; letter-spacing: -0.8px; line-height: 1.1; margin-bottom: 16px; }
+  .is-title span { color: #86EFAC; }
+  .is-desc { font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 28px; max-width: 480px; }
+  .is-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .is-feat { display: flex; align-items: center; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .is-feat-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.25); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .is-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #16A34A, #22C55E); color: white;
+    padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 800;
+    text-decoration: none; transition: all 0.25s; letter-spacing: 0.2px;
+    box-shadow: 0 8px 24px rgba(22,163,74,0.35);
+  }
+  .is-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(22,163,74,0.45); }
+
+  /* Impact preview card */
+  .is-preview {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px; padding: 28px; backdrop-filter: blur(10px);
+  }
+  .isp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .isp-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(74,222,128,0.2); color: #86EFAC; border: 1px solid rgba(74,222,128,0.3); padding: 3px 10px; border-radius: 100px; }
+  .isp-score-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .isp-score { font-size: 56px; font-weight: 900; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 4px; }
+  .isp-tier { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; }
+  .isp-tier-icon { font-size: 13px; }
+  .isp-tier-text { font-size: 12px; font-weight: 800; color: #86EFAC; }
+
+  .isp-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .isp-bar-row { display: flex; align-items: center; gap: 10px; }
+  .isp-bar-label { font-size: 11px; color: rgba(255,255,255,0.55); width: 80px; flex-shrink: 0; }
+  .isp-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; }
+  .isp-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .isp-bar-val { font-size: 11px; font-weight: 700; color: white; width: 32px; text-align: right; flex-shrink: 0; }
+
+  .isp-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .isp-kpi { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 12px; }
+  .isp-kpi-val { font-size: 18px; font-weight: 900; color: white; line-height: 1; }
+  .isp-kpi-label { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  @media (max-width: 900px) {
+    .impact-section-inner { grid-template-columns: 1fr; gap: 32px; padding: 40px 20px; }
+    .is-preview { display: none; }
+  }
+
+  /* HOW IT WORKS */
+  .how-section { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .how-step { padding: 40px 32px; border-right: 1px solid var(--border); position: relative; }
+  .how-step:last-child { border-right: none; }
+  .how-num { font-size: 48px; font-weight: 900; color: rgba(109,40,217,0.08); margin-bottom: 16px; line-height: 1; }
+  .how-icon { font-size: 28px; margin-bottom: 12px; }
+  .how-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .how-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* HYPERPERSONALISATIE SECTION */
+  .hyper-section {
+    background: #0F0A1E; border-top: 1px solid #1E1440; border-bottom: 1px solid #1E1440;
+    padding: 72px 48px;
+  }
+  .hyper-inner { max-width: 1120px; margin: 0 auto; }
+  .hyper-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(109,40,217,0.25); border: 1px solid rgba(109,40,217,0.4);
+    color: #C4B5FD; padding: 5px 16px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .hyper-title { font-size: 36px; font-weight: 900; color: white; letter-spacing: -0.8px; margin-bottom: 10px; line-height: 1.1; }
+  .hyper-title span { color: #A78BFA; }
+  .hyper-sub { font-size: 15px; color: rgba(255,255,255,0.5); max-width: 560px; line-height: 1.65; margin-bottom: 48px; }
+  .hyper-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .hyper-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px;
+    transition: border-color 0.2s;
+  }
+  .hyper-card:hover { border-color: rgba(167,139,250,0.35); }
+  .hyper-persona { display: flex; align-items: center; gap: 10px; }
+  .hyper-avatar { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .hyper-persona-name { font-size: 14px; font-weight: 800; color: white; }
+  .hyper-persona-type { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+  .hyper-signals {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .hyper-signals-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+  .hyper-signal { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 5px; font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.4; }
+  .hyper-signal:last-child { margin-bottom: 0; }
+  .hyper-signal-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .hyper-arrow {
+    display: flex; align-items: center; gap: 8px; font-size: 11px;
+    color: rgba(255,255,255,0.25); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .hyper-arrow::before, .hyper-arrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .hyper-nudge {
+    border-radius: 10px; padding: 12px 14px; border: 1px solid;
+  }
+  .hyper-nudge-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .hyper-nudge-text { font-size: 12px; font-weight: 600; line-height: 1.45; }
+  .hyper-nudge-brand { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+  /* card accent colors */
+  .hc-jims .hyper-avatar { background: rgba(201,162,39,0.2); }
+  .hc-jims .hyper-signal-dot { background: #C9A227; }
+  .hc-jims .hyper-nudge { background: rgba(201,162,39,0.08); border-color: rgba(201,162,39,0.25); }
+  .hc-jims .hyper-nudge-label { color: #C9A227; }
+  .hc-jims .hyper-nudge-text { color: rgba(255,255,255,0.85); }
+  .hc-jims .hyper-nudge-brand { background: rgba(201,162,39,0.15); color: #F0C040; }
+  .hc-colruyt .hyper-avatar { background: rgba(204,0,0,0.2); }
+  .hc-colruyt .hyper-signal-dot { background: #CC0000; }
+  .hc-colruyt .hyper-nudge { background: rgba(204,0,0,0.08); border-color: rgba(204,0,0,0.25); }
+  .hc-colruyt .hyper-nudge-label { color: #F87171; }
+  .hc-colruyt .hyper-nudge-text { color: rgba(255,255,255,0.85); }
+  .hc-colruyt .hyper-nudge-brand { background: rgba(204,0,0,0.15); color: #FCA5A5; }
+  .hc-new .hyper-avatar { background: rgba(0,85,179,0.25); }
+  .hc-new .hyper-signal-dot { background: #3B82F6; }
+  .hc-new .hyper-nudge { background: rgba(0,85,179,0.1); border-color: rgba(0,85,179,0.3); }
+  .hc-new .hyper-nudge-label { color: #60A5FA; }
+  .hc-new .hyper-nudge-text { color: rgba(255,255,255,0.85); }
+  .hc-new .hyper-nudge-brand { background: rgba(0,85,179,0.18); color: #93C5FD; }
+  .hc-bio .hyper-avatar { background: rgba(46,125,50,0.2); }
+  .hc-bio .hyper-signal-dot { background: #22C55E; }
+  .hc-bio .hyper-nudge { background: rgba(46,125,50,0.08); border-color: rgba(46,125,50,0.25); }
+  .hc-bio .hyper-nudge-label { color: #4ADE80; }
+  .hc-bio .hyper-nudge-text { color: rgba(255,255,255,0.85); }
+  .hc-bio .hyper-nudge-brand { background: rgba(46,125,50,0.15); color: #86EFAC; }
+  .hyper-footnote {
+    margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .hyper-footnote-text { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; max-width: 520px; }
+  .hyper-cta-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(109,40,217,0.3); border: 1px solid rgba(109,40,217,0.5);
+    color: #C4B5FD; padding: 9px 18px; border-radius: 8px; text-decoration: none;
+    font-size: 13px; font-weight: 700; transition: all 0.2s; white-space: nowrap;
+  }
+  .hyper-cta-link:hover { background: rgba(109,40,217,0.45); color: white; }
+  @media (max-width: 1000px) { .hyper-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .hyper-grid { grid-template-columns: 1fr; } .hyper-section { padding: 48px 20px; } }
+
+  /* FOOTER */
+  footer {
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 28px 48px; display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--text-muted);
+  }
+  footer strong { color: var(--text-mid); }
+
+  @media (max-width: 900px) {
+    nav, footer { padding: 0 20px; }
+    .hero { padding: 48px 20px 40px; }
+    .section { padding: 40px 20px; }
+    .cards { grid-template-columns: 1fr; }
+    .stats { flex-wrap: wrap; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); flex: 1 1 140px; }
+    .how-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="x-mark">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/>
+        <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/>
+        <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/>
+        <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/>
+      </svg>
+    </div>
+    <div>
+      <div class="nav-name">Xtra Loyalty</div>
+      <div class="nav-sub">Colruyt Group</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge">✦ Proof of Concept</div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">✦ Nieuw Loyalty Concept 2026</div>
+  <h1>
+    <div class="h1-wrap fade-in" id="h1-wrap">
+      <span id="h1-l1">Koop brood bij Colruyt.</span><br>
+      <span id="h1-l2" style="color:var(--xtra);">Sport gratis bij JIMS.</span>
+    </div>
+  </h1>
+  <div class="hero-dots" id="hero-dots"></div>
+  <p class="hero-sub">
+    Spaar Xtratjes bij elk CG-merk en besteed ze waar jij wil. Geen gedoe. Gewoon voordeel.
+  </p>
+  <div style="display:flex;flex-direction:column;align-items:center;">
+    <div class="brand-flow">
+
+      <!-- LEFT: all brands — earn side -->
+      <div class="bf-side">
+        <div class="bf-side-label">Spaar bij</div>
+        <div class="bf-chips">
+          <div class="bf-chips-row">
+            <div class="b-chip b-colruyt"><div class="b-dot"></div>Colruyt</div>
+            <div class="b-chip b-okay"><div class="b-dot"></div>OKay</div>
+          </div>
+          <div class="bf-chips-row">
+            <div class="b-chip b-bio"><div class="b-dot"></div>Bio-Planet</div>
+            <div class="b-chip b-jims"><div class="b-dot"></div>JIMS</div>
+            <div class="b-chip b-new"><div class="b-dot"></div>Newpharma</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONNECTOR left → center -->
+      <div class="bf-connector">
+        <div class="bf-conn-line"></div>
+        <div class="bf-conn-arrow">
+          <div class="bf-conn-arrow-row"><span>→</span></div>
+          <div class="bf-conn-arrow-row" style="opacity:0.4;"><span>←</span></div>
+        </div>
+        <div class="bf-conn-line"></div>
+      </div>
+
+      <!-- CENTER: Xtratjes -->
+      <div class="b-xtra-center">
+        <span class="xtra-icon">
+          <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/>
+            <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/>
+            <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/>
+            <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/>
+          </svg>
+        </span>
+        Xtratjes
+      </div>
+
+      <!-- CONNECTOR center → right -->
+      <div class="bf-connector">
+        <div class="bf-conn-line"></div>
+        <div class="bf-conn-arrow">
+          <div class="bf-conn-arrow-row"><span>→</span></div>
+          <div class="bf-conn-arrow-row" style="opacity:0.4;"><span>←</span></div>
+        </div>
+        <div class="bf-conn-line"></div>
+      </div>
+
+      <!-- RIGHT: all brands — spend side -->
+      <div class="bf-side">
+        <div class="bf-side-label">Besteed bij</div>
+        <div class="bf-chips">
+          <div class="bf-chips-row">
+            <div class="b-chip b-jims"><div class="b-dot"></div>JIMS</div>
+            <div class="b-chip b-new"><div class="b-dot"></div>Newpharma</div>
+          </div>
+          <div class="bf-chips-row">
+            <div class="b-chip b-colruyt"><div class="b-dot"></div>Colruyt</div>
+            <div class="b-chip b-okay"><div class="b-dot"></div>OKay</div>
+            <div class="b-chip b-bio"><div class="b-dot"></div>Bio-Planet</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat-item"><div class="stat-val">9</div><div class="stat-label">Aangesloten merken</div></div>
+  <div class="stat-item"><div class="stat-val">3.2M</div><div class="stat-label">Xtra-kaarthouders</div></div>
+  <div class="stat-item"><div class="stat-val" style="color:var(--xtra);">€0.50</div><div class="stat-label">Waarde per Xtratje</div></div>
+  <div class="stat-item"><div class="stat-val">26%</div><div class="stat-label">Cross-brand gebruik</div></div>
+  <div class="stat-item"><div class="stat-val" style="color:var(--gold);">5</div><div class="stat-label">Merken in deze POC</div></div>
+</div>
+
+<div class="section">
+  <div class="section-eyebrow">Vier perspectieven</div>
+  <div class="section-title">Wie ziet wat?</div>
+  <p class="section-sub">Het concept werkt voor vier groepen: de klant, de merk-marketeer, het groepsteam en de duurzaamheids-manager.<br>Klik op een kaart om te zien hoe dat er voor hen uitziet.</p>
+
+  <div class="cards">
+    <a href="customer.html" class="card">
+      <div class="card-top card-top-1"></div>
+      <div class="card-body">
+        <div class="card-icon ci-1">🛍️</div>
+        <div>
+          <div class="card-tag ct-1">Perspectief 1</div>
+          <h2>De Klant</h2>
+        </div>
+        <p>Van Xtratjes sparen aan de kassa bij Colruyt tot ze inruilen bij JIMS — de volledige customer journey, fysiek en digitaal.</p>
+        <div class="card-features">
+          <div class="feat"><div class="feat-dot fd-1"></div>Fysieke winkel touchpoints</div>
+          <div class="feat"><div class="feat-dot fd-1"></div>App-ervaringen per merk</div>
+          <div class="feat"><div class="feat-dot fd-1"></div>3 interactieve scenario's</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="cf-1">Bekijk de journey</span>
+        <span class="cf-arrow cf-1">→</span>
+      </div>
+    </a>
+
+    <a href="marketer.html" class="card">
+      <div class="card-top card-top-2"></div>
+      <div class="card-body">
+        <div class="card-icon ci-2">📊</div>
+        <div>
+          <div class="card-tag ct-2">Perspectief 2</div>
+          <h2>De Merk-Marketeer</h2>
+        </div>
+        <p>Creëer loyalty mechanismen voor jouw merk, beheer spaarkaarten en volg campagnes op in real-time.</p>
+        <div class="card-features">
+          <div class="feat"><div class="feat-dot fd-2"></div>Campagne builder</div>
+          <div class="feat"><div class="feat-dot fd-2"></div>Live analytics dashboard</div>
+          <div class="feat"><div class="feat-dot fd-2"></div>Per merk volledig gestyled</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="cf-2">Open dashboard</span>
+        <span class="cf-arrow cf-2">→</span>
+      </div>
+    </a>
+
+    <a href="group.html" class="card">
+      <div class="card-top card-top-3"></div>
+      <div class="card-body">
+        <div class="card-icon ci-3">🌐</div>
+        <div>
+          <div class="card-tag ct-3">Perspectief 3</div>
+          <h2>De Groep-Marketeer</h2>
+        </div>
+        <p>Stuur cross-brand challenges, beheer klanttiers (Bronze/Silver/Gold) en maximaliseer het groepspotentieel.</p>
+        <div class="card-features">
+          <div class="feat"><div class="feat-dot fd-3"></div>Cross-brand challenges</div>
+          <div class="feat"><div class="feat-dot fd-3"></div>Tier management</div>
+          <div class="feat"><div class="feat-dot fd-3"></div>Groepsanalytics & AI-tips</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="cf-3">Open platform</span>
+        <span class="cf-arrow cf-3">→</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- FEATURED: 4th perspective — Duurzaamheids-Manager -->
+  <a href="impact-dashboard.html" class="card-featured">
+    <div class="card-featured-inner">
+      <div class="cf-left">
+        <div class="cf-tag">Perspectief 4 — Nieuw</div>
+        <h2>🌍 De Duurzaamheids-Manager</h2>
+        <p>Een overkoepelend dashboard over alle klanten heen: hoe evolueert ons gezondheids- en duurzaamheidsprofiel? Van Nutriscore-adoptie tot CO₂-besparing — alles in één strategisch overzicht.</p>
+        <div class="cf-feats">
+          <div class="cf-feat"><div class="cf-feat-dot"></div>Impact-tier verdeling over 3,2M klanten</div>
+          <div class="cf-feat"><div class="cf-feat-dot"></div>Nutriscore & Greenscore adoptiecurves</div>
+          <div class="cf-feat"><div class="cf-feat-dot"></div>Voortgang CG Belofte (100K bomen, coaching, plastic)</div>
+          <div class="cf-feat"><div class="cf-feat-dot"></div>Match fund gebruik & goede doelen rapportage</div>
+        </div>
+        <div class="cf-footer-link">Open het sustainability dashboard <span class="cf-arrow-green">→</span></div>
+      </div>
+      <div class="cf-kpis">
+        <div class="cf-kpi">
+          <div class="cf-kpi-val">48,2K</div>
+          <div class="cf-kpi-unit">🌳 bomen</div>
+          <div class="cf-kpi-label">geplant via klanten</div>
+        </div>
+        <div class="cf-kpi">
+          <div class="cf-kpi-val">126K</div>
+          <div class="cf-kpi-unit">🍽️ maaltijden</div>
+          <div class="cf-kpi-label">geschonken via Xtra</div>
+        </div>
+        <div class="cf-kpi">
+          <div class="cf-kpi-val">34%</div>
+          <div class="cf-kpi-unit">📈 adoptie</div>
+          <div class="cf-kpi-label">Nutriscore A+B aankopen</div>
+        </div>
+        <div class="cf-kpi">
+          <div class="cf-kpi-val">2.840</div>
+          <div class="cf-kpi-unit">💪 coaching</div>
+          <div class="cf-kpi-label">trajecten gestart</div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- HYPERPERSONALISATIE SECTION -->
+<div class="hyper-section">
+  <div class="hyper-inner">
+    <div class="hyper-eyebrow">🎯 Data-gedreven nudging</div>
+    <h2 class="hyper-title">Één systeem. <span>Elke klant anders.</span></h2>
+    <p class="hyper-sub">Xtra ziet wat klanten doen — en wat ze <em>nog niet</em> doen. Die kloof is precies waar we het verschil maken: niet meer van hetzelfde pushen, maar de juiste nudge op het juiste moment.</p>
+
+    <div class="hyper-grid">
+
+      <!-- Card 1: Jana — OKay loyalist → JIMS -->
+      <div class="hyper-card hc-jims">
+        <div class="hyper-persona">
+          <div class="hyper-avatar">🛒</div>
+          <div>
+            <div class="hyper-persona-name">Jana, 38</div>
+            <div class="hyper-persona-type">Trouwe OKay-klant</div>
+          </div>
+        </div>
+        <div class="hyper-signals">
+          <div class="hyper-signals-label">Wat de data ziet</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>€1.400/jaar bij OKay, 52 weken actief</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Breed assortiment, loyaal gedrag</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Nooit een ander CG-merk bezocht</div>
+        </div>
+        <div class="hyper-arrow">nudge</div>
+        <div class="hyper-nudge">
+          <div class="hyper-nudge-label">Naar JIMS</div>
+          <div class="hyper-nudge-text">"Jij doet het perfect bij OKay. Wist je dat 1 JIMS-dagpas gratis is met jouw Xtratjes?"</div>
+          <span class="hyper-nudge-brand">💪 JIMS Fitness</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Koen — smal assortiment → brood ontdekken -->
+      <div class="hyper-card hc-colruyt">
+        <div class="hyper-persona">
+          <div class="hyper-avatar">🍺</div>
+          <div>
+            <div class="hyper-persona-name">Koen, 44</div>
+            <div class="hyper-persona-type">Smal winkelmandje</div>
+          </div>
+        </div>
+        <div class="hyper-signals">
+          <div class="hyper-signals-label">Wat de data ziet</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Altijd bier + WC-papier, zelden anders</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Hoge herhalingsfrequentie, laag bedrag</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Versafdeling nog nooit bezocht</div>
+        </div>
+        <div class="hyper-arrow">nudge</div>
+        <div class="hyper-nudge">
+          <div class="hyper-nudge-label">Naar bakkerij</div>
+          <div class="hyper-nudge-text">"Koen, 5× ons dagvers brood kopen = 10 gratis Xtratjes. Probeer eens?"</div>
+          <span class="hyper-nudge-brand">🏪 Colruyt Bakkerij</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Mia — gezondheidsinteresse → Newpharma -->
+      <div class="hyper-card hc-new">
+        <div class="hyper-persona">
+          <div class="hyper-avatar">🥗</div>
+          <div>
+            <div class="hyper-persona-name">Mia, 31</div>
+            <div class="hyper-persona-type">Gezondheidszoeker</div>
+          </div>
+        </div>
+        <div class="hyper-signals">
+          <div class="hyper-signals-label">Wat de data ziet</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Zoekt "glutenvrij" & "plantaardig" in app</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Browst gezondheidsrubriek regelmatig</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Nog nooit besteld bij Newpharma</div>
+        </div>
+        <div class="hyper-arrow">nudge</div>
+        <div class="hyper-nudge">
+          <div class="hyper-nudge-label">Naar Newpharma</div>
+          <div class="hyper-nudge-text">"Op basis van jouw zoekgedrag: ontdek ons glutenvrij supplement-aanbod — 15% korting vandaag."</div>
+          <span class="hyper-nudge-brand">💊 Newpharma</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Tim — duurzaamheidsinteresse → Bio-Planet -->
+      <div class="hyper-card hc-bio">
+        <div class="hyper-persona">
+          <div class="hyper-avatar">🌳</div>
+          <div>
+            <div class="hyper-persona-name">Tim, 52</div>
+            <div class="hyper-persona-type">Groen bewust profiel</div>
+          </div>
+        </div>
+        <div class="hyper-signals">
+          <div class="hyper-signals-label">Wat de data ziet</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Heeft al 2 bomen gesponsord via Xtra</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Duurzaamheidstier: Green Champion</div>
+          <div class="hyper-signal"><div class="hyper-signal-dot"></div>Bio-Planet nog niet in winkelpatroon</div>
+        </div>
+        <div class="hyper-arrow">nudge</div>
+        <div class="hyper-nudge">
+          <div class="hyper-nudge-label">Naar Bio-Planet</div>
+          <div class="hyper-nudge-text">"Jij gelooft in impact. Bio-Planet bio-weekbox deze week: verdien dubbele Xtratjes + 1 boom geplant."</div>
+          <span class="hyper-nudge-brand">🌿 Bio-Planet</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="hyper-footnote">
+      <div class="hyper-footnote-text">De nudge-engine combineert aankoophistoriek, zoekgedrag, duurzaamheidsprofiel en lifestyle-signalen. Geen cookie-muur — enkel 1e-partijdata van de Xtra-kaart. Zie hoe het werkt in de klant-journey en het groep-marketeer platform.</div>
+      <a href="customer.html?tab=s6" class="hyper-cta-link">🎯 Bekijk de 4 gepersonaliseerde journeys →</a>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM POC LINK -->
+<div style="max-width:1120px;margin:0 auto;padding:32px 48px;">
+  <a href="team.html" style="display:flex;align-items:center;justify-content:space-between;background:white;border:1.5px solid #E0DDD8;border-radius:14px;padding:24px 28px;text-decoration:none;color:inherit;transition:border-color 0.2s;gap:16px;" onmouseover="this.style.borderColor='#6D28D9'" onmouseout="this.style.borderColor='#E0DDD8'">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div style="width:44px;height:44px;border-radius:10px;background:#F3EFFC;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🚀</div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#888;margin-bottom:4px;">Hoe we het aanpakken</div>
+        <div style="font-size:16px;font-weight:800;color:#1A1A1A;letter-spacing:-0.2px;">POC Aanpak, Team & Planning</div>
+        <div style="font-size:13px;color:#4A4A4A;margin-top:3px;">Agile team, pilootregio Gent, 12-maanden roadmap en budgetschatting</div>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#6D28D9;white-space:nowrap;">Bekijk aanpak →</div>
+  </a>
+</div>
+
+<!-- XTRA APP SECTION -->
+<div class="app-section">
+  <div class="app-section-inner">
+    <!-- Left: text + CTA -->
+    <div>
+      <div class="as-eyebrow">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+          <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/>
+          <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/>
+          <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/>
+          <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/>
+        </svg>
+        Het product — de Xtra App
+      </div>
+      <h2 class="as-title">Zo ziet de klant<br><span>zijn Xtratjes</span> groeien</h2>
+      <p class="as-desc">De interactieve mockup toont de volledige app-ervaring: sparen bij Colruyt, volgen in de app, en inruilen bij JIMS. Inclusief demo-knoppen om live punten te verdienen en te spenderen.</p>
+      <div class="as-features">
+        <div class="as-feat"><span class="as-feat-icon">💰</span>Live saldo dat animeert bij elke transactie</div>
+        <div class="as-feat"><span class="as-feat-icon">⭐</span>Stempelkaarten, challenges en auto-spaarprogramma's</div>
+        <div class="as-feat"><span class="as-feat-icon">🎁</span>Bestedingsopties per merk met realtime beschikbaarheid</div>
+        <div class="as-feat"><span class="as-feat-icon">📊</span>Volledige transactiegeschiedenis per merk</div>
+      </div>
+      <a href="xtra-app.html" class="as-cta">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+          <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="white" opacity="0.9"/>
+          <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="white" opacity="0.9"/>
+          <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="white" opacity="0.9"/>
+          <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="white" opacity="0.9"/>
+        </svg>
+        Open de Xtra App mockup →
+      </a>
+    </div>
+
+    <!-- Right: mini phone preview -->
+    <div class="as-phone-wrap">
+      <div class="as-phone">
+        <div class="as-ph-di"><div class="as-ph-di-pill"></div></div>
+        <div class="as-ph-status">
+          <span class="as-ph-time">9:41</span>
+          <span class="as-ph-batt">▓▓▓▓░ 78%</span>
+        </div>
+        <div class="as-ph-header">
+          <div class="as-ph-logo">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+              <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/>
+              <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/>
+              <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/>
+              <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/>
+            </svg>
+            <span class="as-ph-logo-text">XTRA</span>
+          </div>
+          <div class="as-ph-bal-label">Mijn Xtratjes</div>
+          <div>
+            <span class="as-ph-bal-num">34</span>
+            <span class="as-ph-bal-unit"> ✦</span>
+          </div>
+          <div class="as-ph-badge">
+            <span>👑</span>
+            <span class="as-ph-badge-text">GOLD LID</span>
+          </div>
+        </div>
+        <div class="as-ph-body">
+          <div class="as-ph-tx">
+            <div class="as-ph-tx-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><rect width="60" height="60" rx="9" fill="#CC0000"/><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg></div>
+            <div><div class="as-ph-tx-desc">Wekelijkse boodschappen</div><div class="as-ph-tx-brand">Colruyt LP · Gisteren</div></div>
+            <div class="as-ph-tx-val as-ph-tx-earn">+6 ✦</div>
+          </div>
+          <div class="as-ph-tx">
+            <div class="as-ph-tx-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><rect width="60" height="60" rx="9" fill="#1A2535"/><circle cx="15" cy="20" r="6" fill="#00B4B8"/><circle cx="30" cy="15" r="5" fill="#00B4B8" opacity="0.75"/><circle cx="45" cy="20" r="6" fill="#00B4B8"/><circle cx="15" cy="42" r="5" fill="#00B4B8" opacity="0.6"/><circle cx="30" cy="46" r="6" fill="#00B4B8"/><circle cx="45" cy="42" r="5" fill="#00B4B8" opacity="0.7"/></svg></div>
+            <div><div class="as-ph-tx-desc">Dagpas ingewisseld</div><div class="as-ph-tx-brand">JIMS Fitness · 3 jun</div></div>
+            <div class="as-ph-tx-val as-ph-tx-spend">−20 ✦</div>
+          </div>
+          <div class="as-ph-tx">
+            <div class="as-ph-tx-icon"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><rect width="60" height="60" rx="9" fill="#0066B3"/><circle cx="30" cy="30" r="18" fill="none" stroke="#FF6600" stroke-width="9"/></svg></div>
+            <div><div class="as-ph-tx-desc">Boodschappen €43</div><div class="as-ph-tx-brand">OKay · 1 jun</div></div>
+            <div class="as-ph-tx-val as-ph-tx-earn">+4 ✦</div>
+          </div>
+        </div>
+        <div class="as-ph-nav">
+          <div class="as-ph-nav-item active"><span class="as-ph-nav-icon">🏠</span><span class="as-ph-nav-label">Thuis</span></div>
+          <div class="as-ph-nav-item"><span class="as-ph-nav-icon">⭐</span><span class="as-ph-nav-label">Sparen</span></div>
+          <div class="as-ph-nav-item"><span class="as-ph-nav-icon">🎁</span><span class="as-ph-nav-label">Besteden</span></div>
+          <div class="as-ph-nav-item"><span class="as-ph-nav-icon">📊</span><span class="as-ph-nav-label">Activiteit</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT SECTION -->
+<div class="impact-section">
+  <div class="impact-section-inner">
+    <!-- Left: text + CTA -->
+    <div>
+      <div class="is-eyebrow">🌱 Xtra — Elke Stap Telt</div>
+      <h2 class="is-title">Gezond én groen leven<br><span>wordt beloond</span></h2>
+      <p class="is-desc">Koop producten met Nutriscore A of B, kom met de fiets, gebruik herbruikbare zakken — en verdien Xtratjes. Colruyt Group verdubbelt elke donatie voor goede doelen, bomen en gezondheidscoaching.</p>
+      <div class="is-features">
+        <div class="is-feat"><span class="is-feat-icon">🥗</span>Nutriscore A&B én Greenscore A&B producten leveren extra Xtratjes</div>
+        <div class="is-feat"><span class="is-feat-icon">🚲</span>Met de fiets, herbruikbare zak of leeggoed inleveren: beloond</div>
+        <div class="is-feat"><span class="is-feat-icon">🌳</span>CG verdubbelt elke donatie — bomen, voedselbanken, coaching</div>
+        <div class="is-feat"><span class="is-feat-icon">🏆</span>Vier tiers: Starter → Green → Champion → Pioneer</div>
+      </div>
+      <a href="impact.html" class="is-cta">🌱 Open het Impact Platform →</a>
+    </div>
+
+    <!-- Right: impact preview card -->
+    <div class="is-preview">
+      <div class="isp-header">
+        <div class="isp-badge">🏆 Green Champion</div>
+      </div>
+      <div class="isp-score-label">Impact Score</div>
+      <div class="isp-score">847</div>
+      <div class="isp-tier">
+        <span class="isp-tier-icon">🏆</span>
+        <span class="isp-tier-text">Champion — 153 pts tot Pioneer 🌍</span>
+      </div>
+      <div class="isp-bars">
+        <div class="isp-bar-row">
+          <span class="isp-bar-label">Gezondheid</span>
+          <div class="isp-bar-bg"><div class="isp-bar-fill" style="width:58%;background:linear-gradient(90deg,#22D3EE,#0EA5E9);"></div></div>
+          <span class="isp-bar-val">58</span>
+        </div>
+        <div class="isp-bar-row">
+          <span class="isp-bar-label">Planeet</span>
+          <div class="isp-bar-bg"><div class="isp-bar-fill" style="width:62%;background:linear-gradient(90deg,#4ADE80,#16A34A);"></div></div>
+          <span class="isp-bar-val">62</span>
+        </div>
+        <div class="isp-bar-row">
+          <span class="isp-bar-label">Gemeenschap</span>
+          <div class="isp-bar-bg"><div class="isp-bar-fill" style="width:22%;background:linear-gradient(90deg,#FB923C,#EA580C);"></div></div>
+          <span class="isp-bar-val">22</span>
+        </div>
+      </div>
+      <div class="isp-kpis">
+        <div class="isp-kpi"><div class="isp-kpi-val">142 ✦</div><div class="isp-kpi-label">Verdiend via impact</div></div>
+        <div class="isp-kpi"><div class="isp-kpi-val">3 🌳</div><div class="isp-kpi-label">Bomen gesponsord</div></div>
+        <div class="isp-kpi"><div class="isp-kpi-val">14 kg</div><div class="isp-kpi-label">CO₂ bespaard</div></div>
+        <div class="isp-kpi"><div class="isp-kpi-val">12 🍽️</div><div class="isp-kpi-label">Maaltijden geschonken</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="how-section">
+  <div style="max-width:1120px;margin:0 auto;padding:0 48px;">
+    <div style="padding:48px 0 32px;text-align:center;">
+      <div class="section-eyebrow">Hoe werkt het?</div>
+      <div class="section-title" style="margin-bottom:0;">4 stappen, 1 ecosysteem</div>
+    </div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <div class="how-icon">🛒</div>
+        <div class="how-title">Doe boodschappen, scan je kaart</div>
+        <div class="how-desc">Gewoon winkelen bij Colruyt, OKay of Bio-Planet. Xtra-kaart scannen, Xtratjes worden automatisch bijgeschreven.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <div class="how-icon">✦</div>
+        <div class="how-title">Xtratjes stapelen op</div>
+        <div class="how-desc">De Xtra-app houdt alles bij. Extra acties van je favoriete merk leveren bonus-Xtratjes op bovenop je gewone spaartempo.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <div class="how-icon">🎁</div>
+        <div class="how-title">Gebruik ze waar jij wil</div>
+        <div class="how-desc">Xtratjes inruilen bij JIMS, Newpharma of een ander CG-merk. In de winkel, via de app of gewoon online.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">04</div>
+        <div class="how-icon">👑</div>
+        <div class="how-title">Meer merken = meer voordelen</div>
+        <div class="how-desc">Wie meerdere CG-merken bezoekt, klimt naar Silver of Gold. Dat levert dubbele Xtratjes en exclusieve voordelen op.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div><strong>Colruyt Group</strong> — Xtra Loyalty Proof of Concept</div>
+  <div>Intern document · Concept fase · Juni 2026</div>
+</footer>
+
+<script>
+  const slogans = [
+    { l1: 'Koop brood bij Colruyt.', l2: 'Sport gratis bij JIMS.' },
+    { l1: 'Train bij JIMS.', l2: 'Korting op je boodschappen bij OKay.' },
+    { l1: 'Boodschappen bij Bio-Planet.', l2: 'Betaal je apotheek gratis bij Newpharma.' },
+    { l1: 'Koop vitamines bij Newpharma.', l2: 'Verdien Xtratjes. Geef ze uit bij Colruyt.' },
+    { l1: 'Sport bij JIMS.', l2: 'Haal je bio-weekbox gratis bij Bio-Planet.' },
+    { l1: 'Boodschappen bij OKay.', l2: 'Xtratjes naar Newpharma. Of JIMS. Jij kiest.' },
+    { l1: 'Eco kopen bij Bio-Planet.', l2: 'Fitness bij JIMS — jouw Xtratjes betalen.' },
+    { l1: 'Spaar bij alle vijf merken.', l2: 'Besteed bij één. Of bij allemaal.' },
+    { l1: 'Eén kaart. Vijf merken.', l2: 'Jij kiest wat, waar en wanneer.' },
+    { l1: 'Verdien bij OKay.', l2: 'Koop gezond bij Newpharma — gratis.' },
+  ];
+
+  let current = 0;
+  const wrap = document.getElementById('h1-wrap');
+  const l1 = document.getElementById('h1-l1');
+  const l2 = document.getElementById('h1-l2');
+  const dotsEl = document.getElementById('hero-dots');
+
+  // Build dots
+  slogans.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(idx) {
+    wrap.classList.add('fade-out');
+    wrap.classList.remove('fade-in');
+    setTimeout(() => {
+      current = idx;
+      l1.textContent = slogans[current].l1;
+      l2.textContent = slogans[current].l2;
+      document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      wrap.classList.remove('fade-out');
+      wrap.classList.add('fade-in');
+    }, 450);
+  }
+
+  setInterval(() => goTo((current + 1) % slogans.length), 3500);
+</script>
+</body>
+</html>

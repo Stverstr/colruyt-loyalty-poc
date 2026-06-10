@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POC Team & Aanpak — Xtra Loyalty</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #F5F4F1; --white: #FFFFFF; --border: #E0DDD8;
+    --text: #1A1A1A; --text-mid: #4A4A4A; --text-muted: #888;
+    --xtra: #6D28D9; --xtra-pale: #F3EFFC; --xtra-light: #7C3AED;
+    --gold: #B45309; --gold-bg: #FEF3C7;
+    --green: #15803D; --green-bg: #DCFCE7;
+    --blue: #1D4ED8; --blue-bg: #EFF6FF;
+    --orange: #C2410C; --orange-bg: #FFF7ED;
+    --teal: #0F766E; --teal-bg: #F0FDFA;
+    --marketing: #BE185D; --marketing-bg: #FDF2F8;
+    --dev: #1D4ED8; --dev-bg: #EFF6FF;
+    --cg-dark: #0F1A2E;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 40px; height: 56px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-back { color: var(--text-muted); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .nav-back:hover { color: var(--text); }
+  .nav-sep { color: var(--border); font-size: 16px; }
+  .nav-cur { font-weight: 700; font-size: 14px; }
+  .nav-tag { margin-left: auto; background: var(--xtra-pale); color: var(--xtra); border: 1px solid rgba(109,40,217,0.2); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+
+  /* HERO */
+  .hero { background: var(--cg-dark); color: white; padding: 56px 40px 64px; }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero-label { display: inline-flex; align-items: center; gap: 8px; background: rgba(109,40,217,0.35); color: rgba(180,140,255,1); border: 1px solid rgba(109,40,217,0.4); padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 24px; }
+  .hero h1 { font-size: clamp(30px, 4vw, 52px); font-weight: 900; letter-spacing: -1.2px; line-height: 1.08; margin-bottom: 16px; }
+  .hero h1 span { color: #A78BFA; }
+  .hero-sub { color: rgba(255,255,255,0.65); font-size: 17px; line-height: 1.65; max-width: 680px; margin-bottom: 40px; }
+  .hero-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-pill { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 7px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+  .hero-pill strong { color: #A78BFA; }
+
+  /* PRINCIPLE STRIP */
+  .principles { background: white; border-bottom: 1px solid var(--border); }
+  .principles-inner { max-width: 1100px; margin: 0 auto; display: flex; }
+  .pr-item { flex: 1; padding: 24px 28px; border-right: 1px solid var(--border); }
+  .pr-item:last-child { border-right: none; }
+  .pr-icon { font-size: 22px; margin-bottom: 8px; }
+  .pr-title { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .pr-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+  /* SECTION */
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+  .section { padding: 64px 0; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px; }
+  .section-title { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .section-sub { color: var(--text-mid); font-size: 15px; line-height: 1.6; max-width: 620px; }
+
+  /* TEAM COLUMNS */
+  .teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .team-block { border-radius: 16px; overflow: hidden; border: 1.5px solid var(--border); background: white; }
+  .team-header { padding: 24px 28px; border-bottom: 1.5px solid var(--border); }
+  .team-header.marketing { background: linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%); border-bottom-color: #FBCFE8; }
+  .team-header.dev { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border-bottom-color: #BFDBFE; }
+  .team-badge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 13px; border-radius: 100px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+  .team-badge.marketing { background: #FCE7F3; color: var(--marketing); border: 1px solid #FBCFE8; }
+  .team-badge.dev { background: #DBEAFE; color: var(--dev); border: 1px solid #BFDBFE; }
+  .team-name { font-size: 20px; font-weight: 900; letter-spacing: -0.3px; margin-bottom: 6px; }
+  .team-tagline { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .roles-list { padding: 8px 0; }
+
+  /* ROLE CARD */
+  .role-card { padding: 20px 28px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .role-card:last-child { border-bottom: none; }
+  .role-card:hover { background: #FAFAF9; }
+  .role-top { display: flex; align-items: flex-start; gap: 14px; }
+  .role-avatar { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .role-avatar.marketing { background: #FCE7F3; }
+  .role-avatar.dev { background: #DBEAFE; }
+  .role-avatar.shared { background: #F3EFFC; }
+  .role-info { flex: 1; }
+  .role-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+  .role-fte { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-bottom: 6px; }
+  .role-fte.full { background: #DCFCE7; color: #15803D; }
+  .role-fte.half { background: #FEF9C3; color: #713F12; }
+  .role-fte.lead { background: #F3EFFC; color: var(--xtra); }
+  .role-desc { font-size: 13px; color: var(--text-mid); line-height: 1.55; }
+
+  /* PILOT SECTION */
+  .pilot-section { background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .pilot-inner { max-width: 1100px; margin: 0 auto; padding: 56px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .pilot-map { background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 16px; padding: 32px; text-align: center; }
+  .pilot-map-icon { font-size: 52px; margin-bottom: 16px; }
+  .pilot-city { font-size: 28px; font-weight: 900; color: var(--green); letter-spacing: -0.5px; margin-bottom: 4px; }
+  .pilot-city-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .pilot-stores { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; }
+  .store-chip { padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; border: 1.5px solid; white-space: nowrap; }
+  .store-chip.colruyt { color: #CC0000; border-color: rgba(204,0,0,0.25); background: #FFF5F5; }
+  .store-chip.okay { color: #E84010; border-color: rgba(232,64,16,0.25); background: #FFF7F5; }
+  .store-chip.bio { color: #2E7D32; border-color: rgba(46,125,50,0.25); background: #F1F8E9; }
+  .store-chip.jims { color: #92650A; border-color: rgba(201,162,39,0.3); background: #FFFBEB; }
+  .store-chip.new { color: #0055B3; border-color: rgba(0,85,179,0.25); background: #F0F7FF; }
+  .pilot-text .pilot-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 10px; }
+  .pilot-text h2 { font-size: 26px; font-weight: 900; letter-spacing: -0.4px; margin-bottom: 14px; line-height: 1.15; }
+  .pilot-text h2 span { color: var(--green); }
+  .pilot-text p { font-size: 14px; color: var(--text-mid); line-height: 1.65; margin-bottom: 16px; }
+  .pilot-metric-row { display: flex; gap: 16px; margin-top: 20px; }
+  .pilot-metric { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; flex: 1; }
+  .pilot-metric-val { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
+  .pilot-metric-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* PLANNING */
+  .planning-section { padding: 64px 0; }
+  .phases { display: flex; flex-direction: column; gap: 0; margin-top: 40px; border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; background: white; }
+  .phase { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border); }
+  .phase:last-child { border-bottom: none; }
+  .phase-left { padding: 28px 24px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .phase-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); }
+  .phase-name { font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.25; }
+  .phase-timing { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 100px; display: inline-block; }
+  .phase-timing.p1 { background: #F3EFFC; color: var(--xtra); }
+  .phase-timing.p2 { background: #FEF9C3; color: #713F12; }
+  .phase-timing.p3 { background: #DCFCE7; color: #15803D; }
+  .phase-timing.p4 { background: #FFF7ED; color: #C2410C; }
+  .phase-right { padding: 28px 32px; }
+  .phase-goal { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .phase-deliverables { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+  .del-chip { background: var(--bg); border: 1px solid var(--border); color: var(--text-mid); padding: 4px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .phase-milestone { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+  .phase-milestone::before { content: '✓'; font-weight: 800; color: var(--green); }
+
+  /* BUDGET */
+  .budget-section { background: white; border-top: 1px solid var(--border); }
+  .budget-inner { max-width: 1100px; margin: 0 auto; padding: 64px 40px; }
+  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .budget-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .budget-card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .budget-card-title { font-size: 14px; font-weight: 800; }
+  .budget-card-total { font-size: 18px; font-weight: 900; }
+  .budget-card-header.people { background: #F3EFFC; }
+  .budget-card-header.people .budget-card-total { color: var(--xtra); }
+  .budget-card-header.tech { background: #EFF6FF; }
+  .budget-card-header.tech .budget-card-total { color: var(--blue); }
+  .budget-card-header.activation { background: #F0FDFA; }
+  .budget-card-header.activation .budget-card-total { color: var(--teal); }
+  .budget-card-header.other { background: #FFF7ED; }
+  .budget-card-header.other .budget-card-total { color: var(--orange); }
+  .budget-line { display: flex; align-items: center; justify-content: space-between; padding: 11px 22px; border-bottom: 1px solid var(--border); }
+  .budget-line:last-child { border-bottom: none; }
+  .budget-line-label { font-size: 13px; color: var(--text-mid); display: flex; align-items: center; gap: 8px; }
+  .budget-line-fte { font-size: 11px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px; }
+  .budget-line-val { font-size: 13px; font-weight: 700; color: var(--text); }
+
+  .budget-total-block { margin-top: 28px; background: var(--cg-dark); color: white; border-radius: 14px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .budget-total-label { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+  .budget-total-val { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; }
+  .budget-total-val span { color: #A78BFA; }
+  .budget-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; max-width: 360px; line-height: 1.5; }
+  .budget-range { text-align: right; }
+  .budget-range-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .budget-range-val { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.7); }
+
+  /* FOOTER CTA */
+  .footer-cta { padding: 56px 40px; text-align: center; background: var(--bg); }
+  .footer-cta h2 { font-size: 24px; font-weight: 900; letter-spacing: -0.4px; margin-bottom: 8px; }
+  .footer-cta p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  .footer-cta-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+  .cta-link.primary { background: var(--xtra); color: white; }
+  .cta-link.primary:hover { background: var(--xtra-light); }
+  .cta-link.secondary { background: white; color: var(--text); border: 1.5px solid var(--border); }
+  .cta-link.secondary:hover { border-color: #C4BFB8; }
+
+  @media (max-width: 768px) {
+    .teams-grid, .budget-grid { grid-template-columns: 1fr; }
+    .pilot-inner { grid-template-columns: 1fr; gap: 32px; }
+    .phase { grid-template-columns: 1fr; }
+    .phase-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .budget-total-block { flex-direction: column; gap: 20px; text-align: center; }
+    .principles-inner { flex-wrap: wrap; }
+    .pr-item { flex: 1 1 45%; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-back">← Xtra Loyalty</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cur">POC Aanpak & Team</span>
+  <span class="nav-tag">✦ Intern document</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">🚀 Van idee naar bewijs</div>
+    <h1>Agile bouwen.<br><span>Snel valideren.</span><br>Dan opschalen.</h1>
+    <p class="hero-sub">Drie jaar. Eén ambitie. In 2026 organiseren we ons en leggen we de basis. In 2027 bewijzen we het concept in Gent. En in 2028 lanceren we nationaal — net op tijd voor 100 jaar Colruyt.</p>
+    <div class="hero-pills">
+      <div class="hero-pill">📅 <strong>2026</strong> — Setup & Discovery</div>
+      <div class="hero-pill">🏙️ <strong>2027</strong> — MVP Piloot Gent</div>
+      <div class="hero-pill">🇧🇪 <strong>2028</strong> — Nationale lancering</div>
+      <div class="hero-pill">🏆 <strong>100 jaar</strong> Colruyt in 2028</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES -->
+<div class="principles">
+  <div class="principles-inner">
+    <div class="pr-item">
+      <div class="pr-icon">⚡</div>
+      <div class="pr-title">Agile first</div>
+      <div class="pr-desc">2-weekse sprints. Elke sprint levert iets werkends op. Geen maandenlange plannen voor we beginnen.</div>
+    </div>
+    <div class="pr-item">
+      <div class="pr-icon">🎯</div>
+      <div class="pr-title">Klant centraal</div>
+      <div class="pr-desc">Marketing praat rechtstreeks met klanten. Inzichten sturen het product — niet omgekeerd.</div>
+    </div>
+    <div class="pr-item">
+      <div class="pr-icon">🤖</div>
+      <div class="pr-title">AI-native bouwen</div>
+      <div class="pr-desc">Het dev team bouwt met AI in de kern. Sneller, slimmer, en schaalbaar naar heel België.</div>
+    </div>
+    <div class="pr-item">
+      <div class="pr-icon">📊</div>
+      <div class="pr-title">Data-gedreven</div>
+      <div class="pr-desc">Elke campagne, elke feature wordt gemeten. We schalen wat werkt, stoppen wat niet werkt.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM SECTION -->
+<div class="wrap">
+  <div class="section">
+    <div class="section-eyebrow">Het team</div>
+    <div class="section-title">Twee mini-teams. Één missie.</div>
+    <div class="section-sub">Marketing en product/tech werken schouder aan schouder — niet in silo's. Samen verantwoordelijk voor de uitkomst, niet voor hun eigen stuk.</div>
+
+    <div class="teams-grid">
+
+      <!-- MARKETING TEAM -->
+      <div class="team-block">
+        <div class="team-header marketing">
+          <div class="team-badge marketing">💜 Mini Marketing Team</div>
+          <div class="team-name">Loyalty & Klantteam</div>
+          <div class="team-tagline">Dicht bij de klant. Campagnes die werken. Inzichten die het product voeden.</div>
+        </div>
+        <div class="roles-list">
+          <!-- Loyalty Marketing Lead -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar marketing">🏆</div>
+              <div class="role-info">
+                <div class="role-title">Loyalty Marketing Lead</div>
+                <span class="role-fte lead">Lead · 1.0 FTE</span>
+                <div class="role-desc">De kartrekker. Breed loyalty-profiel met ervaring in programma-design, segmentatie en partner-activatie. Zet de strategische richting, bewaakt de klantbelofte en is het gezicht naar de business. Heeft eerder een loyalty programma van de grond getrokken en weet hoe je gedragsverandering stuurt via beloningen.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Campaign Manager -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar marketing">📣</div>
+              <div class="role-info">
+                <div class="role-title">Digital Campaign Manager</div>
+                <span class="role-fte full">1.0 FTE</span>
+                <div class="role-desc">Ontwerpt en beheert de campagnes in de pilootregio. Van triggered e-mails tot in-app notificaties en push. Werkt nauw samen met de data analist om campagnes te personaliseren op basis van koopgedrag. Hands-on profiel dat zelf in tools werkt.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Customer Insights -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar marketing">🔍</div>
+              <div class="role-info">
+                <div class="role-title">Customer Insights Analist</div>
+                <span class="role-fte full">1.0 FTE</span>
+                <div class="role-desc">Organiseert klantinterviews en gebruikerstests. Vertaalt kwalitatieve feedback naar concrete verbeteringen voor het product en campagneteam. Bewaakt de klantervaring gedurende de pilot en de nationale uitrol.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEV TEAM -->
+      <div class="team-block">
+        <div class="team-header dev">
+          <div class="team-badge dev">💙 Mini Development Team</div>
+          <div class="team-name">Product & Tech Team</div>
+          <div class="team-tagline">Bouwen met AI. Snel itereren. Data als motor van de tool.</div>
+        </div>
+        <div class="roles-list">
+          <!-- Product Manager -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar dev">🧭</div>
+              <div class="role-info">
+                <div class="role-title">Product Manager — Xtra Platform</div>
+                <span class="role-fte lead">Lead · 1.0 FTE</span>
+                <div class="role-desc">De producteigenaar van de tool. Vertaalt de business- en klantnoden naar een heldere roadmap. Bewaakt de balans tussen wat snel gemaakt kan worden en wat echt waarde toevoegt. Schakelt vlot tussen het marketing team en de developers. Ervaart met agile/scrum en liefst met digitale consumentenproducten.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Full-stack Developer -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar dev">⚙️</div>
+              <div class="role-info">
+                <div class="role-title">Full-Stack Developer (AI-native)</div>
+                <span class="role-fte full">1.0 FTE</span>
+                <div class="role-desc">Bouwt de kern van het platform: app, API's en integraties met de enseignes. Werkt AI-first — gebruikt AI-codeertools als copilot om sneller te leveren. Sterk in backend logica (loyalty engines, puntberekeningen) en voldoende frontend om prototypes zelfstandig live te zetten.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Data Engineer -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar dev">🔮</div>
+              <div class="role-info">
+                <div class="role-title">Data Engineer / "Data Cruncher"</div>
+                <span class="role-fte full">1.0 FTE</span>
+                <div class="role-desc">De data-tovenaaar van het team. Koppelt de transactiedata van de verschillende enseignes aan het loyalty platform, bouwt segmentaties en stuurt de personaliseringslogica. Levert ook de analyses waarmee het marketing team campagnes evalueert. Sterk in SQL, Python en bij voorkeur ervaring met CDP of retail data.</div>
+              </div>
+            </div>
+          </div>
+          <!-- UX Designer -->
+          <div class="role-card">
+            <div class="role-top">
+              <div class="role-avatar shared">🎨</div>
+              <div class="role-info">
+                <div class="role-title">UX/Product Designer</div>
+                <span class="role-fte full">1.0 FTE</span>
+                <div class="role-desc">Ontwerpt de volledige klantbeleving van de Xtra app en campagnematerialen. Vertaalt klantinzichten naar intuïtieve flows en zorgt voor visuele samenhang over alle merken heen (Colruyt, OKay, JIMS, …). Voltijds ingezet gezien de omvang van het design systeem en de hyperpersonalisatie-interface.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PILOT REGION -->
+<div class="pilot-section">
+  <div class="pilot-inner">
+    <div class="pilot-map">
+      <div class="pilot-map-icon">🏙️</div>
+      <div class="pilot-city">Gent</div>
+      <div class="pilot-city-sub">Pilootregio — Oost-Vlaanderen</div>
+      <div class="pilot-stores">
+        <span class="store-chip colruyt">● Colruyt (×4)</span>
+        <span class="store-chip okay">● OKay (×6)</span>
+        <span class="store-chip bio">● Bio-Planet (×2)</span>
+        <span class="store-chip jims">● JIMS (×3)</span>
+        <span class="store-chip new">● Newpharma</span>
+      </div>
+    </div>
+    <div class="pilot-text">
+      <div class="pilot-label">Waarom Gent?</div>
+      <h2>Voldoende enseignes.<br><span>Perfecte schaal.</span></h2>
+      <p>Gent combineert een hoog winkeldichtheid van Colruyt Group enseignes met een stedelijk, digitaal publiek. Ideaal om het cross-ensigne gegeven echt te challengen: klanten winkelen er verspreid over Colruyt, OKay, JIMS en Bio-Planet.</p>
+      <p>Klein genoeg om snel te leren, groot genoeg om statistische validiteit te bereiken. Resultaten zijn daarna makkelijk te extrapoleren naar andere steden en regio's.</p>
+      <div class="pilot-metric-row">
+        <div class="pilot-metric">
+          <div class="pilot-metric-val">~500k</div>
+          <div class="pilot-metric-label">Inwoners regio Gent</div>
+        </div>
+        <div class="pilot-metric">
+          <div class="pilot-metric-val">15+</div>
+          <div class="pilot-metric-label">CG enseignes in regio</div>
+        </div>
+        <div class="pilot-metric">
+          <div class="pilot-metric-val">5–10k</div>
+          <div class="pilot-metric-label">Doelleden in pilot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANNING -->
+<div class="wrap">
+  <div class="planning-section">
+    <div class="section-eyebrow">Roadmap</div>
+    <div class="section-title">Van POC naar nationaal — 3 jaar</div>
+    <div class="section-sub">Drie jaar, drie grote stappen: organiseren en leren in 2026, bewijzen in Gent in 2027, en nationaal lanceren in 2028 — net op tijd voor 100 jaar Colruyt.</div>
+
+    <!-- Year timeline bar -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:white;margin-top:32px;margin-bottom:32px;">
+      <div style="padding:20px 28px;border-right:1px solid var(--border);background:var(--xtra-pale);">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--xtra);margin-bottom:6px;">2026</div>
+        <div style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px;">Setup & Discovery</div>
+        <div style="font-size:13px;color:var(--text-muted);">Organiseren, team vormen, technische basis leggen</div>
+      </div>
+      <div style="padding:20px 28px;border-right:1px solid var(--border);background:#FFFBEB;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#B45309;margin-bottom:6px;">2027</div>
+        <div style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px;">MVP — Piloot Gent</div>
+        <div style="font-size:13px;color:var(--text-muted);">Bouwen, lanceren, evalueren en opschalen</div>
+      </div>
+      <div style="padding:20px 28px;background:linear-gradient(135deg,#0F1A2E,#1A2E4A);position:relative;overflow:hidden;">
+        <div style="position:absolute;right:-10px;top:-10px;font-size:80px;opacity:0.07;">🏆</div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#A78BFA;margin-bottom:6px;">2028</div>
+        <div style="font-size:18px;font-weight:900;color:white;margin-bottom:4px;">Nationale Lancering 🇧🇪</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);">100 jaar Colruyt — Xtra voor heel België</div>
+      </div>
+    </div>
+
+    <!-- Detailed phases -->
+    <div class="phases">
+
+      <!-- 2026 FASE 1 -->
+      <div class="phase">
+        <div class="phase-left" style="background:rgba(109,40,217,0.03);">
+          <div class="phase-num" style="color:var(--xtra);">2026 · Fase 1</div>
+          <div class="phase-name">Organisatie & Setup</div>
+          <span class="phase-timing p1">Q1–Q2 2026</span>
+        </div>
+        <div class="phase-right">
+          <div class="phase-goal">🎯 Team compleet, technische basis staat, stakeholders aligned</div>
+          <div class="phase-deliverables">
+            <span class="del-chip">Team samenstellen</span>
+            <span class="del-chip">Technische architectuur</span>
+            <span class="del-chip">Data-integratie plan</span>
+            <span class="del-chip">Governance & privacy kader</span>
+            <span class="del-chip">Budget goedkeuring</span>
+            <span class="del-chip">Merkteams aligned</span>
+          </div>
+          <div class="phase-milestone">Go/no-go voor MVP build: einde Q2 2026</div>
+        </div>
+      </div>
+
+      <!-- 2026 FASE 2 -->
+      <div class="phase">
+        <div class="phase-left" style="background:rgba(109,40,217,0.03);">
+          <div class="phase-num" style="color:var(--xtra);">2026 · Fase 2</div>
+          <div class="phase-name">Discovery & Design</div>
+          <span class="phase-timing p1">Q3–Q4 2026</span>
+        </div>
+        <div class="phase-right">
+          <div class="phase-goal">🎯 Klantinzichten, MVP-scope en hyperpersonalisatie-engine ontworpen</div>
+          <div class="phase-deliverables">
+            <span class="del-chip">25 klantinterviews</span>
+            <span class="del-chip">Xtra app concept getest</span>
+            <span class="del-chip">Nudge engine ontwerp</span>
+            <span class="del-chip">Pilot regio Gent gedefinieerd</span>
+            <span class="del-chip">MVP scope vastgelegd</span>
+            <span class="del-chip">Technische POC gereed</span>
+          </div>
+          <div class="phase-milestone">Alle learnings gebundeld in MVP-brief: december 2026</div>
+        </div>
+      </div>
+
+      <!-- 2027 FASE 3 -->
+      <div class="phase">
+        <div class="phase-left" style="background:#FFFBEB;">
+          <div class="phase-num" style="color:#B45309;">2027 · Fase 3</div>
+          <div class="phase-name">MVP Bouwen & Lanceren</div>
+          <span class="phase-timing p2">Q1–Q2 2027</span>
+        </div>
+        <div class="phase-right">
+          <div class="phase-goal">🎯 Werkende Xtra app live in Gent — eerste echte klantdata binnen</div>
+          <div class="phase-deliverables">
+            <span class="del-chip">Xtra app MVP live</span>
+            <span class="del-chip">Puntensysteem operationeel</span>
+            <span class="del-chip">5 merken gekoppeld</span>
+            <span class="del-chip">Nudge engine v1 actief</span>
+            <span class="del-chip">Bèta: 2.000 leden Gent</span>
+            <span class="del-chip">Marketeer dashboards live</span>
+          </div>
+          <div class="phase-milestone">Eerste cross-merk gedragsdata zichtbaar: einde Q2 2027</div>
+        </div>
+      </div>
+
+      <!-- 2027 FASE 4 -->
+      <div class="phase">
+        <div class="phase-left" style="background:#FFFBEB;">
+          <div class="phase-num" style="color:#B45309;">2027 · Fase 4</div>
+          <div class="phase-name">Piloot Evaluatie & Opschalen</div>
+          <span class="phase-timing p2">Q3–Q4 2027</span>
+        </div>
+        <div class="phase-right">
+          <div class="phase-goal">🎯 Bewezen impact in Gent, businesscase voor nationale rollout klaar</div>
+          <div class="phase-deliverables">
+            <span class="del-chip">10.000+ leden in Gent</span>
+            <span class="del-chip">Gepersonaliseerde nudges gevalideerd</span>
+            <span class="del-chip">NPS & ROI gemeten</span>
+            <span class="del-chip">Impact rapport</span>
+            <span class="del-chip">Nationale schaalarchitectuur</span>
+            <span class="del-chip">Board presentatie</span>
+          </div>
+          <div class="phase-milestone">Formele go beslissing nationale lancering: december 2027</div>
+        </div>
+      </div>
+
+      <!-- 2028 FASE 5 — SPECIAL -->
+      <div class="phase" style="background:linear-gradient(135deg,#0F1A2E 0%,#1A2E4A 100%);border-bottom:none;">
+        <div class="phase-left" style="border-right-color:rgba(255,255,255,0.1);">
+          <div class="phase-num" style="color:#A78BFA;">2028 · Fase 5</div>
+          <div class="phase-name" style="color:white;">Nationale Lancering 🇧🇪</div>
+          <span class="phase-timing" style="background:rgba(167,139,250,0.2);color:#A78BFA;border:1px solid rgba(167,139,250,0.3);">Q1–Q4 2028</span>
+          <div style="margin-top:12px;padding:8px 10px;background:rgba(250,204,21,0.15);border:1px solid rgba(250,204,21,0.3);border-radius:8px;">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:#FDE68A;margin-bottom:2px;">🏆 Mijlpaal</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.4;">100 jaar Colruyt — 2028</div>
+          </div>
+        </div>
+        <div class="phase-right">
+          <div class="phase-goal" style="color:rgba(255,255,255,0.9);">🎯 Xtra loyalty actief voor alle 3,2M kaarthouders in heel België — één ecosysteem, vijf merken</div>
+          <div class="phase-deliverables">
+            <span class="del-chip" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">Nationale app lancering</span>
+            <span class="del-chip" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">Alle regio's actief</span>
+            <span class="del-chip" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">Hyperpersonalisatie op schaal</span>
+            <span class="del-chip" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">3,2M kaarthouders</span>
+            <span class="del-chip" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">Nationale campagne</span>
+            <span class="del-chip" style="background:rgba(167,139,250,0.2);border-color:rgba(167,139,250,0.4);color:#C4B5FD;">100 jaar Colruyt viering</span>
+          </div>
+          <div class="phase-milestone" style="color:rgba(255,255,255,0.55);">✓ Xtra is het loyaliteitsplatform van Colruyt Group voor de volgende 100 jaar</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET -->
+<div class="budget-section">
+  <div class="budget-inner">
+    <div class="section-eyebrow">Budget</div>
+    <div class="section-title">Indicatieve kostenschatting — POC jaar 1</div>
+    <div class="section-sub">Gebaseerd op een team van 7.5 FTE over 12 maanden, met technologie, activatie en onderzoekskosten. Exclusief eventuele interne secondering vanuit Colruyt Group (wat de personeelskost significant kan drukken).</div>
+
+    <div class="budget-grid">
+
+      <!-- People -->
+      <div class="budget-card">
+        <div class="budget-card-header people">
+          <div class="budget-card-title">👥 Personeelskosten</div>
+          <div class="budget-card-total">€ 760k</div>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Loyalty Marketing Lead <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 140k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Digital Campaign Manager <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 85k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Customer Insights Analist <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 90k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Product Manager <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 125k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Full-Stack Developer (AI) <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 115k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Data Engineer <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 105k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">UX/Product Designer <span class="budget-line-fte">1.0 FTE</span></span>
+          <span class="budget-line-val">€ 100k</span>
+        </div>
+      </div>
+
+      <!-- Tech -->
+      <div class="budget-card">
+        <div class="budget-card-header tech">
+          <div class="budget-card-title">🖥️ Technologie & Infra</div>
+          <div class="budget-card-total">€ 75k</div>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">AI/ML APIs (OpenAI, Anthropic, …)</span>
+          <span class="budget-line-val">€ 20k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Cloud hosting & databases</span>
+          <span class="budget-line-val">€ 18k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">CDP / Data platform tooling</span>
+          <span class="budget-line-val">€ 22k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Dev tools & licenties</span>
+          <span class="budget-line-val">€ 15k</span>
+        </div>
+      </div>
+
+      <!-- Activation -->
+      <div class="budget-card">
+        <div class="budget-card-header activation">
+          <div class="budget-card-title">📣 Piloot Activatie</div>
+          <div class="budget-card-total">€ 65k</div>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Regionale campagne (leden werven)</span>
+          <span class="budget-line-val">€ 30k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Gebruikerstests & focusgroepen</span>
+          <span class="budget-line-val">€ 20k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Evenementen & in-store activatie</span>
+          <span class="budget-line-val">€ 15k</span>
+        </div>
+      </div>
+
+      <!-- Other -->
+      <div class="budget-card">
+        <div class="budget-card-header other">
+          <div class="budget-card-title">⚖️ Legal, GDPR & Reserve</div>
+          <div class="budget-card-total">€ 95k</div>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">GDPR-compliance & juridisch advies</span>
+          <span class="budget-line-val">€ 20k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Partner overeenkomsten enseignes</span>
+          <span class="budget-line-val">€ 10k</span>
+        </div>
+        <div class="budget-line">
+          <span class="budget-line-label">Onvoorzien & reserve (10%)</span>
+          <span class="budget-line-val">€ 65k</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="budget-total-block">
+      <div>
+        <div class="budget-total-label">Totale POC budget — jaar 1</div>
+        <div class="budget-total-val">€ <span>900k</span></div>
+        <div class="budget-note">Bij gedeeltelijke interne secondering (2–3 FTE vanuit CG) kan dit teruggebracht worden naar €500–600k. Jaar 2 (nationale rollout) vraagt een apart, uitgebreider businessplan.</div>
+      </div>
+      <div class="budget-range">
+        <div class="budget-range-label">Bandbreedte</div>
+        <div class="budget-range-val">€ 600k – € 1.1M</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta">
+  <h2>Klaar om te starten?</h2>
+  <p>Bekijk de andere onderdelen van het POC concept</p>
+  <div class="footer-cta-links">
+    <a href="index.html" class="cta-link primary">← Terug naar overzicht</a>
+    <a href="customer.html" class="cta-link secondary">Klantbeleving</a>
+    <a href="marketer.html" class="cta-link secondary">Marketeer platform</a>
+    <a href="impact.html" class="cta-link secondary">Impact</a>
+  </div>
+</div>
+
+</body>
+</html>

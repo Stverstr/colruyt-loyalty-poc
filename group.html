@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groep-marketeer platform — Xtra Loyalty</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #F5F4F1; --white: #FFFFFF; --border: #E0DDD8;
+    --text: #1A1A1A; --text-mid: #4A4A4A; --text-muted: #888;
+    --xtra: #6D28D9; --xtra-pale: #F3EFFC;
+    --gold: #B45309; --gold-bg: #FEF3C7;
+    --green: #15803D; --green-bg: #DCFCE7;
+    --cg-blue: #1E5FA8;
+    --colruyt: #CC0000; --okay: #E84010; --bioplanet: #2E7D32;
+    --jims: #92650A; --newpharma: #0055B3;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 40px; height: 56px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-back { color: var(--text-muted); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .nav-back:hover { color: var(--text); }
+  .nav-sep { color: var(--border); }
+  .nav-cur { font-weight: 700; font-size: 14px; }
+  .nav-tag { margin-left: auto; background: var(--green-bg); color: var(--green); border: 1px solid #BBF7D0; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+
+  /* HERO */
+  .hero { background: var(--cg-blue); color: white; padding: 44px 40px; }
+  .hero-inner { max-width: 1140px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .hero-label { display: inline-block; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); padding: 5px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+  .hero h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.6px; margin-bottom: 8px; line-height: 1.15; }
+  .hero p { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.6; max-width: 500px; }
+  .hero-actions { display: flex; gap: 10px; flex-shrink: 0; }
+  .btn-white { background: white; color: var(--cg-blue); padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-white:hover { background: #EFF6FF; }
+  .btn-outline-white { background: transparent; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1.5px solid rgba(255,255,255,0.4); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.1); }
+
+  /* KPI STRIP */
+  .kpi-strip { background: white; border-bottom: 1px solid var(--border); }
+  .kpi-strip-inner { max-width: 1140px; margin: 0 auto; display: flex; }
+  .kpi-item { flex: 1; padding: 20px 28px; border-right: 1px solid var(--border); }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .kpi-val { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 3px; }
+  .kpi-trend { font-size: 12px; }
+  .up { color: var(--green); } .neutral { color: var(--text-muted); }
+
+  /* TABS */
+  .tab-bar { background: white; border-bottom: 1px solid var(--border); }
+  .tab-bar-inner { max-width: 1140px; margin: 0 auto; padding: 0 40px; display: flex; gap: 0; }
+  .tab { padding: 14px 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; background: none; border-left: none; border-right: none; border-top: none; font-family: 'Inter', sans-serif; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--cg-blue); border-bottom-color: var(--cg-blue); }
+
+  /* CONTENT */
+  .page { max-width: 1140px; margin: 0 auto; padding: 36px 40px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Grid helpers */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .g5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .sec-title { font-size: 17px; font-weight: 800; }
+  .sec-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .btn { padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-blue { background: var(--cg-blue); color: white; }
+  .btn-blue:hover { background: #174F94; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-mid); }
+  .btn-ghost:hover { border-color: #B8B4AF; }
+  .mb20 { margin-bottom: 20px; }
+  .mb28 { margin-bottom: 28px; }
+
+  /* OVERZICHT TAB */
+  .brand-perf { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .bp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .bp-av { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+  .bp-name { font-size: 14px; font-weight: 800; }
+  .bp-type { font-size: 11px; color: var(--text-muted); }
+  .bp-metric { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px; }
+  .bp-metric-label { color: var(--text-muted); }
+  .bp-metric-val { font-weight: 700; font-size: 13px; }
+  .bp-bar-bg { height: 4px; background: var(--bg); border-radius: 2px; margin-bottom: 10px; border: 1px solid var(--border); overflow: hidden; }
+  .bp-bar-fill { height: 100%; border-radius: 2px; }
+  .bp-flow { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 7px; background: var(--gold-bg); border: 1px solid #FDE68A; font-size: 11px; font-weight: 600; color: var(--gold); }
+
+  /* Flow diagram */
+  .flow-diagram { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+  .flow-3col { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; }
+  .flow-side { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .flow-side-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .flow-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .flow-row:last-child { border-bottom: none; }
+  .flow-hub { text-align: center; }
+  .flow-hub-circle { width: 60px; height: 60px; background: #0F0A1E; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; overflow: hidden; padding: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  .flow-hub-label { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .flow-total { display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .tip-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9px; padding: 12px 14px; margin-top: 14px; font-size: 13px; color: #1D4ED8; }
+
+  /* CHALLENGES TAB */
+  .builder { background: var(--green-bg); border: 1px solid #BBF7D0; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
+  .builder-title { font-size: 16px; font-weight: 800; color: var(--green); margin-bottom: 18px; }
+  .b-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .b-label { font-size: 11px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .b-input, .b-select { width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); transition: border-color 0.2s; }
+  .b-input:focus, .b-select:focus { outline: none; border-color: var(--green); }
+  .brand-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .bp { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 100px; border: 1.5px solid var(--border); background: var(--white); font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+  .bp.on { color: white; }
+  .bp-colruyt.on { border-color: var(--colruyt); background: var(--colruyt); }
+  .bp-okay.on { border-color: var(--okay); background: var(--okay); }
+  .bp-bio.on { border-color: var(--bioplanet); background: var(--bioplanet); }
+  .bp-jims.on { border-color: var(--jims); background: var(--jims); }
+  .bp-new.on { border-color: var(--newpharma); background: var(--newpharma); }
+
+  .challenge-preview { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .cp-icon { font-size: 28px; flex-shrink: 0; }
+  .cp-name { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .cp-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+  .cp-reward { margin-left: auto; text-align: center; flex-shrink: 0; }
+  .cp-reward-val { font-size: 22px; font-weight: 900; color: var(--gold); }
+  .cp-reward-lab { font-size: 11px; color: var(--text-muted); }
+  .builder-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* Challenge cards */
+  .ch-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: all 0.2s; }
+  .ch-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+  .ch-band { padding: 18px 20px; }
+  .ch-band-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; color: white; }
+  .ch-band-desc { font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4; }
+  .ch-body { padding: 16px 20px; }
+  .ch-status { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+  .s-active { background: var(--green-bg); color: var(--green); }
+  .s-planned { background: var(--xtra-pale); color: var(--xtra); }
+  .s-draft { background: var(--bg); color: var(--text-muted); }
+  .ch-reward { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .ch-brands { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .ch-brand-tag { padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .ch-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .chs { text-align: center; background: var(--bg); border-radius: 7px; padding: 8px 4px; }
+  .chs-val { font-size: 15px; font-weight: 800; }
+  .chs-lab { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+  /* TIERS TAB */
+  .tier-card { border-radius: 16px; padding: 26px; border: 1.5px solid; }
+  .tier-icon { font-size: 32px; margin-bottom: 10px; }
+  .tier-name { font-size: 20px; font-weight: 900; margin-bottom: 3px; }
+  .tier-count { font-size: 13px; margin-bottom: 18px; }
+  .tier-count strong { font-size: 17px; }
+  .tier-benefits { display: flex; flex-direction: column; gap: 7px; }
+  .tier-benefit { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-mid); }
+  .tier-check { width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; flex-shrink: 0; }
+  .tier-off { opacity: 0.3; }
+  .tier-threshold { margin-top: 14px; padding: 9px 12px; border-radius: 8px; font-size: 12px; }
+
+  .t-bronze { background: #FFFAF5; border-color: rgba(180,120,60,0.3); }
+  .t-bronze .tier-name { color: #92400E; }
+  .t-bronze .tier-check { background: rgba(146,64,14,0.12); color: #92400E; }
+  .t-bronze .tier-threshold { background: rgba(146,64,14,0.06); color: #78350F; }
+
+  .t-silver { background: #FAFAFA; border-color: rgba(156,163,175,0.5); }
+  .t-silver .tier-name { color: #374151; }
+  .t-silver .tier-check { background: rgba(107,114,128,0.12); color: #4B5563; }
+  .t-silver .tier-threshold { background: rgba(107,114,128,0.06); color: #4B5563; }
+
+  .t-gold { background: #FFFBEB; border-color: rgba(180,83,9,0.35); }
+  .t-gold .tier-name { color: var(--gold); }
+  .t-gold .tier-check { background: var(--gold-bg); color: var(--gold); }
+  .t-gold .tier-threshold { background: var(--gold-bg); color: var(--gold); }
+
+  /* Segment table */
+  .data-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl th { text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .tbl td { padding: 11px 16px; border-bottom: 1px solid #F0EDE8; font-size: 13px; vertical-align: middle; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: var(--bg); }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .p-gold { background: var(--gold-bg); color: var(--gold); }
+  .p-silver { background: #F3F4F6; color: #4B5563; }
+  .p-bronze { background: #FEF9EE; color: #92400E; }
+  .p-potential { background: var(--xtra-pale); color: var(--xtra); }
+  .p-awake { background: #DBEAFE; color: #1D4ED8; }
+  .p-retain { background: var(--green-bg); color: var(--green); }
+
+  /* ANALYTICS TAB */
+  .insight-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .ins-tip { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: 10px; margin-bottom: 10px; }
+  .ins-tip:last-child { margin-bottom: 0; }
+  .ins-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .ins-title { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
+  .ins-desc { font-size: 13px; color: var(--text-mid); line-height: 1.55; }
+  .ins-green { background: var(--green-bg); border: 1px solid #BBF7D0; }
+  .ins-gold { background: var(--gold-bg); border: 1px solid #FDE68A; }
+  .ins-blue { background: #DBEAFE; border: 1px solid #BFDBFE; }
+  .ins-green .ins-title { color: var(--green); }
+  .ins-gold .ins-title { color: var(--gold); }
+  .ins-blue .ins-title { color: #1D4ED8; }
+
+  /* bar chart in analytics */
+  .mini-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .mini-bar-label { width: 140px; font-size: 12px; color: var(--text-mid); flex-shrink: 0; }
+  .mini-bar-bg { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; border: 1px solid var(--border); overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 4px; }
+  .mini-bar-val { width: 50px; text-align: right; font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+
+  /* ── GROEPSPOT ───────────────────────────── */
+  .pot-model {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0;
+    align-items: stretch; background: var(--white); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; margin-bottom: 24px;
+  }
+  .pot-box { padding: 22px 20px; text-align: center; }
+  .pot-box-earn { background: #FFF5F5; border-right: 1px solid var(--border); }
+  .pot-box-hub  { background: linear-gradient(135deg, #1E5FA8 0%, #6D28D9 100%); color: white; }
+  .pot-box-spend { background: #F0FDF4; border-left: 1px solid var(--border); }
+  .pot-arrow { display: flex; align-items: center; justify-content: center; padding: 0 6px; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .pot-arrow-icon { font-size: 20px; color: var(--text-muted); }
+  .pot-icon { font-size: 28px; margin-bottom: 8px; }
+  .pot-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+  .pot-sub { font-size: 11px; opacity: 0.7; line-height: 1.4; }
+  .pot-amount { font-size: 22px; font-weight: 900; margin: 10px 0 4px; }
+  .pot-label-sm { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.65; }
+  .pot-box-earn .pot-amount { color: #CC0000; }
+  .pot-box-hub .pot-amount { color: #FFE066; }
+  .pot-box-spend .pot-amount { color: var(--green); }
+
+  .pot-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .pot-kpi { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .pot-kpi-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .pot-kpi-val { font-size: 22px; font-weight: 900; margin-bottom: 3px; }
+  .pot-kpi-sub { font-size: 11px; color: var(--text-muted); }
+
+  .pot-rule { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; }
+  .pot-rule-title { font-size: 13px; font-weight: 800; color: #1D4ED8; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .pot-rule-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+  .pot-rule-row:last-child { margin-bottom: 0; }
+  .pot-rule-num { width: 22px; height: 22px; border-radius: 50%; background: #1D4ED8; color: white; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .pot-rule-row strong { color: var(--text); }
+
+  .pot-tbl-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+  .pot-tbl-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .pot-tbl-title { font-size: 15px; font-weight: 800; }
+  .pot-tbl-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .ptbl { width: 100%; border-collapse: collapse; }
+  .ptbl th { text-align: right; font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .ptbl th:first-child { text-align: left; }
+  .ptbl td { padding: 12px 14px; border-bottom: 1px solid #F0EDE8; font-size: 13px; text-align: right; }
+  .ptbl td:first-child { text-align: left; }
+  .ptbl tr:last-child td { border-bottom: none; }
+  .ptbl tr.total-row td { font-weight: 800; background: var(--bg); font-size: 13px; border-top: 2px solid var(--border); }
+  .ptbl tr:hover:not(.total-row) td { background: var(--bg); }
+  .brand-cell { display: flex; align-items: center; gap: 10px; }
+  .bc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .netto-pos { font-weight: 800; }
+  .netto-neg { color: #CC0000; font-weight: 800; }
+  .netto-null { color: var(--text-muted); font-weight: 700; }
+  .zelf-badge { background: var(--gold-bg); color: var(--gold); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 100px; border: 1px solid #FDE68A; white-space: nowrap; }
+
+  .pot-self-card { background: var(--gold-bg); border: 1px solid #FDE68A; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+  .psc-title { font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
+  .psc-sub { font-size: 12px; color: #78350F; margin-bottom: 14px; line-height: 1.5; }
+  .psc-brands { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .psc-brand { background: var(--white); border-radius: 10px; padding: 12px; text-align: center; border: 1px solid #FDE68A; }
+  .psc-brand-name { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .psc-brand-amount { font-size: 16px; font-weight: 900; color: var(--gold); }
+  .psc-brand-sub { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+  @media (max-width: 900px) {
+    .page { padding: 20px; }
+    nav { padding: 0 20px; }
+    .g2, .g3, .g5, .b-row { grid-template-columns: 1fr; }
+    .kpi-strip-inner { flex-wrap: wrap; }
+    .kpi-item { flex: 1 1 140px; border-right: none; border-bottom: 1px solid var(--border); }
+    .hero-inner { flex-direction: column; }
+    .tab-bar-inner { padding: 0 20px; overflow-x: auto; }
+    .flow-3col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← Terug</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cur">🌐 Groep-marketeer platform</span>
+  <div class="nav-tag">Perspectief 3</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label">🌐 Perspectief 3 — Colruyt Group</div>
+      <h1>Alle merken samen,<br>één sterk loyalty-systeem</h1>
+      <p>Van hier stuur je challenges aan, beheer je de klanttiers en zie je hoe Xtratjes door het hele groepsecosysteem stromen.</p>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-outline-white">↓ Rapport exporteren</button>
+      <button class="btn-white" onclick="toonTab('challenges', document.getElementById('t-challenges'))">+ Nieuwe challenge</button>
+    </div>
+  </div>
+</div>
+
+<!-- KPI strip -->
+<div class="kpi-strip">
+  <div class="kpi-strip-inner">
+    <div class="kpi-item"><div class="kpi-label">Xtra-leden totaal</div><div class="kpi-val">3.24M</div><div class="kpi-trend up">↑ +42K deze maand</div></div>
+    <div class="kpi-item"><div class="kpi-label">Xtratjes in omloop</div><div class="kpi-val">18.7M</div><div class="kpi-trend up">↑ +2.1M vs vorige maand</div></div>
+    <div class="kpi-item"><div class="kpi-label">Cross-merk klanten</div><div class="kpi-val">847K</div><div class="kpi-trend up">↑ 26% van totaal</div></div>
+    <div class="kpi-item"><div class="kpi-label">Gold-leden</div><div class="kpi-val">124K</div><div class="kpi-trend up">↑ +8.2% dit kwartaal</div></div>
+    <div class="kpi-item"><div class="kpi-label">Waarde per Xtratje</div><div class="kpi-val">€0.50</div><div class="kpi-trend neutral">Stabiel</div></div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab active" id="t-overzicht" onclick="toonTab('overzicht', this)">Overzicht</button>
+    <button class="tab" id="t-groepspot" onclick="toonTab('groepspot', this)">💰 Groepspot</button>
+    <button class="tab" id="t-challenges" onclick="toonTab('challenges', this)">Cross-merk challenges</button>
+    <button class="tab" id="t-tiers" onclick="toonTab('tiers', this)">Klanttiers</button>
+    <button class="tab" id="t-analytics" onclick="toonTab('analytics', this)">Analytics</button>
+    <button class="tab" id="t-nudge" onclick="toonTab('nudge', this)">🎯 Nudge Engine</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- OVERZICHT -->
+  <div id="panel-overzicht" class="tab-panel active">
+    <div class="g2 mb28">
+      <div>
+        <div class="sec-head mb20"><div><div class="sec-title">Merk-prestaties</div><div class="sec-sub">Xtratjes uitgedeeld en cross-merk effect</div></div></div>
+        <div class="g5" style="margin-bottom:14px;">
+          <div class="brand-perf">
+            <div class="bp-head"><div class="bp-av"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="60" height="60" rx="10" fill="#CC0000"/><polygon points="10,50 24,10 35,10 21,50" fill="rgba(255,255,255,0.92)"/><polygon points="23,50 37,10 48,10 34,50" fill="rgba(255,255,255,0.6)"/></svg></div><div><div class="bp-name">Colruyt LP</div><div class="bp-type">Supermarkt</div></div></div>
+            <div class="bp-metric"><span class="bp-metric-label">Xtratjes</span><span class="bp-metric-val">128K</span></div>
+            <div class="bp-bar-bg"><div class="bp-bar-fill" style="width:82%;background:#CC0000;opacity:0.7;"></div></div>
+            <div class="bp-flow"><span>Sparen</span><span>→ 34% elders</span></div>
+          </div>
+          <div class="brand-perf">
+            <div class="bp-head"><div class="bp-av"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="60" height="60" rx="10" fill="#0066B3"/><circle cx="30" cy="30" r="18" fill="none" stroke="#FF6600" stroke-width="9"/></svg></div><div><div class="bp-name">OKay</div><div class="bp-type">Buurtsuper</div></div></div>
+            <div class="bp-metric"><span class="bp-metric-label">Xtratjes</span><span class="bp-metric-val">54K</span></div>
+            <div class="bp-bar-bg"><div class="bp-bar-fill" style="width:44%;background:#E84010;opacity:0.7;"></div></div>
+            <div class="bp-flow"><span>Sparen</span><span>→ 28% elders</span></div>
+          </div>
+          <div class="brand-perf">
+            <div class="bp-head"><div class="bp-av"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="30" cy="30" r="30" fill="#2E7D32"/><path d="M30,10 Q46,24 30,50 Q14,24 30,10" fill="rgba(255,255,255,0.3)"/><ellipse cx="30" cy="30" rx="26" ry="9" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3"/></svg></div><div><div class="bp-name">Bio-Planet</div><div class="bp-type">Bio</div></div></div>
+            <div class="bp-metric"><span class="bp-metric-label">Xtratjes</span><span class="bp-metric-val">21K</span></div>
+            <div class="bp-bar-bg"><div class="bp-bar-fill" style="width:22%;background:#2E7D32;opacity:0.7;"></div></div>
+            <div class="bp-flow"><span>Sparen</span><span>→ 42% elders</span></div>
+          </div>
+          <div class="brand-perf">
+            <div class="bp-head"><div class="bp-av"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="60" height="60" rx="10" fill="#1A2535"/><circle cx="15" cy="20" r="6" fill="#00B4B8"/><circle cx="30" cy="15" r="5" fill="#00B4B8" opacity="0.75"/><circle cx="45" cy="20" r="6" fill="#00B4B8"/><circle cx="15" cy="42" r="5" fill="#00B4B8" opacity="0.6"/><circle cx="30" cy="46" r="6" fill="#00B4B8"/><circle cx="45" cy="42" r="5" fill="#00B4B8" opacity="0.7"/></svg></div><div><div class="bp-name">JIMS</div><div class="bp-type">Fitness</div></div></div>
+            <div class="bp-metric"><span class="bp-metric-label">Ontvangen</span><span class="bp-metric-val">38K</span></div>
+            <div class="bp-bar-bg"><div class="bp-bar-fill" style="width:38%;background:#92650A;opacity:0.7;"></div></div>
+            <div class="bp-flow"><span>67% van elders</span><span>Besteden</span></div>
+          </div>
+          <div class="brand-perf">
+            <div class="bp-head"><div class="bp-av"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="60" height="60" rx="10" fill="#003087"/><rect x="24" y="12" width="12" height="36" rx="5" fill="#00A651"/><rect x="12" y="24" width="36" height="12" rx="5" fill="rgba(255,255,255,0.9)"/></svg></div><div><div class="bp-name">Newpharma</div><div class="bp-type">Online</div></div></div>
+            <div class="bp-metric"><span class="bp-metric-label">Ontvangen</span><span class="bp-metric-val">29K</span></div>
+            <div class="bp-bar-bg"><div class="bp-bar-fill" style="width:29%;background:#0055B3;opacity:0.7;"></div></div>
+            <div class="bp-flow"><span>71% van elders</span><span>Besteden</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="sec-title" style="margin-bottom:16px;">Waar stromen de Xtratjes naartoe?</div>
+        <div class="flow-3col">
+          <div class="flow-side">
+            <div class="flow-side-label" style="color:var(--green);">✦ Verdiend bij</div>
+            <div class="flow-row"><span>🏪 Colruyt LP</span><span style="font-weight:700;color:var(--green);">128K</span></div>
+            <div class="flow-row"><span>🏪 OKay</span><span style="font-weight:700;color:var(--green);">54K</span></div>
+            <div class="flow-row"><span>🌿 Bio-Planet</span><span style="font-weight:700;color:var(--green);">21K</span></div>
+            <div class="flow-total"><span>Totaal</span><span style="color:var(--green);">203K</span></div>
+          </div>
+          <div class="flow-hub">
+            <div class="flow-hub-circle">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                <ellipse cx="22" cy="18" rx="18" ry="9" transform="rotate(-42,22,18)" fill="#4A90D9" opacity="0.92"/>
+                <ellipse cx="40" cy="17" rx="18" ry="9" transform="rotate(42,40,17)" fill="#52B040" opacity="0.92"/>
+                <ellipse cx="19" cy="43" rx="18" ry="10" transform="rotate(42,19,43)" fill="#F5A623" opacity="0.92"/>
+                <ellipse cx="40" cy="44" rx="16" ry="9" transform="rotate(-42,40,44)" fill="#E04010" opacity="0.92"/>
+              </svg>
+            </div>
+            <div class="flow-hub-label">Xtra Hub</div>
+          </div>
+          <div class="flow-side">
+            <div class="flow-side-label" style="color:var(--xtra);">✦ Besteed bij</div>
+            <div class="flow-row"><span>💪 JIMS</span><span style="font-weight:700;color:var(--xtra);">38K</span></div>
+            <div class="flow-row"><span>💊 Newpharma</span><span style="font-weight:700;color:var(--xtra);">29K</span></div>
+            <div class="flow-row"><span>🏪 Colruyt LP</span><span style="font-weight:700;color:var(--xtra);">24K</span></div>
+            <div class="flow-total"><span>Besteed</span><span style="color:var(--xtra);">91K</span></div>
+          </div>
+        </div>
+        <div class="tip-box">💡 <strong>112K Xtratjes</strong> staan nog klaar om besteed te worden — kans voor een activatiecampagne.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROEPSPOT -->
+  <div id="panel-groepspot" class="tab-panel">
+
+    <!-- Financieringsregel uitleg -->
+    <div class="pot-rule">
+      <div class="pot-rule-title">⚙️ Hoe werkt het financieringsmodel?</div>
+      <div class="pot-rule-row"><div class="pot-rule-num">1</div><div><strong>Merk betaalt bij elke verdienste:</strong> Zodra een klant Xtratjes verdient bij Merk X, stort Merk X €5 per 1.000 ✦ in de groepspot. Dit is de bijdrage van het merk voor het loyaliteitsvoordeel dat ze weggeven.</div></div>
+      <div class="pot-rule-row"><div class="pot-rule-num">2</div><div><strong>Merk ontvangt bij elke besteding:</strong> Wanneer een klant Xtratjes inlost bij Merk Y, krijgt Merk Y €5 per 1.000 ✦ uit de groepspot. Het merk ontvangt dus geld voor de klanten die cross-merk bij hen komen besteden.</div></div>
+      <div class="pot-rule-row"><div class="pot-rule-num">3</div><div><strong>Extra korting = eigen rekening:</strong> Als een merk bovenop de standaard ✦-waarde een extra korting geeft (bv. "betaal met Xtratjes en krijg 20% extra"), financiert dat merk die extra korting volledig zelf. Dit staat buiten de groepspot.</div></div>
+    </div>
+
+    <!-- Model visualisatie -->
+    <div class="pot-model">
+      <div class="pot-box pot-box-earn">
+        <div class="pot-icon">🏪</div>
+        <div class="pot-title" style="color:#CC0000;">Merken betalen IN</div>
+        <div class="pot-sub">Per Xtratje dat een klant bij hun merk verdient, storten merken €5 per 1.000 ✦ in de pot</div>
+        <div class="pot-amount">€154K</div>
+        <div class="pot-label-sm" style="color:#CC0000;">per maand bijgedragen</div>
+      </div>
+      <div class="pot-arrow"><div class="pot-arrow-icon">→</div></div>
+      <div class="pot-box pot-box-hub">
+        <div class="pot-icon">💰</div>
+        <div class="pot-title">Xtra Groepspot</div>
+        <div class="pot-sub">Centrale financiële buffer. Betaalt merken uit voor ontvangen bestedingen. Beheert openstaande verplichting.</div>
+        <div class="pot-amount">€77K</div>
+        <div class="pot-label-sm">huidige maandsaldo</div>
+        <div style="margin-top:8px;font-size:10px;opacity:0.65;">18,7M ✦ openstaand<br>= €93,5K verplichting</div>
+      </div>
+      <div class="pot-arrow"><div class="pot-arrow-icon">→</div></div>
+      <div class="pot-box pot-box-spend">
+        <div class="pot-icon">🎁</div>
+        <div class="pot-title" style="color:#15803D;">Merken ontvangen UIT</div>
+        <div class="pot-sub">Per Xtratje dat een klant bij hun merk inlost, ontvangen merken €5 per 1.000 ✦ uit de pot</div>
+        <div class="pot-amount">€77K</div>
+        <div class="pot-label-sm" style="color:#15803D;">per maand uitbetaald</div>
+      </div>
+    </div>
+
+    <!-- KPI rij -->
+    <div class="pot-kpis">
+      <div class="pot-kpi">
+        <div class="pot-kpi-label">Totale potbijdrage</div>
+        <div class="pot-kpi-val" style="color:#CC0000;">€154K</div>
+        <div class="pot-kpi-sub">30,8M ✦ uitgegeven/maand</div>
+      </div>
+      <div class="pot-kpi">
+        <div class="pot-kpi-label">Totale potuitbetaling</div>
+        <div class="pot-kpi-val" style="color:#15803D;">€77K</div>
+        <div class="pot-kpi-sub">15,4M ✦ ingelost/maand</div>
+      </div>
+      <div class="pot-kpi">
+        <div class="pot-kpi-label">Maandsaldo pot</div>
+        <div class="pot-kpi-val" style="color:#1D4ED8;">€77K</div>
+        <div class="pot-kpi-sub">Inlossingsgraad 50%</div>
+      </div>
+      <div class="pot-kpi">
+        <div class="pot-kpi-label">Openstaande verplichting</div>
+        <div class="pot-kpi-val" style="color:#92400E;">€93,5K</div>
+        <div class="pot-kpi-sub">18,7M ✦ nog niet ingelost</div>
+      </div>
+    </div>
+
+    <!-- Tabel per merk -->
+    <div class="pot-tbl-wrap">
+      <div class="pot-tbl-head">
+        <div>
+          <div class="pot-tbl-title">Financiële positie per merk</div>
+          <div class="pot-tbl-sub">Bijdrage, ontvangst, netto positie en zelfgefinancierde extra kortingen — per maand</div>
+        </div>
+      </div>
+      <table class="ptbl">
+        <thead>
+          <tr>
+            <th>Merk</th>
+            <th>✦ Uitgegeven</th>
+            <th>Bijdrage pot</th>
+            <th>✦ Ontvangen</th>
+            <th>Ontvangen pot</th>
+            <th>Netto positie</th>
+            <th>Extra korting (eigen)</th>
+            <th>Totale loyaliteitskost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="brand-cell"><div class="bc-dot" style="background:#CC0000;"></div><strong>Colruyt LP</strong></div></td>
+            <td>12,8M ✦</td>
+            <td style="color:#CC0000;font-weight:700;">−€64.000</td>
+            <td>5,4M ✦</td>
+            <td style="color:#15803D;font-weight:700;">+€27.000</td>
+            <td><span class="netto-neg">−€37.000</span></td>
+            <td><span class="zelf-badge">€18.000</span></td>
+            <td><strong>€55.000</strong></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><div class="bc-dot" style="background:#E84010;"></div><strong>OKay</strong></div></td>
+            <td>4,8M ✦</td>
+            <td style="color:#CC0000;font-weight:700;">−€24.000</td>
+            <td>2,2M ✦</td>
+            <td style="color:#15803D;font-weight:700;">+€11.000</td>
+            <td><span class="netto-neg">−€13.000</span></td>
+            <td><span class="zelf-badge">€8.000</span></td>
+            <td><strong>€21.000</strong></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><div class="bc-dot" style="background:#2E7D32;"></div><strong>Bio-Planet</strong></div></td>
+            <td>4,2M ✦</td>
+            <td style="color:#CC0000;font-weight:700;">−€21.000</td>
+            <td>1,8M ✦</td>
+            <td style="color:#15803D;font-weight:700;">+€9.000</td>
+            <td><span class="netto-neg">−€12.000</span></td>
+            <td><span class="zelf-badge">€9.500</span></td>
+            <td><strong>€21.500</strong></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><div class="bc-dot" style="background:#00B4B8;"></div><strong>JIMS</strong></div></td>
+            <td>6,2M ✦</td>
+            <td style="color:#CC0000;font-weight:700;">−€31.000</td>
+            <td>4,4M ✦</td>
+            <td style="color:#15803D;font-weight:700;">+€22.000</td>
+            <td><span class="netto-neg">−€9.000</span></td>
+            <td><span class="zelf-badge">€24.000</span></td>
+            <td><strong>€33.000</strong></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><div class="bc-dot" style="background:#003087;"></div><strong>Newpharma</strong></div></td>
+            <td>2,8M ✦</td>
+            <td style="color:#CC0000;font-weight:700;">−€14.000</td>
+            <td>1,6M ✦</td>
+            <td style="color:#15803D;font-weight:700;">+€8.000</td>
+            <td><span class="netto-neg">−€6.000</span></td>
+            <td><span class="zelf-badge">€12.000</span></td>
+            <td><strong>€18.000</strong></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td><strong>Totaal CG groep</strong></td>
+            <td><strong>30,8M ✦</strong></td>
+            <td style="color:#CC0000;"><strong>−€154.000</strong></td>
+            <td><strong>15,4M ✦</strong></td>
+            <td style="color:#15803D;"><strong>+€77.000</strong></td>
+            <td><strong>−€77.000</strong></td>
+            <td><strong>€71.500</strong></td>
+            <td><strong>€148.500</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Extra kortingen toelichting -->
+    <div class="pot-self-card">
+      <div class="psc-title">🏷️ Zelfgefinancierde extra kortingen per merk</div>
+      <div class="psc-sub">Wanneer een merk bovenop de standaard Xtratjes-waarde (€5/1.000 ✦) een extra korting geeft bij betaling met punten, financiert dat merk dit volledig zelf — buiten de groepspot om. Dit is een strategische keuze van het merk om klanttrouw extra te stimuleren.</div>
+      <div class="psc-brands">
+        <div class="psc-brand">
+          <div class="psc-brand-name">Colruyt LP</div>
+          <div class="psc-brand-amount">€18.000</div>
+          <div class="psc-brand-sub">Kassabonus 10%</div>
+        </div>
+        <div class="psc-brand">
+          <div class="psc-brand-name">OKay</div>
+          <div class="psc-brand-amount">€8.000</div>
+          <div class="psc-brand-sub">Versafd. +5%</div>
+        </div>
+        <div class="psc-brand">
+          <div class="psc-brand-name">Bio-Planet</div>
+          <div class="psc-brand-amount">€9.500</div>
+          <div class="psc-brand-sub">Bio-bonus 15%</div>
+        </div>
+        <div class="psc-brand">
+          <div class="psc-brand-name">JIMS</div>
+          <div class="psc-brand-amount">€24.000</div>
+          <div class="psc-brand-sub">Abo-korting 20%</div>
+        </div>
+        <div class="psc-brand">
+          <div class="psc-brand-name">Newpharma</div>
+          <div class="psc-brand-amount">€12.000</div>
+          <div class="psc-brand-sub">Levering gratis</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-groepspot -->
+
+  <!-- CHALLENGES -->
+  <div id="panel-challenges" class="tab-panel">
+    <div class="builder mb28">
+      <div class="builder-title">⚡ Nieuwe cross-merk challenge instellen</div>
+      <div class="b-row">
+        <div>
+          <div class="b-label">Naam van de challenge</div>
+          <input class="b-input" type="text" value="Zomerse driemerken-challenge" id="cName" oninput="updChallenge()">
+        </div>
+        <div>
+          <div class="b-label">Type</div>
+          <select class="b-select" id="cType" onchange="updChallenge()">
+            <option>Bezoek 3 merken</option>
+            <option>Besteed voor totaalbedrag</option>
+            <option>Koop uit 3 categorieën</option>
+            <option>Seizoensactie</option>
+          </select>
+        </div>
+        <div>
+          <div class="b-label">Bonus Xtratjes</div>
+          <input class="b-input" type="number" value="50" id="cReward" min="10" max="500" step="10" oninput="updChallenge()">
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="b-label">Deelnemende merken</div>
+        <div class="brand-pills">
+          <div class="bp bp-colruyt on" onclick="toggleBP(this)">● Colruyt</div>
+          <div class="bp bp-okay" onclick="toggleBP(this)">● OKay</div>
+          <div class="bp bp-bio on" onclick="toggleBP(this)">● Bio-Planet</div>
+          <div class="bp bp-jims on" onclick="toggleBP(this)">● JIMS</div>
+          <div class="bp bp-new" onclick="toggleBP(this)">● Newpharma</div>
+        </div>
+      </div>
+      <div class="b-label">Zo ziet het eruit in de Xtra-app</div>
+      <div class="challenge-preview">
+        <div class="cp-icon">🏆</div>
+        <div>
+          <div class="cp-name" id="pvCName">Zomerse driemerken-challenge</div>
+          <div class="cp-desc" id="pvCDesc">Bezoek Colruyt, Bio-Planet én JIMS deze zomer en ontvang een mooie bonus!</div>
+        </div>
+        <div class="cp-reward">
+          <div class="cp-reward-val" id="pvCReward">★ 50</div>
+          <div class="cp-reward-lab">bonus Xtratjes</div>
+        </div>
+      </div>
+      <div class="builder-actions">
+        <button class="btn btn-ghost">Bewaar als concept</button>
+        <button class="btn btn-blue" onclick="alert('✓ Challenge opgeslagen en verstuurd naar de betrokken merkteams voor validatie!')">✓ Challenge activeren</button>
+      </div>
+    </div>
+
+    <div class="sec-head mb20"><div class="sec-title">Lopende en geplande challenges</div></div>
+    <div class="g3">
+      <div class="ch-card">
+        <div class="ch-band" style="background:linear-gradient(135deg,#1E5FA8,#6D28D9);">
+          <div class="ch-band-title">🏆 Driemerken Juni</div>
+          <div class="ch-band-desc">Bezoek 3 merken in juni — en ontvang je bonus</div>
+        </div>
+        <div class="ch-body">
+          <div class="ch-status s-active">● Actief — nog 26 dagen</div>
+          <div class="ch-reward">✦ 50 bonus Xtratjes</div>
+          <div class="ch-brands">
+            <span class="ch-brand-tag" style="background:rgba(204,0,0,0.1);color:#CC0000;">Colruyt</span>
+            <span class="ch-brand-tag" style="background:rgba(46,125,50,0.1);color:#2E7D32;">Bio-Planet</span>
+            <span class="ch-brand-tag" style="background:rgba(146,101,10,0.1);color:#92650A;">JIMS</span>
+          </div>
+          <div class="ch-stats">
+            <div class="chs"><div class="chs-val">142K</div><div class="chs-lab">Deelnemers</div></div>
+            <div class="chs"><div class="chs-val">38K</div><div class="chs-lab">Afgerond</div></div>
+            <div class="chs"><div class="chs-val">27%</div><div class="chs-lab">Slaagkans</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ch-card">
+        <div class="ch-band" style="background:linear-gradient(135deg,#92400E,#B45309);">
+          <div class="ch-band-title">💰 Jaarlijkse topspaarder</div>
+          <div class="ch-band-desc">Besteed €2.000 bij CG-merken dit jaar</div>
+        </div>
+        <div class="ch-body">
+          <div class="ch-status s-active">● Doorlopend 2026</div>
+          <div class="ch-reward">✦ 200 Xtratjes + Gold-status</div>
+          <div class="ch-brands">
+            <span class="ch-brand-tag" style="background:var(--bg);color:var(--text-muted);">Alle merken</span>
+          </div>
+          <div class="ch-stats">
+            <div class="chs"><div class="chs-val">324K</div><div class="chs-lab">Deelnemers</div></div>
+            <div class="chs"><div class="chs-val">124K</div><div class="chs-lab">Gold bereikt</div></div>
+            <div class="chs"><div class="chs-val">38%</div><div class="chs-lab">In progress</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ch-card">
+        <div class="ch-band" style="background:linear-gradient(135deg,#0055B3,#2E7D32);">
+          <div class="ch-band-title">💊 Back-to-school</div>
+          <div class="ch-band-desc">Schoolspullen bij Newpharma + ontbijt bij Colruyt</div>
+        </div>
+        <div class="ch-body">
+          <div class="ch-status s-planned">⏰ Start 25 augustus</div>
+          <div class="ch-reward">✦ 30 bonus Xtratjes</div>
+          <div class="ch-brands">
+            <span class="ch-brand-tag" style="background:rgba(0,85,179,0.1);color:#0055B3;">Newpharma</span>
+            <span class="ch-brand-tag" style="background:rgba(204,0,0,0.1);color:#CC0000;">Colruyt</span>
+          </div>
+          <div class="ch-stats">
+            <div class="chs"><div class="chs-val">—</div><div class="chs-lab">Nog niet gestart</div></div>
+            <div class="chs"><div class="chs-val">80K</div><div class="chs-lab">Geschat bereik</div></div>
+            <div class="chs"><div class="chs-val">—</div><div class="chs-lab">Slaagkans</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEZONDHEID CAMPAGNE — full-width highlight card -->
+    <div class="sec-head mb20" style="margin-top:32px;">
+      <div>
+        <div class="sec-title">🌿 Nieuwe groepscampagne — Gezond met Colruyt Group</div>
+        <div class="sec-sub">Cross-merk gezondheidsprogramma · Yoboo als beloningspartner</div>
+      </div>
+      <span style="background:#DCFCE7;color:#15803D;border:1px solid #BBF7D0;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;">Nieuw — in voorbereiding</span>
+    </div>
+
+    <div style="background:white;border:1.5px solid #BBF7D0;border-radius:16px;overflow:hidden;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.05);">
+      <!-- Green banner -->
+      <div style="background:linear-gradient(135deg,#15803D,#166534);padding:28px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <div style="font-size:48px;line-height:1;">🌿</div>
+        <div style="flex:1;min-width:220px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Groepscampagne 2026</div>
+          <div style="font-size:22px;font-weight:900;color:white;margin-bottom:6px;">Gezond met Colruyt Group</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.5;">Besteed €50 bij onze gezondheidsmerken en verdien een <strong style="color:white;">gratis Yoboo health coaching sessie</strong> (waarde €75) + 100 bonus-Xtratjes.</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:20px 24px;text-align:center;flex-shrink:0;">
+          <div style="font-size:28px;font-weight:900;color:white;">€75</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;">waarde reward</div>
+          <div style="font-size:13px;font-weight:700;color:#4ADE80;margin-top:6px;">+ 100 ✦ bonus</div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div style="padding:28px 32px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
+
+          <!-- Mechanic -->
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;color:#15803D;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Mechanics</div>
+            <div style="font-size:13px;color:#1A1A1A;line-height:1.6;">Klant spaart <strong>€50</strong> verspreid over min. <strong>2 gezondheidsmerken</strong> binnen 30 dagen. Elke aankoop telt mee via automatische koppeling met de Xtra-kaart.</div>
+          </div>
+
+          <!-- Merken -->
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;color:#15803D;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Deelnemende merken</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;"><span style="background:rgba(204,0,0,0.1);color:#CC0000;padding:2px 8px;border-radius:6px;">Colruyt</span> Gezonde voeding &amp; vers</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;"><span style="background:rgba(46,125,50,0.1);color:#2E7D32;padding:2px 8px;border-radius:6px;">Bio-Planet</span> Bio &amp; plantaardig</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;"><span style="background:rgba(146,101,10,0.1);color:#92650A;padding:2px 8px;border-radius:6px;">JIMS Fitness</span> Beweging &amp; sport</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;"><span style="background:rgba(0,85,179,0.1);color:#0055B3;padding:2px 8px;border-radius:6px;">Newpharma</span> Vitamines &amp; supplements</div>
+            </div>
+          </div>
+
+          <!-- Reward Yoboo -->
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;color:#15803D;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Reward — Yoboo Partner</div>
+            <div style="font-size:26px;margin-bottom:8px;">🧘</div>
+            <div style="font-size:13px;color:#1A1A1A;line-height:1.6;"><strong>Yoboo Health Coaching</strong> is onze nieuwe gezondheidszorgpartner. De klant ontgrendelt een gratis persoonlijke coaching sessie (60 min.) via de Xtra-app. Yoboo co-financiert 50% van de reward.</div>
+            <div style="margin-top:10px;background:#DCFCE7;border-radius:6px;padding:8px;font-size:11px;font-weight:700;color:#15803D;">💰 Yoboo draagt €37,50/inlossing bij</div>
+          </div>
+
+        </div>
+
+        <!-- Business case strip -->
+        <div style="background:#F5F4F1;border-radius:10px;padding:16px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#15803D;">210K</div><div style="font-size:11px;color:#888;margin-top:2px;">Geschat bereik</div></div>
+          <div style="width:1px;height:36px;background:#E0DDD8;"></div>
+          <div style="text-align:center;"><div style="font-size:18px;font-weight:900;">35%</div><div style="font-size:11px;color:#888;margin-top:2px;">Verwachte slaagkans</div></div>
+          <div style="width:1px;height:36px;background:#E0DDD8;"></div>
+          <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#15803D;">+€18</div><div style="font-size:11px;color:#888;margin-top:2px;">Extra besteding/klant</div></div>
+          <div style="width:1px;height:36px;background:#E0DDD8;"></div>
+          <div style="text-align:center;"><div style="font-size:18px;font-weight:900;">€37,50</div><div style="font-size:11px;color:#888;margin-top:2px;">Yoboo co-fin./klant</div></div>
+          <div style="width:1px;height:36px;background:#E0DDD8;"></div>
+          <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#1E5FA8;">30 dgn</div><div style="font-size:11px;color:#888;margin-top:2px;">Campagneduur</div></div>
+          <div style="margin-left:auto;">
+            <button class="btn btn-blue" onclick="alert('✓ Gezondheids-campagne verstuurd naar alle merkteams voor validatie!')">Campagne activeren →</button>
+          </div>
+        </div>
+
+        <div class="tip-box" style="margin-top:16px;">💡 <strong>Strategische meerwaarde:</strong> Deze campagne positioneert Colruyt Group als gezondheidspartner van de klant — niet alleen als retailer. Yoboo als externe partner versterkt de geloofwaardigheid van het gezondheidsplatform en opent de deur voor toekomstige health-as-a-service diensten.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIERS -->
+  <div id="panel-tiers" class="tab-panel">
+    <div class="g3 mb28">
+      <div class="tier-card t-bronze">
+        <div class="tier-icon">🥉</div>
+        <div class="tier-name">Bronze</div>
+        <div class="tier-count" style="color:#92400E;"><strong>2.99M</strong> leden</div>
+        <div class="tier-benefits">
+          <div class="tier-benefit"><div class="tier-check">✓</div>1 Xtratje per €10 besteed</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Toegang tot merk-campagnes</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Maandelijkse nieuwsbrief</div>
+          <div class="tier-benefit tier-off"><div class="tier-check">—</div>Dubbele punten in het weekend</div>
+          <div class="tier-benefit tier-off"><div class="tier-check">—</div>Vroeg toegang tot acties</div>
+        </div>
+        <div class="tier-threshold">Startpunt — <strong>gratis bij aanmelding</strong></div>
+      </div>
+
+      <div class="tier-card t-silver">
+        <div class="tier-icon">🥈</div>
+        <div class="tier-name">Silver</div>
+        <div class="tier-count" style="color:#4B5563;"><strong>128K</strong> leden</div>
+        <div class="tier-benefits">
+          <div class="tier-benefit"><div class="tier-check">✓</div>1,5x Xtratjes op alles</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Alle campagnes toegankelijk</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Dubbele punten in het weekend</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Vroeg toegang tot nieuwe acties</div>
+          <div class="tier-benefit tier-off"><div class="tier-check">—</div>VIP-events en exclusieve deals</div>
+        </div>
+        <div class="tier-threshold">Bereik: <strong>€500/jaar</strong> bij CG-merken, of 2+ merken bezoeken</div>
+      </div>
+
+      <div class="tier-card t-gold">
+        <div class="tier-icon">👑</div>
+        <div class="tier-name">Gold</div>
+        <div class="tier-count" style="color:var(--gold);"><strong>124K</strong> leden</div>
+        <div class="tier-benefits">
+          <div class="tier-benefit"><div class="tier-check">✓</div>2x Xtratjes op alles</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Exclusieve Gold-campagnes</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>VIP-events bij alle merken</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Jaarlijks verrassingscadeau</div>
+          <div class="tier-benefit"><div class="tier-check">✓</div>Voorrangsservice en support</div>
+        </div>
+        <div class="tier-threshold">Bereik: <strong>€2.000/jaar</strong> bij CG-merken, of 4+ merken actief bezoeken</div>
+      </div>
+    </div>
+
+    <div class="sec-head mb20"><div class="sec-title">Wie zit waar — en wat is het potentieel?</div></div>
+    <div class="data-card">
+      <table class="tbl">
+        <thead><tr><th>Segment</th><th>Leden</th><th>Gem. Xtratjes/maand</th><th>Gem. besteding/jaar</th><th>Merken gebruikt</th><th>Aanbevolen aanpak</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill p-gold">👑 Gold</span></td><td><strong>124K</strong></td><td style="color:var(--gold);">★ 48</td><td>€3.240</td><td>4,2 merken</td><td><span class="pill p-retain">Behoud — focus op VIP</span></td></tr>
+          <tr><td><span class="pill p-silver">🥈 Silver</span></td><td><strong>128K</strong></td><td style="color:var(--gold);">★ 22</td><td>€1.120</td><td>2,8 merken</td><td><span class="pill p-gold">Push richting Gold</span></td></tr>
+          <tr><td><span class="pill p-bronze">🥉 Bronze actief</span></td><td><strong>380K</strong></td><td style="color:var(--gold);">★ 11</td><td>€680</td><td>1,4 merken</td><td><span class="pill p-potential">Cross-merk activatie</span></td></tr>
+          <tr><td><span class="pill p-bronze" style="opacity:0.6;">🥉 Bronze slapend</span></td><td><strong>2.61M</strong></td><td style="color:var(--text-muted);">★ 3</td><td>€180</td><td>1,0 merk</td><td><span class="pill p-awake">Wakker schudden</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div id="panel-analytics" class="tab-panel">
+    <div class="g2 mb28">
+      <div class="insight-card">
+        <div class="sec-title" style="margin-bottom:16px;">Sterkste cross-merk paren</div>
+        <div class="mini-bar-row"><div class="mini-bar-label">Colruyt → JIMS</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:82%;background:var(--colruyt);opacity:0.7;"></div></div><div class="mini-bar-val">34.2K</div></div>
+        <div class="mini-bar-row"><div class="mini-bar-label">OKay → Newpharma</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:69%;background:var(--okay);opacity:0.7;"></div></div><div class="mini-bar-val">28.7K</div></div>
+        <div class="mini-bar-row"><div class="mini-bar-label">Bio-Planet → Colruyt</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:44%;background:var(--bioplanet);opacity:0.7;"></div></div><div class="mini-bar-val">18.4K</div></div>
+        <div class="mini-bar-row"><div class="mini-bar-label">Colruyt → Newpharma</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:34%;background:var(--colruyt);opacity:0.7;"></div></div><div class="mini-bar-val">14.1K</div></div>
+        <div class="mini-bar-row"><div class="mini-bar-label">JIMS → Bio-Planet</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:24%;background:var(--jims);opacity:0.7;"></div></div><div class="mini-bar-val">9.8K</div></div>
+        <div class="tip-box" style="margin-top:14px;">💡 Sterkst duo: <strong>Colruyt ↔ JIMS</strong> — ideaal startpunt voor gerichte campagnes</div>
+      </div>
+
+      <div class="insight-card">
+        <div class="sec-title" style="margin-bottom:16px;">Groei Xtratjes in omloop</div>
+        <div style="display:flex;align-items:flex-end;gap:6px;height:100px;margin-bottom:12px;">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--text-muted);">5.1M</div><div style="width:100%;height:27%;background:var(--xtra);border-radius:3px 3px 0 0;opacity:0.5;"></div><div style="font-size:9px;color:var(--text-muted);">Jan</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--text-muted);">7.2M</div><div style="width:100%;height:39%;background:var(--xtra);border-radius:3px 3px 0 0;opacity:0.6;"></div><div style="font-size:9px;color:var(--text-muted);">Feb</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--text-muted);">9.8M</div><div style="width:100%;height:52%;background:var(--xtra);border-radius:3px 3px 0 0;opacity:0.65;"></div><div style="font-size:9px;color:var(--text-muted);">Mrt</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--text-muted);">11.4M</div><div style="width:100%;height:61%;background:var(--xtra);border-radius:3px 3px 0 0;opacity:0.7;"></div><div style="font-size:9px;color:var(--text-muted);">Apr</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--text-muted);">14.2M</div><div style="width:100%;height:76%;background:var(--xtra);border-radius:3px 3px 0 0;opacity:0.8;"></div><div style="font-size:9px;color:var(--text-muted);">Mei</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="font-size:9px;color:var(--gold);font-weight:700;">18.7M</div><div style="width:100%;height:100%;background:var(--gold);border-radius:3px 3px 0 0;"></div><div style="font-size:9px;color:var(--gold);font-weight:700;">Jun</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);">18.7M Xtratjes in omloop — <strong style="color:var(--text);">↑ 267% dit jaar</strong></div>
+      </div>
+    </div>
+
+    <div class="sec-head mb20"><div class="sec-title">Wat raden we aan?</div></div>
+    <div class="insight-card">
+      <div class="ins-tip ins-green">
+        <div class="ins-icon">💡</div>
+        <div><div class="ins-title">Haal slapende Bronze-leden uit hun slaap</div><div class="ins-desc">2.61 miljoen Bronze-leden kopen maar bij 1 merk. Een simpele campagne — "Ontdek je 2e merk, krijg 5 Xtratjes cadeau" — kan het cross-merk bezoek met 15% doen stijgen.</div></div>
+      </div>
+      <div class="ins-tip ins-gold">
+        <div class="ins-icon">🎯</div>
+        <div><div class="ins-title">JIMS als magneet voor nieuwe cross-merk klanten</div><div class="ins-desc">JIMS trekt de meeste Xtratjes van andere merken aan (67%). Een "Eerste JIMS-bezoek"-deal voor Colruyt-klanten — met 20 Xtratjes als welkomstcadeau — kost weinig maar opent een nieuwe markt.</div></div>
+      </div>
+      <div class="ins-tip ins-blue">
+        <div class="ins-icon">👑</div>
+        <div><div class="ins-title">Houd je Gold-leden vast met meer dan kortingen</div><div class="ins-desc">Gold-leden besteden €3.240 per jaar bij gemiddeld 4,2 merken. Een exclusief Gold-event — bv. een privéproeverij of sportdag bij JIMS — versterkt de band meer dan extra Xtratjes alleen.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUDGE ENGINE PANEL -->
+  <div id="panel-nudge" class="tab-panel">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#0F0A1E,#1A0F38);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#A78BFA;margin-bottom:8px;">🎯 Hyperpersonalisatie Engine</div>
+        <div style="font-size:24px;font-weight:900;color:white;letter-spacing:-0.4px;margin-bottom:6px;">Eén systeem. Elke klant anders.</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.6;">De nudge engine analyseert 3,2M klantprofielen continu. Klanten die meer van hetzelfde zouden krijgen, worden automatisch uitgefilterd. Alleen relevante, tijdige nudges passeren.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex-shrink:0;">
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 18px;text-align:center;">
+          <div style="font-size:22px;font-weight:900;color:white;">847K</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Actieve nudge-profielen</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 18px;text-align:center;">
+          <div style="font-size:22px;font-weight:900;color:#86EFAC;">34%</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Nudge → conversie</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 18px;text-align:center;">
+          <div style="font-size:22px;font-weight:900;color:#FDE68A;">€4,20</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Gem. mand­groei per nudge</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 18px;text-align:center;">
+          <div style="font-size:22px;font-weight:900;color:#C4B5FD;">12</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Actieve nudge-regels</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment tabel + signalen logica -->
+    <div class="g2 mb20">
+
+      <!-- Segmenten -->
+      <div class="card" style="padding:20px;">
+        <div class="sec-head"><div><div class="sec-title">Actieve segmenten</div><div class="sec-sub">Auto-gegenereerd op basis van gedragspatronen</div></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#F3EFFC;border:1px solid rgba(109,40,217,0.15);border-radius:10px;">
+            <div style="font-size:20px;">🛒</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;">Verzadigde single-brand klanten</div>
+              <div style="font-size:12px;color:var(--text-muted);">1 merk, hoog spend, 0% cross-brand</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:800;color:var(--xtra);">312K</div>
+              <div style="font-size:10px;color:var(--text-muted);">klanten</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#FFF7ED;border:1px solid rgba(234,88,12,0.15);border-radius:10px;">
+            <div style="font-size:20px;">🥦</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;">Smal assortiment kopers</div>
+              <div style="font-size:12px;color:var(--text-muted);">Minder dan 4 productcategorieën actief</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:800;color:#EA580C;">198K</div>
+              <div style="font-size:10px;color:var(--text-muted);">klanten</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#EFF6FF;border:1px solid rgba(37,99,235,0.15);border-radius:10px;">
+            <div style="font-size:20px;">🔍</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;">Gezondheids-geïnteresseerden</div>
+              <div style="font-size:12px;color:var(--text-muted);">Zoekgedrag: gezond, bio, glutenvrij, sport</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:800;color:#2563EB;">87K</div>
+              <div style="font-size:10px;color:var(--text-muted);">klanten</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#F0FDF4;border:1px solid rgba(22,163,74,0.15);border-radius:10px;">
+            <div style="font-size:20px;">🌱</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;">Duurzaamheids-profielen</div>
+              <div style="font-size:12px;color:var(--text-muted);">Green/Champion tier, bomen gesponsord</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:800;color:#16A34A;">142K</div>
+              <div style="font-size:10px;color:var(--text-muted);">klanten</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#FFFBEB;border:1px solid rgba(180,83,9,0.15);border-radius:10px;">
+            <div style="font-size:20px;">💤</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;">Slapende Xtra-kaarthouders</div>
+              <div style="font-size:12px;color:var(--text-muted);">Kaart actief, geen aankoop >90 dagen</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:800;color:#B45309;">108K</div>
+              <div style="font-size:10px;color:var(--text-muted);">klanten</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Nudge regels -->
+      <div class="card" style="padding:20px;">
+        <div class="sec-head"><div><div class="sec-title">Nudge-regels (actief)</div><div class="sec-sub">Als X → dan nudge Y richting merk Z</div></div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:0;">
+              <div style="background:rgba(232,64,16,0.08);padding:12px 14px;border-right:1px solid var(--border);display:flex;align-items:center;font-size:18px;">🛒</div>
+              <div style="padding:10px 14px;">
+                <div style="font-size:12px;font-weight:700;margin-bottom:2px;">OKay-loyalist zonder cross-brand</div>
+                <div style="font-size:11px;color:var(--text-muted);">Spend >€800/j, 0 andere CG-merken → JIMS dagpas nudge</div>
+              </div>
+              <div style="padding:10px 14px;display:flex;align-items:center;"><span style="background:#ECFDF5;color:#16A34A;border:1px solid #BBF7D0;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;">ACTIEF</span></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:0;">
+              <div style="background:rgba(204,0,0,0.08);padding:12px 14px;border-right:1px solid var(--border);display:flex;align-items:center;font-size:18px;">🍺</div>
+              <div style="padding:10px 14px;">
+                <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Smal assortiment Colruyt</div>
+                <div style="font-size:11px;color:var(--text-muted);">&lt;3 categorieën, versafdeling nooit bezocht → bakkerij spaaractie</div>
+              </div>
+              <div style="padding:10px 14px;display:flex;align-items:center;"><span style="background:#ECFDF5;color:#16A34A;border:1px solid #BBF7D0;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;">ACTIEF</span></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:0;">
+              <div style="background:rgba(0,85,179,0.08);padding:12px 14px;border-right:1px solid var(--border);display:flex;align-items:center;font-size:18px;">🔍</div>
+              <div style="padding:10px 14px;">
+                <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Gezondheids-zoekgedrag</div>
+                <div style="font-size:11px;color:var(--text-muted);">Zoekopdrachten: glutenvrij/bio/sport, 0 Newpharma → supplement nudge</div>
+              </div>
+              <div style="padding:10px 14px;display:flex;align-items:center;"><span style="background:#ECFDF5;color:#16A34A;border:1px solid #BBF7D0;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;">ACTIEF</span></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:0;">
+              <div style="background:rgba(46,125,50,0.08);padding:12px 14px;border-right:1px solid var(--border);display:flex;align-items:center;font-size:18px;">🌳</div>
+              <div style="padding:10px 14px;">
+                <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Duurzaamheids-profiel</div>
+                <div style="font-size:11px;color:var(--text-muted);">Green+ tier OF boom gesponsord, Bio-Planet niet in patroon → bio-weekbox nudge</div>
+              </div>
+              <div style="padding:10px 14px;display:flex;align-items:center;"><span style="background:#ECFDF5;color:#16A34A;border:1px solid #BBF7D0;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;">ACTIEF</span></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;opacity:0.6;">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:0;">
+              <div style="background:var(--bg);padding:12px 14px;border-right:1px solid var(--border);display:flex;align-items:center;font-size:18px;">💤</div>
+              <div style="padding:10px 14px;">
+                <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Win-back slapende kaarten</div>
+                <div style="font-size:11px;color:var(--text-muted);">Geen aankoop >90 dgn → persoonlijk heractivatie-aanbod</div>
+              </div>
+              <div style="padding:10px 14px;display:flex;align-items:center;"><span style="background:var(--bg);color:var(--text-muted);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;">GEPLAND</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Signalen → Nudge flow diagram -->
+    <div class="card mb20" style="padding:24px;">
+      <div class="sec-head"><div><div class="sec-title">Van data-signaal naar nudge</div><div class="sec-sub">Hoe de engine beslist welke klant welke nudge krijgt</div></div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch;text-align:center;">
+
+        <div style="padding:16px;border-right:1px dashed var(--border);">
+          <div style="font-size:28px;margin-bottom:10px;">🛒</div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Aankoopdata</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Welk merk, welke categorie, hoe vaak, hoeveel</div>
+        </div>
+
+        <div style="padding:16px;border-right:1px dashed var(--border);">
+          <div style="font-size:28px;margin-bottom:10px;">🔍</div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;">App-gedrag</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Zoekopdrachten, browsed rubrieken, klik­gedrag</div>
+        </div>
+
+        <div style="padding:16px;border-right:1px dashed var(--border);">
+          <div style="font-size:28px;margin-bottom:10px;">🌱</div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Impact-profiel</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Duurzaamheidstier, donaties, fiets, Greenscore-aankopen</div>
+        </div>
+
+        <div style="padding:16px;background:var(--xtra-pale);border-radius:10px;margin:4px;border:1px solid rgba(109,40,217,0.15);">
+          <div style="font-size:28px;margin-bottom:10px;">🧠</div>
+          <div style="font-size:12px;font-weight:700;color:var(--xtra);margin-bottom:6px;">Nudge engine</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Detecteert kloof: wat ontbreekt in het profiel dat wél past bij het gedrag?</div>
+        </div>
+
+        <div style="padding:16px;border-left:1px dashed var(--border);">
+          <div style="font-size:28px;margin-bottom:10px;">✉️</div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Gepersonaliseerde nudge</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Push, in-app, email of in-store — per klant, per kanaal</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Privacy note -->
+    <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px;">
+      <div style="font-size:22px;flex-shrink:0;">🔐</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#15803D;margin-bottom:4px;">Privacy by design</div>
+        <div style="font-size:13px;color:#166534;line-height:1.55;">Enkel 1e-partijdata van de Xtra-kaart — geen cookies, geen externe data-inkoop. Klanten zien hun eigen profiel in de Xtra app en kunnen elk segment opt-outen. Alle nudge-regels worden gevalideerd door de Data Privacy Officer voor activatie.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function toonTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleBP(el) {
+  el.classList.toggle('on');
+  updChallenge();
+}
+function updChallenge() {
+  const name = document.getElementById('cName').value || 'Nieuwe challenge';
+  const rew = document.getElementById('cReward').value || 50;
+  const actief = [...document.querySelectorAll('.bp.on')].map(b => b.textContent.replace('● ',''));
+  document.getElementById('pvCName').textContent = name;
+  document.getElementById('pvCReward').textContent = '★ ' + rew;
+  document.getElementById('pvCDesc').textContent = actief.length > 0
+    ? 'Bezoek ' + actief.join(', ') + ' en ontvang je bonus!'
+    : 'Selecteer minstens één merk om de challenge te activeren.';
+}
+</script>
+
+</body>
+</html>
