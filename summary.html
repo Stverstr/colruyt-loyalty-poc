@@ -463,146 +463,135 @@
     <div class="section-title">Merken in the lead. Groep maakt het samen beleven mogelijk.</div>
     <p class="section-sub">Dit is de meest fundamentele keuze in het concept: de merken staan in de lead om hun merkbelofte waar te maken, terwijl de groep via een gemeenschappelijke techniek zorgt dat klanten van alle merken samen kunnen profiteren.</p>
 
-    <!-- Slide 6 visual: three-layer diagram -->
-    <div style="margin-bottom:40px;">
+    <!-- SVG Hub-and-spoke diagram -->
+    <div style="background:#0F0A1E;border-radius:24px;overflow:hidden;margin-bottom:0;">
 
-      <!-- Top: Klant -->
-      <div style="display:flex;justify-content:center;margin-bottom:0;">
-        <div style="background:#0F0A1E;border-radius:20px 20px 0 0;padding:28px 40px;text-align:center;max-width:700px;width:100%;border-bottom:2px dashed rgba(167,139,250,0.3);">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#A78BFA;margin-bottom:12px;">De klant ervaart</div>
-          <div style="font-size:22px;font-weight:900;color:white;margin-bottom:10px;letter-spacing:-0.3px;">"Ik beleef de merken apart,<br>maar ik profiteer van hen samen"</div>
-          <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px;">
-            <span style="background:rgba(204,0,0,0.2);border:1px solid rgba(204,0,0,0.35);color:#FCA5A5;padding:5px 14px;border-radius:100px;font-size:12px;font-weight:700;">Colruyt</span>
-            <span style="background:rgba(232,64,16,0.2);border:1px solid rgba(232,64,16,0.35);color:#FCA5A5;padding:5px 14px;border-radius:100px;font-size:12px;font-weight:700;">OKay</span>
-            <span style="background:rgba(46,125,50,0.2);border:1px solid rgba(46,125,50,0.35);color:#86EFAC;padding:5px 14px;border-radius:100px;font-size:12px;font-weight:700;">Bio-Planet</span>
-            <span style="background:rgba(201,162,39,0.2);border:1px solid rgba(201,162,39,0.35);color:#FEF08A;padding:5px 14px;border-radius:100px;font-size:12px;font-weight:700;">JIMS</span>
-            <span style="background:rgba(0,85,179,0.2);border:1px solid rgba(0,85,179,0.35);color:#93C5FD;padding:5px 14px;border-radius:100px;font-size:12px;font-weight:700;">Newpharma</span>
+      <!-- Customer bar -->
+      <div style="padding:28px 40px;border-bottom:1px solid rgba(255,255,255,0.07);text-align:center;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.4);margin-bottom:10px;">🛍️ De Klant</div>
+        <div style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.3px;">"Ik beleef de merken apart — <span style="color:#C4B5FD;">maar profiteer van hen samen</span>"</div>
+      </div>
+
+      <!-- SVG diagram -->
+      <div style="padding:16px 24px 8px;">
+        <svg viewBox="0 0 800 480" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#2D1060"/>
+              <stop offset="100%" stop-color="#0D0820"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Glow rings behind hub -->
+          <circle cx="400" cy="240" r="85" fill="rgba(109,40,217,0.06)"/>
+          <circle cx="400" cy="240" r="68" fill="rgba(109,40,217,0.10)"/>
+
+          <!-- Connection paths -->
+          <path id="p-jims" d="M 400 85 L 400 240" stroke="rgba(201,162,39,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 6"/>
+          <path id="p-np"   d="M 547 192 Q 473 216 400 240" stroke="rgba(0,85,179,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 6"/>
+          <path id="p-clp"  d="M 491 365 Q 445 302 400 240" stroke="rgba(204,0,0,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 6"/>
+          <path id="p-ok"   d="M 309 365 Q 354 302 400 240" stroke="rgba(232,64,16,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 6"/>
+          <path id="p-bp"   d="M 253 192 Q 326 216 400 240" stroke="rgba(46,125,50,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 6"/>
+
+          <!-- EARN DOTS: brand color, brand → hub -->
+          <circle r="4.5" fill="#C9A227"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#p-jims"/></animateMotion></circle>
+          <circle r="4.5" fill="#C9A227"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0.73s"><mpath href="#p-jims"/></animateMotion></circle>
+          <circle r="4.5" fill="#C9A227"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.47s"><mpath href="#p-jims"/></animateMotion></circle>
+
+          <circle r="4.5" fill="#4A8FD4"><animateMotion dur="2.5s" repeatCount="indefinite" begin="0.2s"><mpath href="#p-np"/></animateMotion></circle>
+          <circle r="4.5" fill="#4A8FD4"><animateMotion dur="2.5s" repeatCount="indefinite" begin="1.03s"><mpath href="#p-np"/></animateMotion></circle>
+          <circle r="4.5" fill="#4A8FD4"><animateMotion dur="2.5s" repeatCount="indefinite" begin="1.87s"><mpath href="#p-np"/></animateMotion></circle>
+
+          <circle r="4.5" fill="#CC0000"><animateMotion dur="2.3s" repeatCount="indefinite" begin="0.4s"><mpath href="#p-clp"/></animateMotion></circle>
+          <circle r="4.5" fill="#CC0000"><animateMotion dur="2.3s" repeatCount="indefinite" begin="1.17s"><mpath href="#p-clp"/></animateMotion></circle>
+          <circle r="4.5" fill="#CC0000"><animateMotion dur="2.3s" repeatCount="indefinite" begin="1.93s"><mpath href="#p-clp"/></animateMotion></circle>
+
+          <circle r="4.5" fill="#E84010"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.6s"><mpath href="#p-ok"/></animateMotion></circle>
+          <circle r="4.5" fill="#E84010"><animateMotion dur="2.4s" repeatCount="indefinite" begin="1.4s"><mpath href="#p-ok"/></animateMotion></circle>
+          <circle r="4.5" fill="#E84010"><animateMotion dur="2.4s" repeatCount="indefinite" begin="2.2s"><mpath href="#p-ok"/></animateMotion></circle>
+
+          <circle r="4.5" fill="#4CAF50"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.1s"><mpath href="#p-bp"/></animateMotion></circle>
+          <circle r="4.5" fill="#4CAF50"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.97s"><mpath href="#p-bp"/></animateMotion></circle>
+          <circle r="4.5" fill="#4CAF50"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.83s"><mpath href="#p-bp"/></animateMotion></circle>
+
+          <!-- BURN DOTS: purple, hub → brand -->
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-jims"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3s" repeatCount="indefinite" begin="2.6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-jims"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3.2s" repeatCount="indefinite" begin="0.3s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-np"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3.2s" repeatCount="indefinite" begin="2.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-np"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="2.8s" repeatCount="indefinite" begin="0.9s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-clp"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="2.8s" repeatCount="indefinite" begin="2.3s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-clp"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3.1s" repeatCount="indefinite" begin="1.6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-ok"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3.1s" repeatCount="indefinite" begin="2.9s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-ok"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3s" repeatCount="indefinite" begin="0.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-bp"/></animateMotion></circle>
+          <circle r="3.5" fill="#A78BFA" opacity="0.9"><animateMotion dur="3s" repeatCount="indefinite" begin="2.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-bp"/></animateMotion></circle>
+
+          <!-- Xtratjes hub -->
+          <circle cx="400" cy="240" r="55" fill="url(#hubGrad)" filter="url(#glow)"/>
+          <circle cx="400" cy="240" r="55" fill="none" stroke="#6D28D9" stroke-width="1.5"/>
+          <text x="400" y="226" fill="#A78BFA" font-family="Arial,sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="2">XTRA</text>
+          <text x="400" y="248" fill="white" font-family="Arial,sans-serif" font-size="24" font-weight="900" text-anchor="middle">✦</text>
+          <text x="400" y="266" fill="rgba(196,181,253,0.55)" font-family="Arial,sans-serif" font-size="9" text-anchor="middle" letter-spacing="1.5">PUNTEN</text>
+
+          <!-- JIMS (top) -->
+          <circle cx="400" cy="85" r="33" fill="#B8860B" filter="url(#glow)"/>
+          <text x="400" y="90" fill="white" font-family="Arial Black,sans-serif" font-size="12" font-weight="900" text-anchor="middle" dominant-baseline="central">JIMS</text>
+          <text x="400" y="36" fill="#D4A017" font-family="Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle">Fitness</text>
+
+          <!-- Newpharma (upper-right) -->
+          <circle cx="547" cy="192" r="33" fill="#0055B3" filter="url(#glow)"/>
+          <text x="547" y="189" fill="white" font-family="Arial,sans-serif" font-size="9" font-weight="900" text-anchor="middle">NEW-</text>
+          <text x="547" y="202" fill="rgba(150,200,255,0.9)" font-family="Arial,sans-serif" font-size="9" text-anchor="middle">PHARMA</text>
+          <text x="619" y="175" fill="#4A8FD4" font-family="Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle">Newpharma</text>
+
+          <!-- Colruyt (lower-right) -->
+          <circle cx="491" cy="365" r="33" fill="#CC0000" filter="url(#glow)"/>
+          <text x="491" y="369" fill="white" font-family="Arial Black,sans-serif" font-size="9.5" font-weight="900" text-anchor="middle" dominant-baseline="central">COLRUYT</text>
+          <text x="535" y="414" fill="#FF8080" font-family="Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle">Colruyt</text>
+
+          <!-- OKay (lower-left) -->
+          <circle cx="309" cy="365" r="33" fill="#D94010" filter="url(#glow)"/>
+          <text x="309" y="369" fill="white" font-family="Arial Black,sans-serif" font-size="12" font-weight="900" text-anchor="middle" dominant-baseline="central">OKay</text>
+          <text x="266" y="414" fill="#FF9060" font-family="Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle">OKay</text>
+
+          <!-- Bio-Planet (upper-left) -->
+          <circle cx="253" cy="192" r="33" fill="#2E7D32" filter="url(#glow)"/>
+          <text x="253" y="189" fill="white" font-family="Arial,sans-serif" font-size="9" font-weight="900" text-anchor="middle">BIO-</text>
+          <text x="253" y="202" fill="rgba(100,220,100,0.9)" font-family="Arial,sans-serif" font-size="9" text-anchor="middle">PLANET</text>
+          <text x="181" y="175" fill="#4CAF50" font-family="Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle">Bio-Planet</text>
+
+          <!-- Legend -->
+          <circle cx="240" cy="455" r="5" fill="#C9A227"/>
+          <text x="252" y="459" fill="rgba(255,255,255,0.4)" font-family="Arial,sans-serif" font-size="11" dominant-baseline="middle">merkeigen kleur = earn (punten naar hub)</text>
+          <circle cx="510" cy="455" r="5" fill="#A78BFA"/>
+          <text x="522" y="459" fill="rgba(255,255,255,0.4)" font-family="Arial,sans-serif" font-size="11" dominant-baseline="middle">paars = burn (groep keert punten uit)</text>
+        </svg>
+      </div>
+
+      <!-- Bottom split -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,0.07);">
+        <div style="padding:22px 32px;border-right:1px solid rgba(255,255,255,0.07);">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#FDE68A;margin-bottom:10px;">🏪 Merken — In the lead</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#FDE68A;flex-shrink:0;">→</span>Self-service earn schemes — elk merk kiest zelf welk gedrag beloond wordt</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#FDE68A;flex-shrink:0;">→</span>Eigen business case, financiering en burn schemes</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#FDE68A;flex-shrink:0;">→</span>Eigen marketing, communicatie en kanalen</div>
+          </div>
+        </div>
+        <div style="padding:22px 32px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#A78BFA;margin-bottom:10px;">🌐 Colruyt Group — Enabler</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">→</span>White label tech platform — de ✦ Xtratjes motor</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">→</span>Centrale pot, wisselkoers en spelregels</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">→</span>Consultancy vakmanschap + cross-brand sturing</div>
           </div>
         </div>
       </div>
 
-      <!-- Middle: Brands row -->
-      <div style="display:flex;max-width:700px;margin:0 auto;gap:2px;">
-        <!-- Left brand block -->
-        <div style="flex:1;background:linear-gradient(135deg,#FEF9EC,#FEF3C7);border:1.5px solid #FDE68A;border-top:none;border-right:none;padding:24px 20px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);margin-bottom:8px;">De Merken</div>
-          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px;">Staan in the lead</div>
-          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;">
-            Elk merk maakt zijn eigen merkbelofte waar. Eigen loyalty schemes, eigen invulling, eigen business case. Eigen communicatie en kanalen. Zelf beslissen, zelf betalen, zelf profiteren.
-          </div>
-          <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gold);font-weight:600;"><span>→</span> Self-service earn schemes</div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gold);font-weight:600;"><span>→</span> Eigen burn opportunities</div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gold);font-weight:600;"><span>→</span> Eigen marketing & kanalen</div>
-          </div>
-        </div>
-
-        <!-- Center: vertical label -->
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--border);width:2px;flex-shrink:0;position:relative;">
-          <div style="background:var(--text);color:white;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;padding:6px 10px;border-radius:4px;white-space:nowrap;writing-mode:horizontal-tb;position:absolute;">✦ Xtratjes</div>
-        </div>
-
-        <!-- Right group block -->
-        <div style="flex:1;background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border:1.5px solid #C7D2FE;border-top:none;border-left:none;padding:24px 20px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#4338CA;margin-bottom:8px;">Colruyt Group</div>
-          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px;">Vakmanschap &amp; Tooling</div>
-          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;">
-            De groep ondersteunt met vakmanschap en technologie. Gemeenschappelijke loyalty techniek, spelregels, financiële pot beheer, en consultancy ten dienste van elk merk.
-          </div>
-          <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:#4338CA;font-weight:600;"><span>→</span> White label tech platform</div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:#4338CA;font-weight:600;"><span>→</span> Centrale financiële pot</div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:#4338CA;font-weight:600;"><span>→</span> Consultancy vakmanschap</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom: Common tech layer -->
-      <div style="display:flex;justify-content:center;">
-        <div style="background:linear-gradient(135deg,#6D28D9,#9333EA);border-radius:0 0 20px 20px;padding:20px 40px;max-width:700px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.6);margin-bottom:4px;">Gemeenschappelijke Loyalty Techniek</div>
-            <div style="font-size:15px;font-weight:800;color:white;">✦ Xtratjes — de universele taal over alle merken</div>
-          </div>
-          <div style="display:flex;gap:16px;flex-shrink:0;">
-            <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:white;">+</div><div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.8px;">Earn</div></div>
-            <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#C4B5FD;">250</div><div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.8px;">Punten</div></div>
-            <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:white;">−</div><div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.8px;">Burn</div></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Key insight -->
-    <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:24px 28px;display:flex;align-items:flex-start;gap:16px;max-width:700px;margin:0 auto;">
-      <div style="font-size:24px;flex-shrink:0;">💡</div>
-      <div>
-        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">De kerngedachte in één zin</div>
-        <div style="font-size:13px;color:var(--text-mid);line-height:1.6;">"De merken maken hun belofte waar. De groep maakt het <strong>eenvoudiger om ze samen te beleven</strong>." — Klanten herkennen elk merk als zelfstandig, maar worden via de gemeenschappelijke Xtratjes-valuta discreet met het volledige CG-ecosysteem verbonden.</div>
-      </div>
-    </div>
-
-    <!-- Loyalty on top -->
-    <div style="margin-top:48px;">
-      <div class="section-eyebrow" style="margin-bottom:12px;">Aanvullend principe — Slide 5: Loyalty "on top"</div>
-      <div class="lot-visual">
-        <div class="lot-label">Loyalty vervangt prijs &amp; promo niet — het komt er bovenop</div>
-        <div class="lot-bars">
-          <div class="lot-bar lb-prijs">
-            <div>
-              <div class="lot-bar-name">💰 Laagste prijs</div>
-              <div class="lot-bar-desc">Merkattributen, positionering, basisbelofte — onveranderd</div>
-            </div>
-            <div class="lot-bar-tag">Fundament</div>
-          </div>
-          <div class="lot-bar lb-promo">
-            <div>
-              <div class="lot-bar-name">🏷️ Promoties</div>
-              <div class="lot-bar-desc">Kortingen, acties — waardevernietigend maar noodzakelijk</div>
-            </div>
-            <div class="lot-bar-tag">Vereist</div>
-          </div>
-          <div class="lot-bar lb-loyalty">
-            <div>
-              <div class="lot-bar-name">✦ Loyalty — Xtratjes</div>
-              <div class="lot-bar-desc">Extra munitie bovenop de merkbelofte — waardegenerend voor merk, groep én klant</div>
-            </div>
-            <div class="lot-bar-tag">ON TOP ✦</div>
-          </div>
-        </div>
-        <div class="lot-note">Elk merk werkt simultaan op prijs, promo én loyalty. Loyalty is additioneel — niet ter vervanging.</div>
-      </div>
-    </div>
-
-    <!-- 5 criteria -->
-    <div class="section-eyebrow" style="margin-top:40px; margin-bottom:12px;">Vijf criteria die onze oplossing sturen</div>
-    <div class="criteria-grid">
-      <div class="crit-card">
-        <div class="crit-icon">💎</div>
-        <div class="crit-title">Waarde­perceptie voor de klant</div>
-        <div class="crit-desc">De klant moet voelen dat loyalty loont. Snel, begrijpbaar, tastbaar voordeel.</div>
-      </div>
-      <div class="crit-card">
-        <div class="crit-icon">🦄</div>
-        <div class="crit-title">Differentiërend vermogen</div>
-        <div class="crit-desc">Wat ons uniek maakt versus concurrenten: onze multi-enseigne breedte.</div>
-      </div>
-      <div class="crit-card">
-        <div class="crit-icon">⚡</div>
-        <div class="crit-title">Speed to market</div>
-        <div class="crit-desc">Wendbaar bouwen, snel waarde creëren, iteratief verbeteren. Geen big bang.</div>
-      </div>
-      <div class="crit-card">
-        <div class="crit-icon">🔭</div>
-        <div class="crit-title">Outside-in benadering</div>
-        <div class="crit-desc">Starten vanuit de klant, niet vanuit interne processen of organisatiestructuren.</div>
-      </div>
-      <div class="crit-card">
-        <div class="crit-icon">📈</div>
-        <div class="crit-title">Value creatie voor merken</div>
-        <div class="crit-desc">Elk merk moet een eigen business case kunnen bouwen en aantonen.</div>
-      </div>
     </div>
   </div>
 </div>
@@ -777,82 +766,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
-
-<!-- AANPAK: GEFASEERD PLAN -->
-<div class="approach-section">
-  <div class="approach-inner">
-    <div class="ap-eyebrow">🚀 Hoe we het aanpakken</div>
-    <h2 class="ap-title">Gefaseerd plan — <span>Think, Do, Scale</span></h2>
-    <p class="ap-sub">Geen big bang. We starten met een schaalbaar MVP bij CLP, valideren de techniek en het klantgedrag, en rollen daarna stapsgewijs uit naar de andere enseignes.</p>
-
-    <div class="ap-timeline">
-      <div class="ap-phase">
-        <div class="ap-phase-num">01</div>
-        <div class="ap-phase-label">Think — Nu</div>
-        <div class="ap-phase-title">Verdiepen &amp; Mandaat</div>
-        <div class="ap-phase-items">
-          <div class="ap-phase-item">Conceptvalidatie op TKR (Juni)</div>
-          <div class="ap-phase-item">Financiering, org. setup bepalen</div>
-          <div class="ap-phase-item">Technologische keuzes maken</div>
-          <div class="ap-phase-item">Merk architectuur aligneren</div>
-        </div>
-        <div class="ap-phase-period">Q2–Q3 '25</div>
-      </div>
-
-      <div class="ap-phase">
-        <div class="ap-phase-num">02</div>
-        <div class="ap-phase-label">Do — CLP Pilot</div>
-        <div class="ap-phase-title">Schaalbaar MVP Bouwen</div>
-        <div class="ap-phase-items">
-          <div class="ap-phase-item">CLP eerste earn-scheme designen</div>
-          <div class="ap-phase-item">Piloot in geselecteerde stores</div>
-          <div class="ap-phase-item">Communicatieplan uitrollen</div>
-          <div class="ap-phase-item">Klantgedrag monitoren &amp; bijsturen</div>
-        </div>
-        <div class="ap-phase-period">Q3–Q4 '26</div>
-      </div>
-
-      <div class="ap-phase">
-        <div class="ap-phase-num">03</div>
-        <div class="ap-phase-label">Refine — Test</div>
-        <div class="ap-phase-title">2e Scheme &amp; Learnings</div>
-        <div class="ap-phase-items">
-          <div class="ap-phase-item">CLP uitrol naar alle winkels</div>
-          <div class="ap-phase-item">2e earn-scheme testen</div>
-          <div class="ap-phase-item">JIMS onboarding starten</div>
-          <div class="ap-phase-item">CG DAP onboarding</div>
-        </div>
-        <div class="ap-phase-period">Q1 '27</div>
-      </div>
-
-      <div class="ap-phase">
-        <div class="ap-phase-num">04</div>
-        <div class="ap-phase-label">Scale — Uitrol</div>
-        <div class="ap-phase-title">Multi-enseigne Activatie</div>
-        <div class="ap-phase-items">
-          <div class="ap-phase-item">OKay onboarding &amp; pilot</div>
-          <div class="ap-phase-item">Cross-brand challenges lanceren</div>
-          <div class="ap-phase-item">Nudge engine activeren</div>
-          <div class="ap-phase-item">Retail media monetisering</div>
-        </div>
-        <div class="ap-phase-period">Q2 '27</div>
-      </div>
-
-      <div class="ap-phase">
-        <div class="ap-phase-num">05</div>
-        <div class="ap-phase-label">Improve — Doorgroeien</div>
-        <div class="ap-phase-title">Volledige Groepsuitrol</div>
-        <div class="ap-phase-items">
-          <div class="ap-phase-item">Alle enseignes actief</div>
-          <div class="ap-phase-item">AI personalisatie op schaal</div>
-          <div class="ap-phase-item">Sustainability impact meting</div>
-          <div class="ap-phase-item">CG DAP migratie afgerond</div>
-        </div>
-        <div class="ap-phase-period">Q3 '27</div>
-      </div>
     </div>
   </div>
 </div>
