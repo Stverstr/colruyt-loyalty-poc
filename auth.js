@@ -1,9 +1,12 @@
 (function () {
   'use strict';
   var KEY = 'xtra-poc-v1';
-  var HASH = 'Q0cgTG95YWx0eSBTdGlqbg=='; // btoa('CG Loyalty Stijn')
+  var VALID_HASHES = [
+    '750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04', // master wachtwoord
+    'ad6a56a054f5ffaebc6e0a3afa555d052d35a3fbc263e7c57bae3bdd7ee038d2'  // CG Loyalty Stijn
+  ];
 
-  if (sessionStorage.getItem(KEY) === HASH) return;
+  if (sessionStorage.getItem(KEY) === '1') return;
 
   // Hide page instantly to avoid flash
   document.documentElement.style.visibility = 'hidden';
@@ -52,10 +55,16 @@
     });
   }
 
-  window.__xtraCheck = function () {
+  async function sha256(s) {
+    var b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(b)).map(function(x){ return x.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  window.__xtraCheck = async function () {
     var val = document.getElementById('xtra-auth-input').value;
-    if (btoa(val) === HASH) {
-      sessionStorage.setItem(KEY, HASH);
+    var h = await sha256(val);
+    if (VALID_HASHES.indexOf(h) !== -1) {
+      sessionStorage.setItem(KEY, '1');
       document.getElementById('xtra-auth-overlay').remove();
       document.body.classList.remove('xtra-locked');
     } else {
