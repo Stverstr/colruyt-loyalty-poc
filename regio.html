@@ -17,11 +17,9 @@
     --text-muted: #888;
     --xtra: #6D28D9;
     --xtra-pale: #F3EFFC;
-    --hp: #6D28D9;        /* Halle–Pajottenland */
-    --hp-pale: #F3EFFC;
-    --go: #0E7490;        /* Gent Oost */
-    --go-pale: #E6F7FA;
-    --accent: #EA580C;    /* challenge-oranje */
+    --hp: #6D28D9;
+    --go: #0E7490;
+    --accent: #EA580C;
     --accent-pale: #FFF1E8;
     --okay: #E84010;
     --colruyt: #CC0000;
@@ -45,14 +43,16 @@
   .role-pills { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 4px; gap: 4px; }
   .role-pill { border: none; background: none; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 100px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
   .role-pill.active { background: var(--text); color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .role-select { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--white); color: var(--text); cursor: pointer; outline: none; max-width: 240px; }
+  .role-select:focus { border-color: var(--accent); }
   .role-persona { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; }
   .role-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--accent-pale); border: 1.5px solid rgba(234,88,12,0.25); }
   .role-persona b { display: block; font-size: 13px; }
   .role-persona span { font-size: 11px; color: var(--text-muted); }
 
-  /* DUEL HERO */
+  /* PODIUM HERO */
   .duel { background: linear-gradient(135deg, #1A1030 0%, #2A1545 55%, #0D3B48 100%); color: white; padding: 36px 32px 30px; position: relative; overflow: hidden; }
-  .duel::before { content: 'VS'; position: absolute; font-size: 260px; font-weight: 900; color: rgba(255,255,255,0.03); top: -60px; left: 50%; transform: translateX(-50%); letter-spacing: -10px; }
+  .duel::before { content: 'BE'; position: absolute; font-size: 260px; font-weight: 900; color: rgba(255,255,255,0.03); top: -60px; left: 50%; transform: translateX(-50%); letter-spacing: -10px; }
   .duel-inner { max-width: 1060px; margin: 0 auto; position: relative; }
   .duel-eyebrow { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FDBA74; margin-bottom: 6px; }
   .duel-title { text-align: center; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
@@ -68,13 +68,11 @@
   .duel-mid { text-align: center; }
   .duel-week { font-size: 12px; font-weight: 700; color: #FDBA74; background: rgba(253,186,116,0.12); border: 1px solid rgba(253,186,116,0.3); padding: 6px 16px; border-radius: 100px; white-space: nowrap; }
   .duel-vs { font-size: 30px; font-weight: 900; margin: 10px 0; color: rgba(255,255,255,0.85); }
-  .duel-left-note { font-size: 11px; color: rgba(255,255,255,0.45); }
   .tug { max-width: 720px; margin: 28px auto 0; }
   .tug-bar { height: 16px; border-radius: 100px; background: rgba(255,255,255,0.1); overflow: hidden; display: flex; }
   .tug-hp { background: linear-gradient(90deg, #7C3AED, #A78BFA); width: 50%; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
   .tug-go { background: linear-gradient(90deg, #22D3EE, #0E7490); flex: 1; }
   .tug-labels { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 8px; }
-  .tug-flag { position: relative; height: 0; }
   .duel-team-badge { width: 52px; height: 52px; margin: 0 auto 10px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
   .dtb-hp { background: rgba(124,58,237,0.25); border: 1.5px solid rgba(167,139,250,0.4); }
   .dtb-go { background: rgba(14,116,144,0.3); border: 1.5px solid rgba(34,211,238,0.35); }
@@ -116,9 +114,10 @@
 
   /* LEADERBOARD */
   .lb { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
-  .lb-row { display: grid; grid-template-columns: 52px 1fr 120px 90px 160px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--border); gap: 12px; transition: background 0.15s; }
+  .lb-row { display: grid; grid-template-columns: 52px 1fr 150px 90px 160px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--border); gap: 12px; transition: background 0.15s; }
   .lb-row:last-child { border-bottom: none; }
   .lb-row:hover { background: #FBFAF8; }
+  .lb-row.klik { cursor: pointer; }
   .lb-row.head { background: #FAF9F7; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 10px 20px; }
   .lb-row.me { background: var(--accent-pale); border-left: 4px solid var(--accent); padding-left: 16px; }
   .lb-rank { font-size: 16px; font-weight: 900; color: var(--text-mid); }
@@ -145,7 +144,7 @@
   .action { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; }
   .action-icon { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
   .ai-1 { background: var(--accent-pale); }
-  .ai-2 { background: var(--hp-pale); }
+  .ai-2 { background: var(--xtra-pale); }
   .ai-3 { background: #ECFDF5; }
   .ai-4 { background: #FEF3C7; }
   .action-body { flex: 1; }
@@ -180,7 +179,7 @@
   .bdg-name { font-size: 10.5px; font-weight: 800; line-height: 1.25; }
   .bdg-sub { font-size: 9.5px; color: var(--text-muted); margin-top: 3px; }
 
-  /* MISSIONS (store view) */
+  /* MISSIONS */
   .mission { display: flex; align-items: center; gap: 13px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--white); margin-bottom: 10px; cursor: pointer; transition: all 0.2s; }
   .mission:hover { border-color: var(--accent); }
   .mission.done { background: #F0FDF4; border-color: #BBF7D0; }
@@ -212,7 +211,7 @@
   .win-form button { margin-top: 9px; width: 100%; border: none; background: var(--accent); color: white; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; padding: 11px; border-radius: 11px; cursor: pointer; transition: all 0.2s; }
   .win-form button:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(234,88,12,0.35); }
 
-  /* NEXT RANK CALLOUT */
+  /* CALLOUT */
   .callout { background: linear-gradient(135deg, #FFF7ED, #FFEDD5); border: 1.5px solid #FED7AA; border-radius: 16px; padding: 18px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
   .callout-emoji { font-size: 34px; }
   .callout-title { font-size: 14.5px; font-weight: 800; color: #9A3412; }
@@ -232,10 +231,9 @@
     .two-col { grid-template-columns: 1fr; }
     .duel-grid { grid-template-columns: 1fr; gap: 12px; }
     .duel-score { font-size: 40px; }
-    .lb-row { grid-template-columns: 40px 1fr 80px; }
+    .lb-row { grid-template-columns: 40px 1fr 90px; }
     .lb-trend, .lb-badges { display: none; }
     .role-persona { display: none; }
-    .badge-grid { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
@@ -256,47 +254,21 @@
     <button class="role-pill active" id="pill-regio" onclick="switchRole('regio')">🧭 Regioverantwoordelijke</button>
     <button class="role-pill" id="pill-winkel" onclick="switchRole('winkel')">🏪 Winkelverantwoordelijke</button>
   </div>
-  <div class="role-persona" id="persona">
-    <div class="role-avatar">👩‍💼</div>
-    <div><b>Karin De Smedt</b><span>Regiodirecteur Halle–Pajottenland · 8 winkels</span></div>
-  </div>
+  <select class="role-select" id="selRegio" onchange="selectRegio(this.value)" title="Kies een regio"></select>
+  <select class="role-select" id="selWinkel" onchange="selectStore(this.value)" title="Kies een winkel" style="display:none;"></select>
+  <div class="role-persona" id="persona"></div>
 </div>
 
-<!-- ═══════════ NATIONAAL PODIUM HERO (shared) ═══════════ -->
+<!-- ═══════════ NATIONAAL PODIUM HERO ═══════════ -->
 <div class="duel">
   <div class="duel-inner">
     <div class="duel-eyebrow">Spel zonder grenzen · 🇧🇪 heel België</div>
     <div class="duel-title">Alle 13 regio's, één competitie</div>
     <div class="duel-sub">Kwartaalcompetitie op 5 klant-KPI's · groei t.o.v. de eigen nulmeting (dus elke regio start gelijk) · elke KPI telt voor 20% · 104 winkels</div>
-    <div class="duel-grid">
-      <div class="duel-team">
-        <div class="duel-team-badge dtb-hp">🥈</div>
-        <div class="duel-team-name">🌳 Halle–Pajottenland</div>
-        <div class="duel-team-sub">8 winkels · "De Groene Reuzen" · jouw regio ⭐</div>
-        <div class="duel-score" id="scoreHP">0</div>
-        <div class="duel-score-unit">challenge-punten</div><br>
-        <span class="duel-delta dd-up">↑ +9 pt deze week — sterkste stijger van het land</span>
-      </div>
-      <div class="duel-mid">
-        <div class="duel-week">📅 Week 5 / 13</div>
-        <div class="duel-vs">🥇</div>
-        <div class="duel-team-name">🦁 Gent Oost</div>
-        <div class="duel-team-sub">9 winkels · "De Digitale Leeuwen"</div>
-        <div class="duel-score" id="scoreGO" style="font-size:44px;">0</div>
-        <div class="duel-score-unit">challenge-punten · leider</div>
-      </div>
-      <div class="duel-team">
-        <div class="duel-team-badge dtb-go">🥉</div>
-        <div class="duel-team-name">🌲 Kempen</div>
-        <div class="duel-team-sub">7 winkels · "De Kempense Kanjers"</div>
-        <div class="duel-score" id="scoreKE">0</div>
-        <div class="duel-score-unit">challenge-punten</div><br>
-        <span class="duel-delta dd-up">↑ +5 pt deze week</span>
-      </div>
-    </div>
+    <div class="duel-grid" id="podium"></div>
     <div class="tug">
       <div class="tug-bar"><div class="tug-hp" id="tugHP" style="width:50%;"></div><div class="tug-go"></div></div>
-      <div class="tug-labels"><span>🌳 Jouw regio: 104 pt</span><span>Jacht op de leider — verschil: slechts 3 punten!</span><span>107 pt 🦁 leider</span></div>
+      <div class="tug-labels" id="tugLabels"></div>
     </div>
   </div>
 </div>
@@ -304,33 +276,12 @@
 <!-- ═══════════ VIEW 1: REGIOVERANTWOORDELIJKE ═══════════ -->
 <div class="content" id="view-regio">
 
-  <div class="strip">
-    <div class="strip-card">
-      <div class="strip-label">Positie nationaal</div>
-      <div class="strip-val">2e <span style="font-size:14px;">van 13</span></div>
-      <div class="strip-sub warn">3 pt achter leider Gent Oost</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Momentum</div>
-      <div class="strip-val">+9 pt</div>
-      <div class="strip-sub pos">Sterkste weekgroei van alle 13 regio's 🔥</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Winkels boven target</div>
-      <div class="strip-val">6 / 8</div>
-      <div class="strip-sub">OKay Gooik &amp; Colruyt Beersel hebben een duwtje nodig</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Team-moraal</div>
-      <div class="strip-val">😄 87%</div>
-      <div class="strip-sub pos">Wekelijkse pulse-check bij winkelteams</div>
-    </div>
-  </div>
+  <div class="strip" id="stripRegio"></div>
 
   <div class="sec-head">
     <div>
       <div class="sec-title">De 5 kern-KPI's — groei t.o.v. nulmeting</div>
-      <div class="sec-sub">Jouw regio (🌳 paars) vs het gemiddelde van de 13 regio's (🇧🇪 teal) · elke KPI weegt 20% in de challenge-score</div>
+      <div class="sec-sub" id="kpiSub"></div>
     </div>
   </div>
   <div class="kpi-grid" id="kpiGridRegio"></div>
@@ -338,7 +289,7 @@
   <div class="sec-head">
     <div>
       <div class="sec-title">🇧🇪 Nationaal klassement — alle 13 regio's</div>
-      <div class="sec-sub">Score = gemiddelde KPI-groei t.o.v. de eigen nulmeting × 10 · iedereen start gelijk, ook kleinere regio's maken kans</div>
+      <div class="sec-sub">Score = gemiddelde KPI-groei t.o.v. de eigen nulmeting × 10 · <b>klik op een regio</b> om ernaartoe te navigeren</div>
     </div>
   </div>
   <div class="lb" id="lbNationaal" style="margin-bottom:32px;"></div>
@@ -346,40 +297,28 @@
   <div class="sec-head">
     <div>
       <div class="sec-title">🗺️ Jouw regio op de kaart</div>
-      <div class="sec-sub">Halle–Pajottenland met alle 8 winkels · klik op een winkel voor detail · kleur = formule</div>
+      <div class="sec-sub" id="kaartSub"></div>
     </div>
   </div>
   <div class="two-col" style="grid-template-columns: 1.35fr 1fr;">
     <div class="panel" style="margin-bottom:0;">
-      <svg viewBox="70 60 250 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-        <path d="M 30,120 L 70,85 L 120,60 L 152,74 L 175,62 L 205,45 L 232,62 L 252,44 L 300,58 L 322,50 L 346,80 L 338,110 L 366,120 L 400,130 L 416,168 L 421,192 L 398,232 L 372,280 L 355,330 L 352,372 L 322,345 L 282,330 L 240,302 L 198,312 L 158,270 L 110,232 L 78,190 L 58,160 Z"
+      <svg id="regioSvg" viewBox="47 82 250 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <path d="M 14.0,96.9 L 16.3,95.2 L 20.5,93.8 L 35.7,82.2 L 59.1,68.5 L 81.6,53.6 L 106.7,45.4 L 107.8,52.3 L 107.3,56.7 L 107.2,60.9 L 108.8,65.4 L 111.5,68.4 L 114.9,70.0 L 118.5,70.4 L 123.8,69.6 L 124.1,67.9 L 123.9,65.6 L 124.1,63.5 L 125.3,62.3 L 126.9,61.9 L 128.7,61.8 L 133.2,60.8 L 136.0,60.6 L 138.8,61.1 L 152.5,65.6 L 154.7,67.0 L 155.2,69.4 L 155.1,71.4 L 155.2,73.2 L 156.9,75.2 L 158.3,75.8 L 171.6,75.7 L 174.1,74.9 L 179.2,70.8 L 193.1,63.8 L 198.6,59.4 L 203.1,53.4 L 203.7,51.6 L 204.5,47.4 L 206.8,48.7 L 207.7,50.5 L 208.5,53.8 L 210.3,56.0 L 212.4,57.8 L 213.7,59.6 L 214.1,60.7 L 214.3,61.8 L 214.0,63.1 L 213.2,64.3 L 214.3,64.0 L 215.2,63.0 L 216.8,59.6 L 213.1,58.0 L 212.2,57.2 L 211.8,55.6 L 211.8,51.8 L 211.5,49.9 L 210.7,48.5 L 209.0,46.4 L 211.3,46.5 L 216.3,48.8 L 218.5,49.5 L 223.7,49.8 L 225.9,48.7 L 226.4,45.6 L 225.7,43.8 L 223.2,40.8 L 222.3,39.2 L 222.4,37.4 L 223.2,36.0 L 223.4,34.7 L 222.0,33.2 L 227.9,29.8 L 233.9,27.6 L 237.2,27.0 L 238.6,27.3 L 239.5,28.8 L 239.4,31.8 L 238.4,34.0 L 238.2,35.8 L 240.4,37.3 L 241.9,37.5 L 245.1,36.9 L 248.7,37.8 L 250.4,37.7 L 251.9,37.1 L 253.1,36.2 L 261.7,25.5 L 265.4,23.6 L 267.1,23.8 L 269.1,24.6 L 271.0,25.8 L 272.1,27.3 L 272.4,30.0 L 271.7,32.6 L 271.2,35.3 L 272.0,38.5 L 267.1,36.2 L 265.8,36.4 L 265.2,38.5 L 267.6,39.6 L 275.4,39.8 L 277.5,40.4 L 281.8,42.4 L 284.2,41.7 L 287.1,38.9 L 289.7,35.4 L 291.4,32.5 L 292.2,30.3 L 292.6,28.6 L 293.2,27.6 L 295.0,27.1 L 298.6,29.8 L 300.8,34.0 L 300.4,37.0 L 299.2,39.9 L 298.8,43.8 L 299.5,45.5 L 303.4,49.8 L 304.0,51.3 L 305.1,55.3 L 305.7,56.5 L 307.6,57.6 L 311.9,57.2 L 314.0,57.4 L 316.0,59.9 L 316.0,66.3 L 318.0,66.8 L 322.2,65.7 L 335.5,66.3 L 337.8,65.4 L 342.5,62.1 L 344.8,61.0 L 347.2,61.3 L 349.8,63.0 L 351.9,65.7 L 352.7,69.2 L 353.0,73.2 L 353.7,73.8 L 355.6,75.4 L 362.0,77.3 L 363.5,78.4 L 364.6,79.7 L 365.8,80.5 L 367.7,80.5 L 372.4,79.5 L 373.8,79.7 L 375.7,80.8 L 378.0,84.0 L 379.5,85.3 L 382.9,84.4 L 384.8,84.6 L 385.8,86.9 L 384.5,89.3 L 384.2,91.3 L 386.7,94.1 L 385.7,94.8 L 384.6,95.2 L 383.4,95.4 L 382.1,95.3 L 382.4,96.6 L 382.9,97.8 L 382.1,100.3 L 381.5,101.5 L 380.6,102.7 L 379.3,101.6 L 378.4,102.1 L 377.8,103.9 L 377.5,106.2 L 379.1,108.3 L 377.3,112.7 L 372.9,119.7 L 375.4,119.1 L 377.5,119.7 L 376.3,121.9 L 374.3,126.0 L 372.9,128.2 L 371.0,129.1 L 369.7,129.7 L 361.7,138.7 L 361.9,142.7 L 363.7,145.4 L 365.6,146.7 L 368.7,148.3 L 370.4,148.9 L 370.2,150.9 L 369.1,155.0 L 371.1,156.2 L 372.3,156.4 L 373.5,156.2 L 374.0,155.4 L 375.3,153.5 L 376.2,152.8 L 377.4,153.2 L 379.7,155.7 L 380.8,156.5 L 390.5,156.3 L 391.8,156.7 L 393.0,157.1 L 401.2,157.4 L 403.4,156.9 L 403.4,158.2 L 405.2,159.2 L 405.3,160.9 L 404.9,162.8 L 405.3,164.3 L 406.8,164.4 L 411.2,163.2 L 413.1,163.4 L 415.2,165.6 L 422.1,176.0 L 420.6,177.0 L 421.9,179.5 L 424.2,180.7 L 431.9,180.9 L 432.2,182.0 L 431.4,183.5 L 430.1,185.1 L 427.6,187.2 L 424.1,190.2 L 422.0,193.4 L 423.9,195.8 L 423.0,197.1 L 424.1,198.3 L 425.4,198.4 L 424.5,200.0 L 425.4,200.8 L 426.3,202.8 L 427.2,203.5 L 428.4,203.6 L 432.1,202.4 L 434.9,203.2 L 439.7,204.3 L 441.8,204.5 L 440.5,205.7 L 440.3,207.1 L 440.6,208.7 L 441.2,210.5 L 442.2,212.1 L 443.4,212.8 L 443.3,215.8 L 442.5,219.9 L 441.7,222.3 L 441.9,224.3 L 445.8,231.1 L 446.0,233.6 L 444.6,235.1 L 441.6,235.6 L 440.1,235.3 L 438.8,234.8 L 437.6,234.7 L 436.1,235.6 L 435.0,237.0 L 434.2,238.7 L 434.0,240.4 L 434.5,242.0 L 432.4,243.9 L 427.6,245.2 L 425.3,246.3 L 424.2,248.0 L 421.6,249.9 L 420.5,251.4 L 422.0,253.0 L 422.6,255.0 L 422.5,257.0 L 421.8,258.7 L 421.0,259.2 L 418.8,259.4 L 417.8,260.0 L 417.2,262.5 L 418.1,264.3 L 418.5,265.4 L 418.2,266.6 L 417.2,267.8 L 415.5,267.0 L 415.3,265.6 L 415.4,264.0 L 414.9,262.4 L 413.4,261.0 L 411.9,261.9 L 410.9,262.5 L 408.3,262.9 L 407.1,262.7 L 405.6,262.0 L 404.9,260.7 L 404.5,259.0 L 403.8,258.2 L 402.1,259.6 L 399.7,259.9 L 398.8,261.5 L 398.3,263.9 L 397.4,266.4 L 395.7,268.1 L 391.6,270.2 L 389.7,271.9 L 389.3,273.0 L 389.1,275.8 L 388.8,277.0 L 388.1,278.0 L 386.5,279.4 L 385.8,280.5 L 385.9,282.5 L 385.9,284.2 L 385.7,285.6 L 384.8,286.4 L 382.6,287.4 L 381.9,288.4 L 381.8,290.8 L 382.5,291.7 L 383.0,292.7 L 381.8,295.1 L 380.8,296.0 L 379.2,296.4 L 378.4,296.9 L 377.5,298.1 L 377.1,299.0 L 376.4,301.0 L 372.5,307.7 L 372.0,309.4 L 373.4,310.0 L 375.8,311.9 L 376.9,313.5 L 373.9,313.2 L 373.8,314.7 L 373.4,315.7 L 374.5,316.8 L 373.1,317.7 L 372.6,319.3 L 372.8,321.4 L 373.5,323.6 L 374.7,325.5 L 375.8,326.1 L 377.0,326.3 L 378.4,327.2 L 379.2,328.3 L 381.8,333.5 L 382.2,336.8 L 382.9,337.8 L 384.5,338.2 L 385.8,338.7 L 387.2,338.5 L 387.9,339.6 L 388.0,340.9 L 387.0,342.2 L 386.8,344.3 L 386.3,345.5 L 386.7,346.8 L 387.5,347.3 L 389.7,347.6 L 390.5,348.3 L 391.2,350.7 L 390.5,352.3 L 389.4,353.3 L 388.5,354.3 L 387.1,358.3 L 386.2,360.1 L 384.9,361.3 L 386.8,362.3 L 385.8,365.0 L 383.2,367.8 L 380.5,369.0 L 379.2,368.7 L 376.8,367.2 L 375.6,367.0 L 374.4,367.7 L 372.9,369.6 L 371.5,370.2 L 369.1,369.8 L 366.7,368.6 L 364.2,368.0 L 361.4,369.4 L 360.0,371.3 L 359.8,372.5 L 357.8,373.4 L 353.3,371.5 L 351.2,372.5 L 348.4,374.7 L 345.4,376.4 L 343.0,375.7 L 342.3,374.2 L 342.4,372.7 L 342.8,371.0 L 342.8,369.2 L 342.4,367.7 L 337.0,357.9 L 335.7,356.8 L 334.9,356.0 L 331.4,354.7 L 330.1,353.9 L 329.0,354.3 L 328.5,355.2 L 327.9,356.1 L 325.3,356.0 L 324.7,355.3 L 324.5,353.7 L 324.8,351.3 L 325.7,350.7 L 325.5,347.5 L 323.3,344.8 L 320.9,342.5 L 318.5,342.5 L 313.5,343.9 L 310.9,343.2 L 308.8,341.7 L 307.2,340.0 L 302.4,333.1 L 301.1,331.8 L 297.1,330.7 L 294.8,329.4 L 290.7,325.3 L 288.6,324.1 L 286.3,324.2 L 281.4,326.0 L 278.9,326.4 L 276.0,325.9 L 274.9,324.6 L 275.0,318.1 L 274.7,317.1 L 273.6,315.3 L 273.6,313.3 L 274.6,312.2 L 275.5,309.1 L 276.1,307.7 L 276.4,306.2 L 276.2,303.9 L 274.5,300.7 L 269.1,298.5 L 267.6,296.1 L 268.1,293.3 L 272.4,282.5 L 272.6,280.6 L 272.4,279.2 L 272.5,277.6 L 274.6,273.0 L 276.5,274.1 L 276.8,271.1 L 277.4,267.4 L 277.5,264.4 L 276.5,263.0 L 273.0,263.7 L 271.7,263.2 L 271.2,260.6 L 268.2,262.0 L 256.2,274.1 L 255.6,275.5 L 255.3,277.2 L 255.5,278.3 L 255.9,279.2 L 256.1,280.4 L 255.2,285.9 L 254.4,288.7 L 253.4,290.7 L 252.2,291.5 L 247.5,292.2 L 231.9,300.0 L 228.5,300.6 L 210.9,295.7 L 204.0,296.7 L 202.3,297.0 L 200.8,296.6 L 194.5,293.2 L 195.3,290.7 L 194.7,288.0 L 194.6,285.7 L 195.1,284.4 L 196.0,283.4 L 198.0,281.5 L 200.6,279.6 L 203.3,278.3 L 202.6,275.8 L 201.9,274.1 L 200.0,266.6 L 198.9,266.0 L 197.7,266.2 L 195.4,267.2 L 193.9,266.4 L 194.1,263.2 L 196.3,256.2 L 196.9,253.0 L 197.4,251.6 L 198.6,249.9 L 201.2,247.8 L 202.3,246.6 L 202.6,244.7 L 201.9,243.6 L 200.5,242.4 L 199.0,241.4 L 198.0,241.0 L 196.6,241.6 L 196.5,242.8 L 196.7,244.0 L 195.9,244.8 L 193.8,243.8 L 190.7,237.2 L 188.4,235.1 L 186.0,233.7 L 182.3,229.6 L 180.1,228.6 L 177.7,228.8 L 170.6,231.8 L 168.1,231.9 L 166.1,230.9 L 164.1,229.5 L 161.8,228.4 L 157.2,227.8 L 152.3,228.2 L 150.8,228.7 L 149.9,229.8 L 147.8,233.2 L 147.4,234.7 L 146.5,235.5 L 145.8,236.6 L 141.8,232.9 L 140.8,225.7 L 140.8,217.5 L 139.9,210.7 L 138.1,207.4 L 135.8,205.3 L 133.4,204.0 L 130.8,203.5 L 123.6,203.4 L 122.2,202.4 L 123.3,200.4 L 123.5,199.0 L 122.7,198.1 L 121.1,197.6 L 119.5,197.7 L 118.4,198.5 L 117.3,199.6 L 115.7,200.8 L 110.8,202.6 L 108.1,202.9 L 106.1,202.4 L 101.2,199.8 L 99.8,198.6 L 98.0,196.4 L 97.4,194.4 L 97.3,188.7 L 94.3,178.8 L 93.4,173.7 L 95.0,170.7 L 93.7,166.5 L 92.8,164.9 L 91.3,164.4 L 89.7,164.2 L 88.8,163.1 L 87.4,159.7 L 85.9,156.9 L 84.0,153.6 L 82.1,151.8 L 79.2,150.9 L 70.3,153.7 L 64.4,155.5 L 61.8,157.2 L 59.8,159.4 L 56.4,165.2 L 54.9,166.4 L 53.2,166.0 L 43.7,161.6 L 41.6,159.9 L 41.0,158.8 L 39.5,155.2 L 38.9,154.1 L 34.7,150.1 L 34.0,148.7 L 33.6,147.5 L 33.1,146.5 L 31.6,145.7 L 28.4,145.9 L 25.9,145.5 L 25.1,145.1 L 24.5,144.1 L 23.5,141.9 L 21.6,140.6 L 21.4,139.2 L 22.3,137.2 L 20.2,128.3 L 20.8,126.6 L 23.4,124.0 L 24.1,123.0 L 23.7,119.4 L 22.0,116.8 L 17.9,112.3 L 16.8,108.9 L 15.7,101.0 L 14.0,96.9 Z"
               fill="#F2F0FA" stroke="#D5CEE8" stroke-width="2" stroke-linejoin="round"/>
-        <!-- buurregio's (context) -->
-        <g font-family="Inter, sans-serif" font-size="7.5" font-weight="600" fill="#A9A2B8">
-          <circle cx="168" cy="100" r="3" fill="#C6BFD9"/><text x="168" y="92" text-anchor="middle">Gent Oost 🥇</text>
-          <circle cx="200" cy="152" r="3" fill="#C6BFD9"/><text x="207" y="148" text-anchor="start">Brussel</text>
-          <circle cx="122" cy="118" r="3" fill="#C6BFD9"/><text x="122" y="110" text-anchor="middle">Gent West</text>
-          <circle cx="250" cy="142" r="3" fill="#C6BFD9"/><text x="250" y="134" text-anchor="middle">Leuven-Hageland</text>
-          <circle cx="142" cy="232" r="3" fill="#C6BFD9"/><text x="142" y="224" text-anchor="middle">Henegouwen</text>
-        </g>
-        <!-- regio-zone -->
-        <circle cx="172" cy="172" r="36" fill="#6D28D9" fill-opacity="0.10" stroke="#6D28D9" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <text x="172" y="216" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="800" fill="#6D28D9">🌳 HALLE–PAJOTTENLAND</text>
+        <g id="buurRegios"></g>
+        <g id="regioZone"></g>
         <g id="regioPins"></g>
       </svg>
-      <div style="font-size:10.5px;color:var(--text-muted);margin-top:8px;"><span style="color:var(--colruyt);font-weight:700;">●</span> Colruyt&nbsp;&nbsp;<span style="color:var(--okay);font-weight:700;">●</span> OKay&nbsp;&nbsp;<span style="color:var(--bioplanet);font-weight:700;">●</span> Bio-Planet&nbsp;&nbsp;· grijze stippen = buurregio's (België als achtergrond)</div>
+      <div style="font-size:10.5px;color:var(--text-muted);margin-top:8px;"><span style="color:var(--colruyt);font-weight:700;">●</span> Colruyt&nbsp;&nbsp;<span style="color:var(--okay);font-weight:700;">●</span> OKay&nbsp;&nbsp;<span style="color:var(--bioplanet);font-weight:700;">●</span> Bio-Planet&nbsp;&nbsp;· grijze stippen = andere regio's (klikbaar!) · België als achtergrond</div>
     </div>
-    <div class="panel" style="margin-bottom:0;" id="pinDetail">
-      <div class="panel-title">👆 Klik op een winkel</div>
-      <div style="font-size:12.5px;color:var(--text-mid);line-height:1.6;">Elke stip is een winkel in jouw regio. Klik erop om de score, positie en weektrend te zien — en spring meteen naar de juiste rij in het leaderboard hieronder.</div>
-    </div>
+    <div class="panel" style="margin-bottom:0;" id="pinDetail"></div>
   </div>
   <div style="margin-bottom:32px;"></div>
 
   <div class="sec-head">
     <div>
-      <div class="sec-title">🏅 Winkel-leaderboard — Halle–Pajottenland</div>
-      <div class="sec-sub">Wekelijkse stand · winkelpunten = gemiddelde KPI-groei × 10</div>
+      <div class="sec-title" id="lbRegioTitle"></div>
+      <div class="sec-sub">Wekelijkse stand · winkelpunten = gemiddelde KPI-groei × 10 · <b>klik op een winkel</b> om als winkelverantwoordelijke te kijken</div>
     </div>
   </div>
   <div class="lb" id="lbRegio"></div>
@@ -392,44 +331,7 @@
           <div class="sec-sub">Aanbevolen acties op basis van de tussenstand — jij beslist</div>
         </div>
       </div>
-      <div class="actions">
-        <div class="action">
-          <div class="action-icon ai-1">🚀</div>
-          <div class="action-body">
-            <div class="action-title">Boost-team naar OKay Gooik</div>
-            <div class="action-desc">Stuur 2 Xtra-coaches uit topwinkel Colruyt Halle voor een dag mee-draaien aan de kassa.</div>
-            <div class="action-why">💡 Gooik scoort -12% op herkenning — grootste hefboom voor de regio-score</div>
-          </div>
-          <button class="action-btn" onclick="doAction(this, 'Boost-team geboekt! 🚀 OKay Gooik krijgt versterking op donderdag.')">Plan boost</button>
-        </div>
-        <div class="action">
-          <div class="action-icon ai-2">🎪</div>
-          <div class="action-body">
-            <div class="action-title">Regio-actie: "Xtra op de Markt van Halle"</div>
-            <div class="action-desc">Stand op de zaterdagmarkt: klanten koppelen hun Xtra-kaart en krijgen een discovery box.</div>
-            <div class="action-why">💡 Lokale autonomie: jij kiest de actie, het budget (€1.200) is al goedgekeurd</div>
-          </div>
-          <button class="action-btn" onclick="doAction(this, 'Regio-actie gelanceerd! 🎪 De winkels krijgen morgen hun briefing.')">Lanceer actie</button>
-        </div>
-        <div class="action">
-          <div class="action-icon ai-3">📣</div>
-          <div class="action-body">
-            <div class="action-title">Deel de weekly win van Bio-Planet Halle</div>
-            <div class="action-desc">Hun "formulemix-tip aan de kassa" werkte: +18% doorverwijzingen. Deel met alle 8 winkels.</div>
-            <div class="action-why">💡 Kennisdeling is een van de 4 engagementmechanismen van de challenge</div>
-          </div>
-          <button class="action-btn" onclick="doAction(this, 'Weekly win gedeeld met alle winkelteams! 📣')">Deel win</button>
-        </div>
-        <div class="action">
-          <div class="action-icon ai-4">☕</div>
-          <div class="action-body">
-            <div class="action-title">Winkelbezoek: Colruyt Beersel</div>
-            <div class="action-desc">Score stagneert 2 weken. Plan een koffiemoment met winkelverantwoordelijke Els — luisteren eerst.</div>
-            <div class="action-why">💡 Ownership in het veld: ondersteunen, niet afrekenen</div>
-          </div>
-          <button class="action-btn" onclick="doAction(this, 'Bezoek ingepland ☕ — dinsdag 9u bij Els in Beersel.')">Plan bezoek</button>
-        </div>
-      </div>
+      <div class="actions" id="actiesRegio"></div>
     </div>
     <div>
       <div class="panel">
@@ -438,14 +340,7 @@
       </div>
       <div class="panel">
         <div class="panel-title">🎖️ Regio-badges</div>
-        <div class="badge-grid">
-          <div class="bdg earned"><div class="bdg-emoji">🚀</div><div class="bdg-name">Vliegende Start</div><div class="bdg-sub">Beste week 1</div></div>
-          <div class="bdg earned"><div class="bdg-emoji">💳</div><div class="bdg-name">Betaalkampioen</div><div class="bdg-sub">Hoogste groei Xtra-betaling</div></div>
-          <div class="bdg earned"><div class="bdg-emoji">🤝</div><div class="bdg-name">Deelgraag</div><div class="bdg-sub">3 weekly wins gedeeld</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">👑</div><div class="bdg-name">Wekelijkse Leider</div><div class="bdg-sub">Sta 1e op maandag</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">🎯</div><div class="bdg-name">Alle 5 Groen</div><div class="bdg-sub">Elke KPI boven target</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">🏆</div><div class="bdg-name">Regiokampioen</div><div class="bdg-sub">Win de challenge</div></div>
-        </div>
+        <div class="badge-grid" id="badgesRegio"></div>
       </div>
     </div>
   </div>
@@ -455,36 +350,9 @@
 <!-- ═══════════ VIEW 2: WINKELVERANTWOORDELIJKE ═══════════ -->
 <div class="content" id="view-winkel" style="display:none;">
 
-  <div class="callout">
-    <div class="callout-emoji">🥉</div>
-    <div>
-      <div class="callout-title">Colruyt Halle staat 3e van 8 — nog 6 punten van een podiumplek!</div>
-      <div class="callout-text">OKay Lennik (2e) groeit trager op Xtra-betaling. Voltooi deze week je teammissies en jullie kunnen zaterdag over hen springen. 💪</div>
-    </div>
-  </div>
+  <div class="callout" id="calloutWinkel"></div>
 
-  <div class="strip">
-    <div class="strip-card">
-      <div class="strip-label">Jouw winkelscore</div>
-      <div class="strip-val">103 <span style="font-size:14px;">pt</span></div>
-      <div class="strip-sub pos">↑ +11 pt deze week</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Positie in regio</div>
-      <div class="strip-val">3e <span style="font-size:14px;">van 8</span></div>
-      <div class="strip-sub warn">6 pt achter OKay Lennik</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Missies deze week</div>
-      <div class="strip-val" id="missieCount">1 / 4</div>
-      <div class="strip-sub">Elke missie levert winkelpunten op</div>
-    </div>
-    <div class="strip-card">
-      <div class="strip-label">Team-bijdrage aan regio</div>
-      <div class="strip-val">12,8%</div>
-      <div class="strip-sub pos">Jullie tellen mee voor de regio-score!</div>
-    </div>
-  </div>
+  <div class="strip" id="stripWinkel"></div>
 
   <div class="two-col">
     <div>
@@ -498,37 +366,39 @@
         <div class="mp-bar"><div class="mp-fill" id="mpFill" style="width:25%;"></div></div>
         <div class="mp-label" id="mpLabel">1 van 4 voltooid</div>
       </div>
-      <div class="mission done" onclick="toggleMission(this, 3)">
-        <div class="mission-check">✓</div>
-        <div class="mission-body">
-          <div class="mission-title">Kassabriefing: vraag élke klant naar de Xtra-kaart</div>
-          <div class="mission-desc">5-minuten briefing bij shiftstart, hele week — herkenning is KPI #1</div>
+      <div id="missies">
+        <div class="mission done" onclick="toggleMission(this, 3)">
+          <div class="mission-check">✓</div>
+          <div class="mission-body">
+            <div class="mission-title">Kassabriefing: vraag élke klant naar de Xtra-kaart</div>
+            <div class="mission-desc">5-minuten briefing bij shiftstart, hele week — herkenning is KPI #1</div>
+          </div>
+          <div class="mission-pts">+3 pt</div>
         </div>
-        <div class="mission-pts">+3 pt</div>
-      </div>
-      <div class="mission" onclick="toggleMission(this, 4)">
-        <div class="mission-check">✓</div>
-        <div class="mission-body">
-          <div class="mission-title">Demo-hoek Xtra-betaalfunctie aan kassa 1</div>
-          <div class="mission-desc">Laat klanten één keer proef-betalen met de app — met hulp van een teamlid</div>
+        <div class="mission" onclick="toggleMission(this, 4)">
+          <div class="mission-check">✓</div>
+          <div class="mission-body">
+            <div class="mission-title">Demo-hoek Xtra-betaalfunctie aan kassa 1</div>
+            <div class="mission-desc">Laat klanten één keer proef-betalen met de app — met hulp van een teamlid</div>
+          </div>
+          <div class="mission-pts">+4 pt</div>
         </div>
-        <div class="mission-pts">+4 pt</div>
-      </div>
-      <div class="mission" onclick="toggleMission(this, 3)">
-        <div class="mission-check">✓</div>
-        <div class="mission-body">
-          <div class="mission-title">Deel 20 discovery boxen uit aan trouwe klanten</div>
-          <div class="mission-desc">Verras klanten met producten van andere CG-formules — goed voor de formulemix</div>
+        <div class="mission" onclick="toggleMission(this, 3)">
+          <div class="mission-check">✓</div>
+          <div class="mission-body">
+            <div class="mission-title">Deel 20 discovery boxen uit aan trouwe klanten</div>
+            <div class="mission-desc">Verras klanten met producten van andere CG-formules — goed voor de formulemix</div>
+          </div>
+          <div class="mission-pts">+3 pt</div>
         </div>
-        <div class="mission-pts">+3 pt</div>
-      </div>
-      <div class="mission" onclick="toggleMission(this, 2)">
-        <div class="mission-check">✓</div>
-        <div class="mission-body">
-          <div class="mission-title">Vier jullie 100e nieuwe Xtra-klant van de challenge 🎂</div>
-          <div class="mission-desc">Taart voor het team + foto voor de weekly wins — nog 7 te gaan</div>
+        <div class="mission" onclick="toggleMission(this, 2)">
+          <div class="mission-check">✓</div>
+          <div class="mission-body">
+            <div class="mission-title">Vier jullie 100e nieuwe Xtra-klant van de challenge 🎂</div>
+            <div class="mission-desc">Taart voor het team + foto voor de weekly wins</div>
+          </div>
+          <div class="mission-pts">+2 pt</div>
         </div>
-        <div class="mission-pts">+2 pt</div>
       </div>
 
       <div class="sec-head">
@@ -542,24 +412,17 @@
 
     <div>
       <div class="panel">
-        <div class="panel-title">🎖️ Badges van Colruyt Halle</div>
-        <div class="badge-grid">
-          <div class="bdg earned"><div class="bdg-emoji">🚀</div><div class="bdg-name">Snelste Stijger</div><div class="bdg-sub">Week 3</div></div>
-          <div class="bdg earned"><div class="bdg-emoji">🪪</div><div class="bdg-name">Herkenner</div><div class="bdg-sub">70%+ herkenning</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">💳</div><div class="bdg-name">Tap-Toppers</div><div class="bdg-sub">20% Xtra-betaling</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">🥇</div><div class="bdg-name">Winkelkampioen</div><div class="bdg-sub">Word 1e van de regio</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">🎁</div><div class="bdg-name">Box-Bezorger</div><div class="bdg-sub">100 discovery boxen</div></div>
-          <div class="bdg locked"><div class="bdg-emoji">📣</div><div class="bdg-name">Verhalenverteller</div><div class="bdg-sub">5 weekly wins</div></div>
-        </div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:12px;">💳 Tap-Toppers: nog 2,9pp te gaan — jullie demo-hoek helpt!</div>
+        <div class="panel-title" id="badgesWinkelTitle">🎖️ Badges</div>
+        <div class="badge-grid" id="badgesWinkel"></div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:12px;" id="badgesWinkelTip"></div>
       </div>
       <div class="panel">
         <div class="panel-title">📣 Deel jullie weekly win</div>
         <div class="win-form">
-          <textarea id="winInput" placeholder="Bv. 'Onze kassière Fatima overtuigde vandaag 14 klanten om de Xtra-app te installeren — record!'"></textarea>
+          <textarea id="winInput" placeholder="Bv. 'Onze kassière overtuigde vandaag 14 klanten om de Xtra-app te installeren — record!'"></textarea>
           <button onclick="submitWin()">Insturen naar de regio 🎉</button>
         </div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:10px;">De beste win van de week wordt door Karin gedeeld met alle winkels — en levert 2 bonuspunten op.</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:10px;" id="winFormTip"></div>
       </div>
       <div class="panel">
         <div class="panel-title">🏅 Mini-leaderboard regio</div>
@@ -575,173 +438,393 @@
 <div id="toast"></div>
 
 <script>
-// ─── DATA ───────────────────────────────────────
-const KPIS = [
-  { icon:'🪪', name:'Herkenning aan kassa', base:'62%', now:'68,4%', hp:10.3, go:7.4, sub:'% transacties met Xtra-identificatie' },
-  { icon:'💳', name:'Xtra-betaling', base:'14%', now:'17,1%', hp:22.1, go:13.6, sub:'% betaald via Xtra-betaalfunctie' },
-  { icon:'🔁', name:'Klantfrequentie', base:'3,1', now:'3,28', hp:5.8, go:4.6, sub:'bezoeken / klant / maand' },
-  { icon:'🛒', name:'Uitgaven per klant', base:'€86', now:'€90,10', hp:4.8, go:4.2, sub:'gem. besteding / maand' },
-  { icon:'🧩', name:'Formulemix', base:'1,60', now:'1,74', hp:8.8, go:6.7, sub:'CG-formules / klant' }
+// ═══════════════ DATA ═══════════════
+// [naam, emoji, bijnaam, x, y, score, +deze week, herkenning%, betaling%, freq, uitgaven€, mix, regiodirecteur]
+const REGIOS = [
+  ['Gent Oost','🦁','De Digitale Leeuwen',155,102,107,6,69.1,17.8,3.31,89,1.72,'Bart Vermeulen'],
+  ['Halle–Pajottenland','🌳','De Groene Reuzen',202,162,104,9,68.4,17.1,3.28,90,1.74,'Karin De Smedt'],
+  ['Kempen','🌲','De Kempense Kanjers',286,63,91,5,61.2,12.4,2.82,81,1.41,'Els Jacobs'],
+  ['Antwerpen Stad','🏙️','De Sinjoren',225,75,86,4,66.2,16.4,3.12,87,1.61,'Youssef El Amrani'],
+  ['Leuven-Hageland','🎓','De Slimme Spaarders',267,130,82,4,65.8,15.2,3.05,88,1.58,'Sofie Peeters'],
+  ['Gent West','🌉','De Stroppendragers',124,109,78,3,64.5,14.9,3.02,86,1.55,'Jan De Clerck'],
+  ['Limburg','🍒','De Fruitige Fanaten',337,114,71,3,62.9,13.1,2.91,82,1.44,'Hilde Vranken'],
+  ['Mechelen-Rupel','🐟','De Maneblussers',230,104,68,2,62.1,13.6,2.86,83,1.47,'Tom Claes'],
+  ['Brussel Hoofdstad','🏛️','De Kosmopolieten',219,139,62,3,61.8,15.8,2.95,84,1.49,'Aïcha Benali'],
+  ['Kust & Westhoek','🌊','De Zeebonken',56,104,59,2,63.4,12.8,2.88,83,1.46,'Wim Depoorter'],
+  ['Namen & Waals-Brabant','🏰','Les Citadelles',264,198,54,2,60.4,11.9,2.78,80,1.38,'Céline Dubois'],
+  ['Henegouwen','⛏️','Les Loups',174,213,48,1,59.6,11.2,2.74,78,1.35,'Marc Lemaire'],
+  ['Luik & Ardennen','🦌','Les Sangliers',359,205,42,1,59.1,10.8,2.70,77,1.33,'Julie Renard']
 ];
-
-const NATIONAL = [
-  { rank:1,  emoji:'🦁', name:'Gent Oost', nick:'De Digitale Leeuwen', stores:9,  score:107, trend:'↑ +6', tclass:'up', badges:['👑 Weekleider'] },
-  { rank:2,  emoji:'🌳', name:'Halle–Pajottenland', nick:'De Groene Reuzen', stores:8, score:104, trend:'↑ +9', tclass:'up', badges:['🚀 Sterkste Stijger'], me:true },
-  { rank:3,  emoji:'🌲', name:'Kempen', nick:'De Kempense Kanjers', stores:7, score:91, trend:'↑ +5', tclass:'up', badges:['🌟 Verrassing v/d week'] },
-  { rank:4,  emoji:'🏙️', name:'Antwerpen Stad', nick:'De Sinjoren', stores:11, score:86, trend:'↑ +4', tclass:'up', badges:[] },
-  { rank:5,  emoji:'🎓', name:'Leuven-Hageland', nick:'De Slimme Spaarders', stores:8, score:82, trend:'↑ +4', tclass:'up', badges:[] },
-  { rank:6,  emoji:'🌉', name:'Gent West', nick:'De Stroppendragers', stores:7, score:78, trend:'↑ +3', tclass:'up', badges:[] },
-  { rank:7,  emoji:'🍒', name:'Limburg', nick:'De Fruitige Fanaten', stores:9, score:71, trend:'↑ +3', tclass:'up', badges:[] },
-  { rank:8,  emoji:'🐟', name:'Mechelen-Rupel', nick:'De Maneblussers', stores:6, score:68, trend:'↑ +2', tclass:'up', badges:[] },
-  { rank:9,  emoji:'🏛️', name:'Brussel Hoofdstad', nick:'De Kosmopolieten', stores:10, score:62, trend:'↑ +3', tclass:'up', badges:[] },
-  { rank:10, emoji:'🌊', name:'Kust & Westhoek', nick:'De Zeebonken', stores:6, score:59, trend:'↑ +2', tclass:'up', badges:[] },
-  { rank:11, emoji:'🏰', name:'Namen & Waals-Brabant', nick:'Les Citadelles', stores:7, score:54, trend:'↑ +2', tclass:'up', badges:[] },
-  { rank:12, emoji:'⛏️', name:'Henegouwen', nick:'Les Loups', stores:8, score:48, trend:'↑ +1', tclass:'up', badges:[] },
-  { rank:13, emoji:'🦌', name:'Luik & Ardennen', nick:'Les Sangliers', stores:8, score:42, trend:'↑ +1', tclass:'up', badges:[] }
+// winkels per regio: [naam, formule c/o/b, dx, dy, score]
+const WINKELS = {
+  'Gent Oost': [['Colruyt Gentbrugge','c',-6,14,121],['Colruyt Sint-Amandsberg','c',-12,-6,114],['Colruyt Destelbergen','c',14,2,110],['Colruyt Melle','c',6,20,107],['OKay Ledeberg','o',-14,6,105],['OKay Lochristi','o',10,-16,103],['OKay Merelbeke','o',-2,26,100],['Bio-Planet Gent Zuid','b',-20,16,97],['Colruyt Oostakker','c',2,-12,94]],
+  'Halle–Pajottenland': [['Colruyt Sint-Pieters-Leeuw','c',8,-12,118],['OKay Lennik','o',-10,-6,109],['Colruyt Halle','c',0,8,103],['Bio-Planet Halle','b',6,14,101],['Colruyt Dilbeek','c',4,-22,98],['OKay Pepingen','o',-12,12,95],['Colruyt Beersel','c',16,0,89],['OKay Gooik','o',-20,-2,84]],
+  'Kempen': [['Colruyt Turnhout','c',0,-10,104],['Colruyt Geel','c',6,16,98],['OKay Mol','o',18,12,93],['Colruyt Herentals','c',-12,10,91],['OKay Kasterlee','o',8,2,88],['Bio-Planet Turnhout','b',-4,-16,84],['Colruyt Hoogstraten','c',-14,-20,79]],
+  'Antwerpen Stad': [['Colruyt Deurne','c',10,0,101],['Colruyt Merksem','c',4,-12,97],['Colruyt Wilrijk','c',-4,16,94],['Colruyt Berchem','c',6,8,91],['OKay Antwerpen Centrum','o',-4,0,89],['OKay Borgerhout','o',12,-6,87],['OKay Hoboken','o',-10,20,84],['Bio-Planet Antwerpen Zuid','b',-8,10,81],['Colruyt Ekeren','c',-2,-20,78],['OKay Linkeroever','o',-16,2,75],['Bio-Planet Berchem','b',14,14,71]],
+  'Leuven-Hageland': [['Colruyt Leuven','c',-8,4,95],['Colruyt Aarschot','c',6,-14,90],['Colruyt Diest','c',20,-10,86],['Colruyt Tienen','c',12,16,83],['OKay Heverlee','o',-10,14,80],['OKay Rotselaar','o',-2,-8,77],['Bio-Planet Leuven','b',-16,-2,74],['OKay Haacht','o',-20,-14,70]],
+  'Gent West': [['Colruyt Drongen','c',-6,4,91],['Colruyt Mariakerke','c',4,-8,85],['OKay Wondelgem','o',10,-2,81],['Colruyt Deinze','c',-10,18,78],['OKay Nevele','o',-18,8,75],['Bio-Planet Gent West','b',2,10,71],['Colruyt Zomergem','c',-14,-12,66]],
+  'Limburg': [['Colruyt Hasselt','c',-2,8,86],['Colruyt Genk','c',12,2,80],['Colruyt Sint-Truiden','c',-16,20,76],['OKay Bilzen','o',8,16,73],['OKay Beringen','o',-14,-8,70],['Colruyt Tongeren','c',2,26,67],['OKay Peer','o',-2,-18,64],['Bio-Planet Hasselt','b',6,-6,60],['Colruyt Lommel','c',-10,-26,56]],
+  'Mechelen-Rupel': [['Colruyt Mechelen','c',2,4,80],['OKay Duffel','o',10,-4,74],['Colruyt Willebroek','c',-12,8,70],['OKay Bornem','o',-20,2,66],['Colruyt Lier','c',16,-10,62],['Bio-Planet Mechelen','b',-4,-10,57]],
+  'Brussel Hoofdstad': [['Colruyt Anderlecht','c',-10,6,78],['Colruyt Schaarbeek','c',6,-8,72],['Colruyt Jette','c',-6,-10,68],['OKay Elsene','o',6,8,65],['OKay Ukkel','o',0,16,63],['OKay Etterbeek','o',12,2,60],['Bio-Planet Sint-Gillis','b',-2,2,57],['Colruyt Evere','c',12,-14,54],['OKay Laken','o',-4,-18,50],['Colruyt Vorst','c',-12,16,46]],
+  'Kust & Westhoek': [['Colruyt Oostende','c',4,-14,71],['OKay Nieuwpoort','o',-6,-4,65],['Colruyt Ieper','c',6,24,61],['OKay Diksmuide','o',0,8,57],['Colruyt Poperinge','c',-8,20,53],['Bio-Planet Oostende','b',12,-10,48]],
+  'Namen & Waals-Brabant': [['Colruyt Namur','c',8,10,67],['Colruyt Wavre','c',-8,-14,61],['OKay Gembloux','o',-2,0,57],['Colruyt Nivelles','c',-20,-6,54],['OKay Jodoigne','o',8,-10,50],['Bio-Planet Wavre','b',-14,-18,46],['Colruyt Andenne','c',20,14,42]],
+  'Henegouwen': [['Colruyt Charleroi','c',18,6,61],['Colruyt Mons','c',-4,10,56],['Colruyt Tournai','c',-28,-6,52],['OKay La Louvière','o',8,-2,49],['OKay Binche','o',2,14,46],['Colruyt Mouscron','c',-34,-16,43],['Bio-Planet Mons','b',-8,18,39],['OKay Soignies','o',-2,-12,35]],
+  'Luik & Ardennen': [['Colruyt Liège','c',-4,-14,55],['Colruyt Verviers','c',14,-8,50],['OKay Spa','o',10,4,46],['Colruyt Marche-en-Famenne','c',-16,28,43],['OKay Bastogne','o',6,44,40],['Colruyt Huy','c',-22,-2,37],['Bio-Planet Liège','b',4,-22,33],['OKay Malmedy','o',24,8,29]]
+};
+const FORMULE = { c:['Colruyt','#CC0000'], o:['OKay','#E84010'], b:['Bio-Planet','#2E7D32'] };
+const KPI_DEF = [
+  { icon:'🪪', name:'Herkenning aan kassa', sub:'% transacties met Xtra-identificatie', idx:7, mult:0.99, fmt:v=>v.toFixed(1).replace('.',',')+'%' },
+  { icon:'💳', name:'Xtra-betaling', sub:'% betaald via Xtra-betaalfunctie', idx:8, mult:2.12, fmt:v=>v.toFixed(1).replace('.',',')+'%' },
+  { icon:'🔁', name:'Klantfrequentie', sub:'bezoeken / klant / maand', idx:9, mult:0.56, fmt:v=>v.toFixed(2).replace('.',',') },
+  { icon:'🛒', name:'Uitgaven per klant', sub:'gem. besteding / maand', idx:10, mult:0.46, fmt:v=>'€'+v.toFixed(1).replace('.',',') },
+  { icon:'🧩', name:'Formulemix', sub:'CG-formules / klant', idx:11, mult:0.85, fmt:v=>v.toFixed(2).replace('.',',') }
 ];
+const NAT_AVG_GROEI = [7.2, 15.5, 4.1, 3.4, 6.2]; // nationaal gemiddelde groei per KPI
+const MANAGERS = ['Tom Wauters','Els Van Damme','Ahmed Karim','Sofie Maes','Jan Willems','Nadia Peeters','Pieter Goossens','Leen Jacobs','Koen Martens','Fatima Zahra','Dirk Smets'];
 
-const STORES = [
-  { rank:1, name:'Colruyt Sint-Pieters-Leeuw', sub:'Colruyt Laagste Prijzen', color:'var(--colruyt)', score:118, trend:'↑ +7', tclass:'up', badges:['👑 Weekleider','🪪 Herkenner'] },
-  { rank:2, name:'OKay Lennik', sub:'OKay', color:'var(--okay)', score:109, trend:'↑ +4', tclass:'up', badges:['🎁 Box-Bezorger'] },
-  { rank:3, name:'Colruyt Halle', sub:'Colruyt Laagste Prijzen', color:'var(--colruyt)', score:103, trend:'↑ +11', tclass:'up', badges:['🚀 Snelste Stijger'], me:true },
-  { rank:4, name:'Bio-Planet Halle', sub:'Bio-Planet', color:'var(--bioplanet)', score:101, trend:'↑ +5', tclass:'up', badges:['📣 Verhalenverteller'] },
-  { rank:5, name:'Colruyt Dilbeek', sub:'Colruyt Laagste Prijzen', color:'var(--colruyt)', score:98, trend:'↑ +3', tclass:'up', badges:[] },
-  { rank:6, name:'OKay Pepingen', sub:'OKay', color:'var(--okay)', score:95, trend:'↑ +2', tclass:'up', badges:[] },
-  { rank:7, name:'Colruyt Beersel', sub:'Colruyt Laagste Prijzen', color:'var(--colruyt)', score:89, trend:'→ 0', tclass:'flat', badges:[] },
-  { rank:8, name:'OKay Gooik', sub:'OKay', color:'var(--okay)', score:84, trend:'↓ -2', tclass:'down', badges:[] }
-];
-
-const WINS = [
-  { emoji:'🥐', text:'<b>Bio-Planet Halle</b>: "Kassatip van de week: we wijzen klanten met bio-brood op de Colruyt-bakkerij om de hoek — formulemix +18%!"', meta:'Week 5 · 24 duimpjes', likes:24 },
-  { emoji:'📱', text:'<b>Colruyt Halle</b>: "Fatima overtuigde 14 klanten op één shift om de Xtra-app te installeren. Applaus op de winkelvloer! 👏"', meta:'Week 5 · 31 duimpjes', likes:31 },
-  { emoji:'🎂', text:'<b>OKay Lennik</b>: "500e Xtra-betaling gevierd met taart voor het team én de klant. Die klant? Meteen fan."', meta:'Week 4 · 19 duimpjes', likes:19 },
-  { emoji:'🛒', text:'<b>Colruyt Sint-Pieters-Leeuw</b>: "Discovery boxen bij de klantendienst: 40 op één zaterdag uitgedeeld."', meta:'Week 4 · 15 duimpjes', likes:15 }
-];
-
-const STORE_VS = [
-  { name:'🪪 Herkenning', store:14.2, regio:10.3, max:25 },
-  { name:'💳 Xtra-betaling', store:19.5, regio:22.1, max:30 },
-  { name:'🔁 Klantfrequentie', store:6.1, regio:5.8, max:12 },
-  { name:'🛒 Uitgaven per klant', store:4.2, regio:4.8, max:12 },
-  { name:'🧩 Formulemix', store:9.4, regio:8.8, max:15 }
-];
-
-// ─── RENDER: KPI cards ──────────────────────────
-document.getElementById('kpiGridRegio').innerHTML = KPIS.map(k => {
-  const winning = k.hp >= k.go;
-  const maxv = Math.max(k.hp, k.go) * 1.15;
-  return `<div class="kpi">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;"><span class="kpi-icon">${k.icon}</span><span class="kpi-weight">20%</span></div>
-    <div class="kpi-name">${k.name}<br><span style="font-weight:500;color:var(--text-muted);font-size:10px;">${k.sub}</span></div>
-    <div class="kpi-vals"><span class="kpi-now">${k.now}</span><span class="kpi-base">was ${k.base}</span></div>
-    <div class="kpi-growth ${winning ? 'kg-win' : 'kg-lose'}">${winning ? '🏆' : '🎯'} +${String(k.hp).replace('.',',')}% groei</div>
-    <div class="kpi-cmp">
-      <div class="kpi-cmp-row"><div class="kpi-cmp-dot" style="background:var(--hp);"></div><div class="kpi-cmp-bar"><div class="kpi-cmp-fill" style="width:${k.hp/maxv*100}%;background:var(--hp);"></div></div><div class="kpi-cmp-val">+${String(k.hp).replace('.',',')}%</div></div>
-      <div class="kpi-cmp-row"><div class="kpi-cmp-dot" style="background:var(--go);"></div><div class="kpi-cmp-bar"><div class="kpi-cmp-fill" style="width:${k.go/maxv*100}%;background:var(--go);"></div></div><div class="kpi-cmp-val">+${String(k.go).replace('.',',')}%</div></div>
-    </div>
-  </div>`;
-}).join('');
-
-// ─── RENDER: leaderboard ────────────────────────
-function medal(r) { return r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : r + 'e'; }
-
-// nationaal klassement (13 regio's)
-document.getElementById('lbNationaal').innerHTML =
-  `<div class="lb-row head"><div>Plaats</div><div>Regio</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
-  NATIONAL.map(r => `<div class="lb-row${r.me ? ' me' : ''}">
-    <div class="lb-rank${r.rank <= 3 ? ' podium' : ''}">${medal(r.rank)}</div>
-    <div class="lb-store"><span style="font-size:16px;">${r.emoji}</span><div><div class="lb-store-name">${r.name}${r.me ? ' ⭐ jouw regio' : ''}</div><div class="lb-store-sub">"${r.nick}" · ${r.stores} winkels</div></div></div>
-    <div class="lb-score">${r.score} <span>pt</span> <span style="display:inline-block;vertical-align:middle;width:52px;height:5px;border-radius:100px;background:var(--bg);overflow:hidden;margin-left:4px;"><span style="display:block;height:100%;width:${r.score / 107 * 100}%;background:${r.me ? 'var(--accent)' : 'var(--hp)'};border-radius:100px;"></span></span></div>
-    <div class="lb-trend ${r.tclass}">${r.trend}</div>
-    <div class="lb-badges">${r.badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
-  </div>`).join('');
-document.getElementById('lbRegio').innerHTML =
-  `<div class="lb-row head"><div>Plaats</div><div>Winkel</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
-  STORES.map(s => `<div class="lb-row${s.me ? ' me' : ''}">
-    <div class="lb-rank${s.rank <= 3 ? ' podium' : ''}">${medal(s.rank)}</div>
-    <div class="lb-store"><div class="lb-dot" style="background:${s.color};"></div><div><div class="lb-store-name">${s.name}${s.me ? ' ⭐' : ''}</div><div class="lb-store-sub">${s.sub}</div></div></div>
-    <div class="lb-score">${s.score} <span>pt</span></div>
-    <div class="lb-trend ${s.tclass}">${s.trend}</div>
-    <div class="lb-badges">${s.badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
-  </div>`).join('');
-
-// ─── RENDER: regiokaart met winkelpins ──────────
-const GEO = { 'Colruyt Sint-Pieters-Leeuw':[8,-12], 'OKay Lennik':[-10,-6], 'Colruyt Halle':[0,8], 'Bio-Planet Halle':[6,14], 'Colruyt Dilbeek':[4,-22], 'OKay Pepingen':[-12,12], 'Colruyt Beersel':[16,0], 'OKay Gooik':[-20,-2] };
-const CX = 172, CY = 172;
+// ═══════════════ STATE ═══════════════
+let curRegio = 'Halle–Pajottenland';
+let curWinkel = 'Colruyt Halle';
+let curRole = 'regio';
 let selPin = null;
-function fmColor(sub) { return sub.includes('OKay') ? 'var(--okay)' : sub.includes('Bio') ? 'var(--bioplanet)' : 'var(--colruyt)'; }
+let winsExtra = {};   // ingezonden wins per regio
+let winsLiked = {};
+
+// ═══════════════ HELPERS ═══════════════
+const R = n => REGIOS.find(r => r[0] === n);
+const rangNat = n => REGIOS.findIndex(r => r[0] === n) + 1;
+const medal = r => r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : r + 'e';
+const esc = s => s.replace(/'/g, "\\'");
+function groeiKPI(regio, i) { return (R(regio)[5] / 10) * KPI_DEF[i].mult; }
+function winkelSorted(regio) { return [...WINKELS[regio]].sort((a, b) => b[4] - a[4]); }
+function winkelRang(regio, naam) { return winkelSorted(regio).findIndex(w => w[0] === naam) + 1; }
+function winkelDelta(naam, score) { let h = 0; for (const c of naam) h = (h * 31 + c.charCodeAt(0)) % 97; return (h % 8) - 1; } // -1..+6 deterministisch
+function manager(regio, naam) { if (naam === 'Colruyt Halle') return 'Tom Wauters'; let h = 0; for (const c of naam) h = (h * 17 + c.charCodeAt(0)) % 991; return MANAGERS[h % MANAGERS.length]; }
+function stad(winkelnaam) { return winkelnaam.replace(/^(Colruyt|OKay|Bio-Planet)\s+/, ''); }
+
+// ═══════════════ HERO (nationaal podium + jacht-balk) ═══════════════
+function renderHero() {
+  const top3 = REGIOS.slice(0, 3);
+  const orde = [top3[1], top3[0], top3[2]]; // 2e — 1e — 3e
+  document.getElementById('podium').innerHTML = orde.map((r, i) => {
+    const rank = rangNat(r[0]);
+    const mij = r[0] === curRegio ? ' · jouw regio ⭐' : '';
+    const mid = i === 1;
+    return `<div class="${mid ? 'duel-mid' : 'duel-team'}" style="cursor:pointer;" onclick="selectRegio('${esc(r[0])}')">
+      ${mid ? '<div class="duel-week">📅 Week 5 / 13</div><div class="duel-vs">🥇</div>' : `<div class="duel-team-badge ${i === 0 ? 'dtb-hp' : 'dtb-go'}">${medal(rank)}</div>`}
+      <div class="duel-team-name">${r[1]} ${r[0]}</div>
+      <div class="duel-team-sub">${WINKELS[r[0]].length} winkels · "${r[2]}"${mij}</div>
+      <div class="duel-score" ${mid ? 'style="font-size:44px;"' : ''} id="podScore${i}">0</div>
+      <div class="duel-score-unit">challenge-punten${rank === 1 ? ' · leider' : ''}</div>${!mid ? '<br><span class="duel-delta dd-up">↑ +' + r[6] + ' pt deze week' + (r[6] >= 9 ? ' — sterkste stijger van het land' : '') + '</span>' : ''}
+    </div>`;
+  }).join('');
+  orde.forEach((r, i) => countUp('podScore' + i, r[5], 1400));
+  // jacht-balk: jouw regio vs leider
+  const sel = R(curRegio), leider = REGIOS[0];
+  if (curRegio === leider[0]) {
+    const tw = REGIOS[1];
+    document.getElementById('tugHP').style.width = '50%';
+    setTimeout(() => { document.getElementById('tugHP').style.width = (leider[5] / (leider[5] + tw[5]) * 100) + '%'; }, 300);
+    document.getElementById('tugLabels').innerHTML = `<span>${leider[1]} Jouw regio: ${leider[5]} pt</span><span>Aan de leiding — ${tw[0]} nadert tot op ${leider[5] - tw[5]} punten!</span><span>${tw[5]} pt ${tw[1]} achtervolger</span>`;
+  } else {
+    document.getElementById('tugHP').style.width = '50%';
+    setTimeout(() => { document.getElementById('tugHP').style.width = (sel[5] / (sel[5] + leider[5]) * 100) + '%'; }, 300);
+    document.getElementById('tugLabels').innerHTML = `<span>${sel[1]} Jouw regio: ${sel[5]} pt (${medal(rangNat(curRegio))})</span><span>Jacht op de leider — verschil: ${leider[5] - sel[5]} punten!</span><span>${leider[5]} pt ${leider[1]} leider</span>`;
+  }
+}
+
+// ═══════════════ REGIO-VIEW ═══════════════
+function renderRegio() {
+  const r = R(curRegio), rank = rangNat(curRegio), n = REGIOS.length;
+  const winkels = winkelSorted(curRegio);
+  const gemScore = winkels.reduce((a, w) => a + w[4], 0) / winkels.length;
+  const boven = winkels.filter(w => w[4] >= gemScore).length;
+  const zwak = winkels[winkels.length - 1], sterk = winkels[0], tweede = winkels[1], stagneer = winkels[Math.max(winkels.length - 2, 1)];
+  const leider = REGIOS[0];
+  const moraal = 72 + (r[5] % 21);
+
+  // strip
+  document.getElementById('stripRegio').innerHTML = `
+    <div class="strip-card"><div class="strip-label">Positie nationaal</div><div class="strip-val">${rank}e <span style="font-size:14px;">van ${n}</span></div><div class="strip-sub ${rank <= 3 ? 'pos' : 'warn'}">${rank === 1 ? 'Aan de leiding! 🏆' : (leider[5] - r[5]) + ' pt achter leider ' + leider[0]}</div></div>
+    <div class="strip-card"><div class="strip-label">Momentum</div><div class="strip-val">+${r[6]} pt</div><div class="strip-sub ${r[6] >= 4 ? 'pos' : ''}">${r[6] >= 9 ? 'Sterkste weekgroei van alle 13 regio\'s 🔥' : r[6] >= 4 ? 'Mooie stijging deze week' : 'Trage week — tijd voor actie'}</div></div>
+    <div class="strip-card"><div class="strip-label">Winkels boven regiogemiddelde</div><div class="strip-val">${boven} / ${winkels.length}</div><div class="strip-sub">${zwak[0]} heeft een duwtje nodig</div></div>
+    <div class="strip-card"><div class="strip-label">Team-moraal</div><div class="strip-val">${moraal >= 85 ? '😄' : moraal >= 75 ? '🙂' : '😐'} ${moraal}%</div><div class="strip-sub pos">Wekelijkse pulse-check bij winkelteams</div></div>`;
+
+  // KPI cards
+  document.getElementById('kpiSub').innerHTML = `Jouw regio (${r[1]} paars) vs het gemiddelde van de 13 regio's (🇧🇪 teal) · elke KPI weegt 20% in de challenge-score`;
+  document.getElementById('kpiGridRegio').innerHTML = KPI_DEF.map((k, i) => {
+    const g = groeiKPI(curRegio, i), nat = NAT_AVG_GROEI[i];
+    const nu = r[k.idx], basis = nu / (1 + g / 100);
+    const win = g >= nat, maxv = Math.max(g, nat) * 1.15;
+    return `<div class="kpi">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;"><span class="kpi-icon">${k.icon}</span><span class="kpi-weight">20%</span></div>
+      <div class="kpi-name">${k.name}<br><span style="font-weight:500;color:var(--text-muted);font-size:10px;">${k.sub}</span></div>
+      <div class="kpi-vals"><span class="kpi-now">${k.fmt(nu)}</span><span class="kpi-base">was ${k.fmt(basis)}</span></div>
+      <div class="kpi-growth ${win ? 'kg-win' : 'kg-lose'}">${win ? '🏆' : '🎯'} +${g.toFixed(1).replace('.',',')}% groei</div>
+      <div class="kpi-cmp">
+        <div class="kpi-cmp-row"><div class="kpi-cmp-dot" style="background:var(--hp);"></div><div class="kpi-cmp-bar"><div class="kpi-cmp-fill" style="width:${g / maxv * 100}%;background:var(--hp);"></div></div><div class="kpi-cmp-val">+${g.toFixed(1).replace('.',',')}%</div></div>
+        <div class="kpi-cmp-row"><div class="kpi-cmp-dot" style="background:var(--go);"></div><div class="kpi-cmp-bar"><div class="kpi-cmp-fill" style="width:${nat / maxv * 100}%;background:var(--go);"></div></div><div class="kpi-cmp-val">+${nat.toFixed(1).replace('.',',')}%</div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // nationaal klassement
+  document.getElementById('lbNationaal').innerHTML =
+    `<div class="lb-row head"><div>Plaats</div><div>Regio</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
+    REGIOS.map((q, i) => {
+      const rk = i + 1, me = q[0] === curRegio;
+      const badges = [];
+      if (rk === 1) badges.push('👑 Weekleider');
+      if (q[6] >= 9) badges.push('🚀 Sterkste Stijger');
+      if (rk === 3) badges.push('🌟 Verrassing v/d week');
+      return `<div class="lb-row klik${me ? ' me' : ''}" onclick="selectRegio('${esc(q[0])}')">
+        <div class="lb-rank${rk <= 3 ? ' podium' : ''}">${medal(rk)}</div>
+        <div class="lb-store"><span style="font-size:16px;">${q[1]}</span><div><div class="lb-store-name">${q[0]}${me ? ' ⭐ jouw regio' : ''}</div><div class="lb-store-sub">"${q[2]}" · ${WINKELS[q[0]].length} winkels · ${q[12]}</div></div></div>
+        <div class="lb-score">${q[5]} <span>pt</span> <span style="display:inline-block;vertical-align:middle;width:52px;height:5px;border-radius:100px;background:var(--bg);overflow:hidden;margin-left:4px;"><span style="display:block;height:100%;width:${q[5] / REGIOS[0][5] * 100}%;background:${me ? 'var(--accent)' : 'var(--hp)'};border-radius:100px;"></span></span></div>
+        <div class="lb-trend up">↑ +${q[6]}</div>
+        <div class="lb-badges">${badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
+      </div>`;
+    }).join('');
+
+  // kaart
+  document.getElementById('kaartSub').textContent = `${curRegio} met alle ${winkels.length} winkels · klik op een winkel voor detail · kleur = formule · grijze stip = andere regio`;
+  const vx = Math.min(Math.max(r[3] - 125, 0), 210), vy = Math.min(Math.max(r[4] - 90, 0), 220);
+  document.getElementById('regioSvg').setAttribute('viewBox', `${vx} ${vy} 250 180`);
+  document.getElementById('buurRegios').innerHTML = REGIOS.filter(q => q[0] !== curRegio).map(q =>
+    `<g style="cursor:pointer;" onclick="selectRegio('${esc(q[0])}')"><circle cx="${q[3]}" cy="${q[4]}" r="3.5" fill="#C6BFD9"><title>${q[0]} — klik om te bekijken</title></circle><text x="${q[3]}" y="${q[4] - 7}" text-anchor="middle" font-family="Inter, sans-serif" font-size="7.5" font-weight="600" fill="#A9A2B8">${q[0]}${rangNat(q[0]) <= 3 ? ' ' + medal(rangNat(q[0])) : ''}</text></g>`).join('');
+  document.getElementById('regioZone').innerHTML =
+    `<circle cx="${r[3]}" cy="${r[4]}" r="38" fill="#6D28D9" fill-opacity="0.10" stroke="#6D28D9" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="4 3"/>
+     <text x="${r[3]}" y="${r[4] + 48}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="800" fill="#6D28D9">${r[1]} ${curRegio.toUpperCase()}</text>`;
+  renderPins();
+  document.getElementById('pinDetail').innerHTML = `<div class="panel-title">👆 Klik op een winkel</div><div style="font-size:12.5px;color:var(--text-mid);line-height:1.6;">Elke gekleurde stip is een winkel in <b>${curRegio}</b>. Klik erop voor score, positie en weektrend. De grijze stippen zijn de andere regio's — klik erop om van regio te wisselen.</div>`;
+
+  // winkel-leaderboard
+  document.getElementById('lbRegioTitle').textContent = `🏅 Winkel-leaderboard — ${curRegio}`;
+  document.getElementById('lbRegio').innerHTML =
+    `<div class="lb-row head"><div>Plaats</div><div>Winkel</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
+    winkels.map((w, i) => {
+      const rk = i + 1, d = winkelDelta(w[0], w[4]);
+      const badges = [];
+      if (rk === 1) badges.push('👑 Regioleider');
+      if (d >= 5 || w[0] === 'Colruyt Halle') badges.push('🚀 Snelste Stijger');
+      const me = curRole === 'winkel' && w[0] === curWinkel;
+      return `<div class="lb-row klik${me ? ' me' : ''}" onclick="kiesWinkelUitLb('${esc(w[0])}')">
+        <div class="lb-rank${rk <= 3 ? ' podium' : ''}">${medal(rk)}</div>
+        <div class="lb-store"><div class="lb-dot" style="background:${FORMULE[w[1]][1]};"></div><div><div class="lb-store-name">${w[0]}${me ? ' ⭐' : ''}</div><div class="lb-store-sub">${FORMULE[w[1]][0]} · ${manager(curRegio, w[0])}</div></div></div>
+        <div class="lb-score">${w[4]} <span>pt</span></div>
+        <div class="lb-trend ${d > 0 ? 'up' : d < 0 ? 'down' : 'flat'}">${d > 0 ? '↑ +' + d : d < 0 ? '↓ ' + d : '→ 0'}</div>
+        <div class="lb-badges">${badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
+      </div>`;
+    }).join('');
+
+  // acties
+  document.getElementById('actiesRegio').innerHTML = `
+    <div class="action"><div class="action-icon ai-1">🚀</div><div class="action-body">
+      <div class="action-title">Boost-team naar ${zwak[0]}</div>
+      <div class="action-desc">Stuur 2 Xtra-coaches uit topwinkel ${sterk[0]} voor een dag mee-draaien aan de kassa.</div>
+      <div class="action-why">💡 ${stad(zwak[0])} sluit het regioklassement — grootste hefboom voor de regio-score</div></div>
+      <button class="action-btn" onclick="doAction(this, 'Boost-team geboekt! 🚀 ${esc(zwak[0])} krijgt versterking op donderdag.')">Plan boost</button></div>
+    <div class="action"><div class="action-icon ai-2">🎪</div><div class="action-body">
+      <div class="action-title">Regio-actie: "Xtra op de markt van ${stad(sterk[0])}"</div>
+      <div class="action-desc">Stand op de zaterdagmarkt: klanten koppelen hun Xtra-kaart en krijgen een discovery box.</div>
+      <div class="action-why">💡 Lokale autonomie: jij kiest de actie, het budget (€1.200) is al goedgekeurd</div></div>
+      <button class="action-btn" onclick="doAction(this, 'Regio-actie gelanceerd! 🎪 De winkels krijgen morgen hun briefing.')">Lanceer actie</button></div>
+    <div class="action"><div class="action-icon ai-3">📣</div><div class="action-body">
+      <div class="action-title">Deel de weekly win van ${tweede[0]}</div>
+      <div class="action-desc">Hun kassatip werkte: +18% doorverwijzingen naar andere formules. Deel met alle ${winkels.length} winkels.</div>
+      <div class="action-why">💡 Kennisdeling is een van de 4 engagementmechanismen van de challenge</div></div>
+      <button class="action-btn" onclick="doAction(this, 'Weekly win gedeeld met alle winkelteams! 📣')">Deel win</button></div>
+    <div class="action"><div class="action-icon ai-4">☕</div><div class="action-body">
+      <div class="action-title">Winkelbezoek: ${stagneer[0]}</div>
+      <div class="action-desc">Score stagneert. Plan een koffiemoment met winkelverantwoordelijke ${manager(curRegio, stagneer[0]).split(' ')[0]} — luisteren eerst.</div>
+      <div class="action-why">💡 Ownership in het veld: ondersteunen, niet afrekenen</div></div>
+      <button class="action-btn" onclick="doAction(this, 'Bezoek ingepland ☕ bij ${esc(stagneer[0])}.')">Plan bezoek</button></div>`;
+
+  // wins + badges
+  renderWins();
+  document.getElementById('badgesRegio').innerHTML = [
+    ['🚀','Vliegende Start','Beste week 1', r[6] >= 4],
+    ['💳','Betaalkampioen','Hoogste groei Xtra-betaling', rank <= 2],
+    ['🤝','Deelgraag','3 weekly wins gedeeld', rank <= 5],
+    ['👑','Wekelijkse Leider','Sta 1e op maandag', rank === 1],
+    ['🎯','Alle 5 Groen','Elke KPI boven landelijk gem.', KPI_DEF.every((k, i) => groeiKPI(curRegio, i) >= NAT_AVG_GROEI[i])],
+    ['🏆','Regiokampioen','Win de challenge', false]
+  ].map(([e, nm, sb, earned]) => `<div class="bdg ${earned ? 'earned' : 'locked'}"><div class="bdg-emoji">${e}</div><div class="bdg-name">${nm}</div><div class="bdg-sub">${sb}</div></div>`).join('');
+}
+
+// ═══════════════ KAART-PINS ═══════════════
 function renderPins() {
-  document.getElementById('regioPins').innerHTML = STORES.map(s => {
-    const [dx, dy] = GEO[s.name];
-    const x = CX + dx, y = CY + dy;
-    const sel = selPin === s.name;
-    return `<g style="cursor:pointer;" onclick="pickPin('${s.name.replace(/'/g, "\\'")}')">
-      <circle cx="${x}" cy="${y}" r="${sel ? 8 : 6}" fill="${s.color.replace('var(--colruyt)', '#CC0000').replace('var(--okay)', '#E84010').replace('var(--bioplanet)', '#2E7D32')}" stroke="${sel ? '#1A1A1A' : 'white'}" stroke-width="${sel ? 2.5 : 1.8}"><title>${s.name} · ${s.score} pt</title></circle>
-      <text x="${x}" y="${y + 2.5}" text-anchor="middle" font-size="6.5" font-weight="800" fill="white" font-family="Inter, sans-serif" pointer-events="none">${s.rank}</text>
-      ${sel ? `<text x="${x}" y="${y - 12}" text-anchor="middle" font-size="8" font-weight="800" fill="#1A1A1A" font-family="Inter, sans-serif">${s.name}</text>` : ''}
+  const r = R(curRegio);
+  document.getElementById('regioPins').innerHTML = winkelSorted(curRegio).map((w, i) => {
+    const x = r[3] + w[2], y = r[4] + w[3];
+    const sel = selPin === w[0];
+    return `<g style="cursor:pointer;" onclick="pickPin('${esc(w[0])}')">
+      <circle cx="${x}" cy="${y}" r="${sel ? 8 : 6}" fill="${FORMULE[w[1]][1]}" stroke="${sel ? '#1A1A1A' : 'white'}" stroke-width="${sel ? 2.5 : 1.8}"><title>${w[0]} · ${w[4]} pt</title></circle>
+      <text x="${x}" y="${y + 2.5}" text-anchor="middle" font-size="6.5" font-weight="800" fill="white" font-family="Inter, sans-serif" pointer-events="none">${i + 1}</text>
+      ${sel ? `<text x="${x}" y="${y - 12}" text-anchor="middle" font-size="8" font-weight="800" fill="#1A1A1A" font-family="Inter, sans-serif">${w[0]}</text>` : ''}
     </g>`;
   }).join('');
 }
-function pickPin(name) {
-  selPin = name;
+function pickPin(naam) {
+  selPin = naam;
   renderPins();
-  const s = STORES.find(x => x.name === name);
+  const w = WINKELS[curRegio].find(x => x[0] === naam);
+  const rk = winkelRang(curRegio, naam), d = winkelDelta(naam, w[4]);
   document.getElementById('pinDetail').innerHTML = `
-    <div class="panel-title"><span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${s.color};"></span> ${s.name}${s.me ? ' ⭐' : ''}</div>
+    <div class="panel-title"><span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${FORMULE[w[1]][1]};"></span> ${naam}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${medal(s.rank)}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PLAATS</div></div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${s.score}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PUNTEN</div></div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:16px;font-weight:900;" class="lb-trend ${s.tclass}">${s.trend}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">DEZE WEEK</div></div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${medal(rk)}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PLAATS</div></div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${w[4]}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PUNTEN</div></div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:16px;font-weight:900;" class="lb-trend ${d > 0 ? 'up' : d < 0 ? 'down' : 'flat'}">${d > 0 ? '↑ +' + d : d < 0 ? '↓ ' + d : '→ 0'}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">DEZE WEEK</div></div>
     </div>
-    <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:10px;">${s.sub} · ${s.badges.length ? 'badges: ' + s.badges.join(', ') : 'nog geen badges dit kwartaal'}</div>
-    ${s.rank >= 7 ? '<div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:9px;padding:9px 12px;font-size:11.5px;color:#9A3412;line-height:1.5;margin-bottom:10px;">💡 Tip: plan een boost of bezoek via het actiecentrum hieronder.</div>' : ''}
-    <button class="action-btn" style="width:100%;" onclick="document.getElementById('lbRegio').scrollIntoView({behavior:'smooth',block:'center'})">Bekijk in leaderboard ↓</button>`;
+    <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:10px;">${FORMULE[w[1]][0]} · winkelverantwoordelijke ${manager(curRegio, naam)} · team van ${28 + (w[4] % 22)}</div>
+    ${rk >= WINKELS[curRegio].length - 1 ? '<div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:9px;padding:9px 12px;font-size:11.5px;color:#9A3412;line-height:1.5;margin-bottom:10px;">💡 Tip: plan een boost of bezoek via het actiecentrum hieronder.</div>' : ''}
+    <div style="display:flex;gap:8px;">
+      <button class="action-btn" style="flex:1;" onclick="document.getElementById('lbRegio').scrollIntoView({behavior:'smooth',block:'center'})">Bekijk in leaderboard ↓</button>
+      <button class="action-btn" style="flex:1;background:var(--accent);" onclick="kiesWinkelUitLb('${esc(naam)}')">Bekijk als winkel →</button>
+    </div>`;
 }
-renderPins();
 
-// mini leaderboard (store view)
-document.getElementById('lbMini').innerHTML = STORES.slice(0, 5).map(s =>
-  `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);${s.me ? 'background:var(--accent-pale);border-radius:8px;padding:8px 10px;' : ''}">
-    <span style="font-size:14px;font-weight:900;width:26px;">${medal(s.rank)}</span>
-    <span style="font-size:12.5px;font-weight:${s.me ? 800 : 600};flex:1;">${s.name}${s.me ? ' ⭐' : ''}</span>
-    <span style="font-size:12.5px;font-weight:800;">${s.score} pt</span>
-  </div>`).join('') + `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">…en 3 andere winkels. Volledige stand bij de regioverantwoordelijke.</div>`;
-
-// ─── RENDER: weekly wins ────────────────────────
+// ═══════════════ WEEKLY WINS ═══════════════
+function baseWins() {
+  const w = winkelSorted(curRegio);
+  return [
+    { emoji:'🥐', text:`<b>${w[1][0]}</b>: "Kassatip van de week: we wijzen klanten actief op de andere CG-formules in de buurt — formulemix +18%!"`, meta:'Week 5 · 24 duimpjes', likes:24 },
+    { emoji:'📱', text:`<b>${w[0][0]}</b>: "Ons team overtuigde 14 klanten op één shift om de Xtra-app te installeren. Applaus op de winkelvloer! 👏"`, meta:'Week 5 · 31 duimpjes', likes:31 },
+    { emoji:'🎂', text:`<b>${w[2][0]}</b>: "500e Xtra-betaling gevierd met taart voor het team én de klant. Die klant? Meteen fan."`, meta:'Week 4 · 19 duimpjes', likes:19 }
+  ];
+}
+function curWins() { return (winsExtra[curRegio] || []).concat(baseWins()); }
 function renderWins() {
-  document.getElementById('winsFeed').innerHTML = WINS.map((w, i) =>
-    `<div class="win"><div class="win-emoji">${w.emoji}</div><div><div class="win-text">${w.text}</div><div class="win-meta">${w.meta}</div><button class="win-likes" onclick="likeWin(this, ${i})">👍 ${w.likes}</button></div></div>`
-  ).join('');
+  document.getElementById('winsFeed').innerHTML = curWins().map((w, i) =>
+    `<div class="win"><div class="win-emoji">${w.emoji}</div><div><div class="win-text">${w.text}</div><div class="win-meta">${w.meta}</div><button class="win-likes" onclick="likeWin(this, ${i})">👍 ${w.likes}</button></div></div>`).join('');
 }
-renderWins();
 function likeWin(btn, i) {
   if (btn.classList.contains('liked')) return;
-  WINS[i].likes++;
   btn.classList.add('liked');
-  btn.textContent = '👍 ' + WINS[i].likes;
+  btn.textContent = '👍 ' + (curWins()[i].likes + 1);
+}
+function submitWin() {
+  const t = document.getElementById('winInput').value.trim();
+  if (!t) { toast('Schrijf eerst jullie win op ✍️'); return; }
+  winsExtra[curRegio] = winsExtra[curRegio] || [];
+  winsExtra[curRegio].unshift({ emoji:'✨', text:`<b>${curWinkel}</b>: "${t.replace(/</g, '&lt;')}"`, meta:'Zonet · door ' + manager(curRegio, curWinkel).split(' ')[0], likes:1 });
+  renderWins();
+  document.getElementById('winInput').value = '';
+  toast('Weekly win ingestuurd! ' + R(curRegio)[12].split(' ')[0] + ' en de hele regio zien hem nu 📣');
+  confetti(60);
 }
 
-// ─── RENDER: store vs regio bars ────────────────
-document.getElementById('storeVsRegio').innerHTML = STORE_VS.map(k => {
-  const ahead = k.store >= k.regio;
-  return `<div class="svr">
-    <div class="svr-head"><span style="color:var(--text);">${k.name}</span><span>jij +${String(k.store).replace('.',',')}% · regio +${String(k.regio).replace('.',',')}% ${ahead ? '· 💪 boven gemiddelde' : ''}</span></div>
-    <div class="svr-track"><div class="svr-fill" style="width:${k.store/k.max*100}%;"></div><div class="svr-marker" style="left:${k.regio/k.max*100}%;"></div></div>
-  </div>`;
-}).join('') + `<div class="svr-legend">Tip: jullie grootste kans ligt bij <b>Xtra-betaling</b> — de demo-hoek missie pakt precies dat aan. 🎯</div>`;
+// ═══════════════ WINKEL-VIEW ═══════════════
+function renderWinkel() {
+  const winkels = winkelSorted(curRegio);
+  if (!winkels.find(w => w[0] === curWinkel)) curWinkel = winkels[0][0];
+  const w = winkels.find(x => x[0] === curWinkel);
+  const rk = winkelRang(curRegio, curWinkel), n = winkels.length, d = Math.max(winkelDelta(curWinkel, w[4]), 1);
+  const boven = rk > 1 ? winkels[rk - 2] : null;
+  const gap = boven ? boven[4] - w[4] : winkels[1] ? w[4] - winkels[1][4] : 0;
+  const som = winkels.reduce((a, x) => a + x[4], 0);
 
-// ─── INTERACTIE ─────────────────────────────────
-function switchRole(r) {
-  document.getElementById('view-regio').style.display = r === 'regio' ? '' : 'none';
-  document.getElementById('view-winkel').style.display = r === 'winkel' ? '' : 'none';
-  document.getElementById('pill-regio').classList.toggle('active', r === 'regio');
-  document.getElementById('pill-winkel').classList.toggle('active', r === 'winkel');
-  document.getElementById('persona').innerHTML = r === 'regio'
-    ? `<div class="role-avatar">👩‍💼</div><div><b>Karin De Smedt</b><span>Regiodirecteur Halle–Pajottenland · 8 winkels</span></div>`
-    : `<div class="role-avatar">👨‍🍳</div><div><b>Tom Wauters</b><span>Winkelverantwoordelijke Colruyt Halle · team van 42</span></div>`;
+  document.getElementById('calloutWinkel').innerHTML = `
+    <div class="callout-emoji">${rk <= 3 ? medal(rk) : '💪'}</div>
+    <div>
+      <div class="callout-title">${curWinkel} staat ${rk}e van ${n} in ${curRegio}${rk === 1 ? ' — aan de leiding!' : ' — nog ' + gap + ' punten van ' + (rk === 2 ? 'de leiding' : rk === 3 ? 'plek 2' : 'een hogere plek') + '!'}</div>
+      <div class="callout-text">${rk === 1 ? 'Jullie zijn regioleider — hou ' + winkels[1][0] + ' (' + winkels[1][4] + ' pt) achter je door de teammissies af te werken. 🏆' : boven[0] + ' (' + (rk - 1) + 'e) staat ' + gap + ' punten voor. Voltooi deze week je teammissies en jullie kunnen erover springen. 💪'}</div>
+    </div>`;
+
+  document.getElementById('stripWinkel').innerHTML = `
+    <div class="strip-card"><div class="strip-label">Jouw winkelscore</div><div class="strip-val">${w[4]} <span style="font-size:14px;">pt</span></div><div class="strip-sub pos">↑ +${d} pt deze week</div></div>
+    <div class="strip-card"><div class="strip-label">Positie in regio</div><div class="strip-val">${rk}e <span style="font-size:14px;">van ${n}</span></div><div class="strip-sub ${rk <= 3 ? 'pos' : 'warn'}">${rk === 1 ? 'Regioleider 👑' : gap + ' pt achter ' + boven[0]}</div></div>
+    <div class="strip-card"><div class="strip-label">Missies deze week</div><div class="strip-val" id="missieCount">${done} / 4</div><div class="strip-sub">Elke missie levert winkelpunten op</div></div>
+    <div class="strip-card"><div class="strip-label">Team-bijdrage aan regio</div><div class="strip-val">${(w[4] / som * 100).toFixed(1).replace('.',',')}%</div><div class="strip-sub pos">Jullie tellen mee voor de score van ${curRegio}!</div></div>`;
+
+  // winkel vs regio bars
+  const avgG = w[4] / 10;
+  let h = 0; for (const c of curWinkel) h = (h * 13 + c.charCodeAt(0)) % 211;
+  document.getElementById('storeVsRegio').innerHTML = KPI_DEF.map((k, i) => {
+    const jit = 0.85 + ((h + i * 37) % 31) / 100;
+    const sg = avgG * k.mult * jit, rg = groeiKPI(curRegio, i);
+    const mx = Math.max(sg, rg) * 1.35;
+    return `<div class="svr">
+      <div class="svr-head"><span style="color:var(--text);">${k.icon} ${k.name}</span><span>jij +${sg.toFixed(1).replace('.',',')}% · regio +${rg.toFixed(1).replace('.',',')}% ${sg >= rg ? '· 💪 boven gemiddelde' : ''}</span></div>
+      <div class="svr-track"><div class="svr-fill" style="width:${sg / mx * 100}%;"></div><div class="svr-marker" style="left:${rg / mx * 100}%;"></div></div>
+    </div>`;
+  }).join('') + `<div class="svr-legend">Tip: jullie grootste kans ligt bij <b>Xtra-betaling</b> — de demo-hoek missie pakt precies dat aan. 🎯</div>`;
+
+  // badges
+  document.getElementById('badgesWinkelTitle').textContent = '🎖️ Badges van ' + curWinkel;
+  document.getElementById('badgesWinkel').innerHTML = [
+    ['🚀','Snelste Stijger','Week 3', d >= 4],
+    ['🪪','Herkenner','70%+ herkenning', rk <= 3],
+    ['💳','Tap-Toppers','20% Xtra-betaling', false],
+    ['🥇','Winkelkampioen','Word 1e van de regio', rk === 1],
+    ['🎁','Box-Bezorger','100 discovery boxen', rk <= 2],
+    ['📣','Verhalenverteller','5 weekly wins', false]
+  ].map(([e, nm, sb, earned]) => `<div class="bdg ${earned ? 'earned' : 'locked'}"><div class="bdg-emoji">${e}</div><div class="bdg-name">${nm}</div><div class="bdg-sub">${sb}</div></div>`).join('');
+  document.getElementById('badgesWinkelTip').textContent = '💳 Tap-Toppers: nog 2,9pp te gaan — jullie demo-hoek helpt!';
+  document.getElementById('winFormTip').textContent = 'De beste win van de week wordt door ' + R(curRegio)[12].split(' ')[0] + ' gedeeld met alle winkels — en levert 2 bonuspunten op.';
+
+  // mini leaderboard
+  document.getElementById('lbMini').innerHTML = winkels.slice(0, 5).map((x, i) =>
+    `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);${x[0] === curWinkel ? 'background:var(--accent-pale);border-radius:8px;padding:8px 10px;' : ''}">
+      <span style="font-size:14px;font-weight:900;width:26px;">${medal(i + 1)}</span>
+      <span style="font-size:12.5px;font-weight:${x[0] === curWinkel ? 800 : 600};flex:1;">${x[0]}${x[0] === curWinkel ? ' ⭐' : ''}</span>
+      <span style="font-size:12.5px;font-weight:800;">${x[4]} pt</span>
+    </div>`).join('') + (n > 5 ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">…en ${n - 5} andere winkels. Volledige stand bij de regioverantwoordelijke.</div>` : '');
+}
+
+// ═══════════════ NAVIGATIE ═══════════════
+function fillSelects() {
+  document.getElementById('selRegio').innerHTML = REGIOS.map(r =>
+    `<option value="${r[0]}" ${r[0] === curRegio ? 'selected' : ''}>${r[1]} ${r[0]} (${medal(rangNat(r[0]))} · ${r[5]} pt)</option>`).join('');
+  document.getElementById('selWinkel').innerHTML = winkelSorted(curRegio).map((w, i) =>
+    `<option value="${w[0]}" ${w[0] === curWinkel ? 'selected' : ''}>${medal(i + 1)} ${w[0]} (${w[4]} pt)</option>`).join('');
+  document.getElementById('selWinkel').style.display = curRole === 'winkel' ? '' : 'none';
+}
+function renderPersona() {
+  const r = R(curRegio);
+  document.getElementById('persona').innerHTML = curRole === 'regio'
+    ? `<div class="role-avatar">👩‍💼</div><div><b>${r[12]}</b><span>Regiodirecteur ${curRegio} · ${WINKELS[curRegio].length} winkels</span></div>`
+    : `<div class="role-avatar">👨‍🍳</div><div><b>${manager(curRegio, curWinkel)}</b><span>Winkelverantwoordelijke ${curWinkel}</span></div>`;
+}
+function renderAll() {
+  fillSelects();
+  renderPersona();
+  renderHero();
+  renderRegio();
+  renderWinkel();
+}
+function selectRegio(naam) {
+  curRegio = naam;
+  selPin = null;
+  curWinkel = winkelSorted(naam)[0][0];
+  renderAll();
+  toast(R(naam)[1] + ' Welkom in ' + naam + ' — ' + medal(rangNat(naam)) + ' nationaal');
+}
+function selectStore(naam) {
+  curWinkel = naam;
+  renderWinkel();
+  renderPersona();
+  renderRegio(); // ⭐ in leaderboard mee verplaatsen
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function kiesWinkelUitLb(naam) {
+  curWinkel = naam;
+  switchRole('winkel');
+}
+function switchRole(rol) {
+  curRole = rol;
+  document.getElementById('view-regio').style.display = rol === 'regio' ? '' : 'none';
+  document.getElementById('view-winkel').style.display = rol === 'winkel' ? '' : 'none';
+  document.getElementById('pill-regio').classList.toggle('active', rol === 'regio');
+  document.getElementById('pill-winkel').classList.toggle('active', rol === 'winkel');
+  fillSelects();
+  renderPersona();
+  renderWinkel();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ═══════════════ INTERACTIE ═══════════════
 let done = 1, total = 4;
 function toggleMission(el, pts) {
   if (el.classList.contains('done')) return;
@@ -749,12 +832,12 @@ function toggleMission(el, pts) {
   done++;
   document.getElementById('mpFill').style.width = (done / total * 100) + '%';
   document.getElementById('mpLabel').textContent = done + ' van ' + total + ' voltooid';
-  document.getElementById('missieCount').textContent = done + ' / ' + total;
+  const mc = document.getElementById('missieCount');
+  if (mc) mc.textContent = done + ' / ' + total;
   toast('Missie voltooid! +' + pts + ' winkelpunten 🎉');
   confetti(done === total ? 90 : 35);
-  if (done === total) setTimeout(() => toast('ALLE missies klaar! Colruyt Halle klimt richting plek 2 🥈🔥'), 1600);
+  if (done === total) setTimeout(() => toast('ALLE missies klaar! ' + curWinkel + ' klimt in het klassement 🔥'), 1600);
 }
-
 function doAction(btn, msg) {
   if (btn.classList.contains('done')) return;
   btn.classList.add('done');
@@ -762,17 +845,6 @@ function doAction(btn, msg) {
   toast(msg);
   confetti(35);
 }
-
-function submitWin() {
-  const t = document.getElementById('winInput').value.trim();
-  if (!t) { toast('Schrijf eerst jullie win op ✍️'); return; }
-  WINS.unshift({ emoji:'✨', text:'<b>Colruyt Halle</b>: "' + t.replace(/</g,'&lt;') + '"', meta:'Zonet · door Tom', likes:1 });
-  renderWins();
-  document.getElementById('winInput').value = '';
-  toast('Weekly win ingestuurd! Karin en de hele regio zien hem nu 📣');
-  confetti(60);
-}
-
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -780,7 +852,6 @@ function toast(msg) {
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('show'), 3200);
 }
-
 function confetti(n) {
   const colors = ['#EA580C','#7C3AED','#0E7490','#F59E0B','#22C55E','#EC4899'];
   for (let i = 0; i < n; i++) {
@@ -795,10 +866,9 @@ function confetti(n) {
     setTimeout(() => p.remove(), 3600);
   }
 }
-
-// ─── ANIMATED SCORES on load ────────────────────
 function countUp(id, target, ms) {
   const el = document.getElementById(id);
+  if (!el) return;
   const t0 = performance.now();
   (function step(t) {
     const p = Math.min((t - t0) / ms, 1);
@@ -806,10 +876,9 @@ function countUp(id, target, ms) {
     if (p < 1) requestAnimationFrame(step);
   })(t0);
 }
-countUp('scoreHP', 104, 1400);
-countUp('scoreGO', 107, 1400);
-countUp('scoreKE', 91, 1400);
-setTimeout(() => { document.getElementById('tugHP').style.width = (104 / (104 + 107) * 100) + '%'; }, 300);
+
+// ═══════════════ START ═══════════════
+renderAll();
 </script>
 </body>
 </html>
