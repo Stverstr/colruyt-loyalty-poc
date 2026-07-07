@@ -467,6 +467,7 @@
     <button class="tn-tab" onclick="toonTab('campagnes', this)">🎯 Campagnes</button>
     <button class="tn-tab" onclick="toonTab('builder', this)">➕ Nieuwe campagne</button>
     <button class="tn-tab" onclick="toonTab('flow', this)">🔄 Xtratjes-flow</button>
+    <button class="tn-tab" onclick="toonTab('regio', this)">🏆 Regio Challenge</button>
   </div>
 
   <div class="content">
@@ -850,6 +851,68 @@
 
     </div>
 
+    <!-- ════════════ TAB 5: REGIO CHALLENGE ════════════ -->
+    <div id="tab-regio" style="display:none;">
+
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">🏆 Regio Challenge 2026 — jouw winkels in de strijd</div>
+          <div class="sec-sub">Halle–Pajottenland 🆚 Gent Oost · week 5 van 13 · hoe presteren de winkels van jouw merk in beide challenge-regio's?</div>
+        </div>
+        <a href="regio.html" style="text-decoration:none;"><button class="btn btn-brand">Open het challenge-dashboard →</button></a>
+      </div>
+
+      <!-- Tussenstand strip -->
+      <div style="background:linear-gradient(135deg,#1A1030,#2A1545 55%,#0D3B48);border-radius:14px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;color:white;">
+        <div style="text-align:center;"><div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:700;">🌳 HALLE–PAJOTTENLAND</div><div style="font-size:28px;font-weight:900;">104 pt</div></div>
+        <div style="font-size:20px;font-weight:900;">⚔️</div>
+        <div style="text-align:center;"><div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:700;">🦁 GENT OOST</div><div style="font-size:28px;font-weight:900;">107 pt</div></div>
+        <div style="flex:1;min-width:220px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.55;">Jouw merk levert <strong style="color:#FDBA74;">8 van de 17</strong> deelnemende winkels. Hun KPI-groei telt rechtstreeks mee in de regioscore — jouw campagnes kunnen het verschil maken.</div>
+      </div>
+
+      <!-- KPI-bijdrage van het merk -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid var(--brand);"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">🪪 Herkenning</div><div style="font-size:20px;font-weight:900;margin-top:4px;">+11,6%</div><div style="font-size:10.5px;color:#15803D;font-weight:600;">jouw winkels vs +10,8% regio-gem.</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid var(--brand);"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">💳 Xtra-betaling</div><div style="font-size:20px;font-weight:900;margin-top:4px;">+20,3%</div><div style="font-size:10.5px;color:#15803D;font-weight:600;">sterkste KPI van jouw merk 🔥</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid var(--brand);"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">🔁 Frequentie</div><div style="font-size:20px;font-weight:900;margin-top:4px;">+5,9%</div><div style="font-size:10.5px;color:var(--text-muted);font-weight:600;">rond regio-gemiddelde</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid var(--brand);"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">🛒 Uitgaven</div><div style="font-size:20px;font-weight:900;margin-top:4px;">+4,5%</div><div style="font-size:10.5px;color:#B45309;font-weight:600;">kans: koppel een campagne</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:3px solid var(--brand);"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">🧩 Formulemix</div><div style="font-size:20px;font-weight:900;margin-top:4px;">+8,1%</div><div style="font-size:10.5px;color:#15803D;font-weight:600;">discovery boxen werken</div></div>
+      </div>
+
+      <!-- Winkels per regio -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+        <div class="table-card">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">🌳</span><div><div style="font-size:13.5px;font-weight:800;">Halle–Pajottenland</div><div style="font-size:11px;color:var(--text-muted);">4 winkels van jouw merk · regiodirecteur Karin De Smedt</div></div></div>
+          <div style="padding:6px 18px 12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>🥇 <strong>Colruyt Sint-Pieters-Leeuw</strong></span><span style="font-weight:800;">118 pt <span style="color:#15803D;font-size:11px;">↑ +7</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>🥉 <strong>Colruyt Halle</strong> <span style="background:#FEF3C7;border:1px solid #FDE68A;color:#92400E;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:100px;">🚀 Snelste Stijger</span></span><span style="font-weight:800;">103 pt <span style="color:#15803D;font-size:11px;">↑ +11</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>5e · <strong>Colruyt Dilbeek</strong></span><span style="font-weight:800;">98 pt <span style="color:#15803D;font-size:11px;">↑ +3</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12.5px;"><span>7e · <strong>Colruyt Beersel</strong></span><span style="font-weight:800;">89 pt <span style="color:var(--text-muted);font-size:11px;">→ 0</span></span></div>
+          </div>
+        </div>
+        <div class="table-card">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">🦁</span><div><div style="font-size:13.5px;font-weight:800;">Gent Oost</div><div style="font-size:11px;color:var(--text-muted);">4 winkels van jouw merk · regiodirecteur Bart Vermeulen</div></div></div>
+          <div style="padding:6px 18px 12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>🥇 <strong>Colruyt Gentbrugge</strong></span><span style="font-weight:800;">121 pt <span style="color:#15803D;font-size:11px;">↑ +5</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>🥈 <strong>Colruyt Sint-Amandsberg</strong></span><span style="font-weight:800;">114 pt <span style="color:#15803D;font-size:11px;">↑ +6</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:12.5px;"><span>4e · <strong>Colruyt Destelbergen</strong></span><span style="font-weight:800;">105 pt <span style="color:#15803D;font-size:11px;">↑ +4</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12.5px;"><span>6e · <strong>Colruyt Melle</strong></span><span style="font-weight:800;">97 pt <span style="color:#15803D;font-size:11px;">↑ +2</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actiekansen voor de marketeer -->
+      <div style="background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:14px;padding:18px 22px;">
+        <div style="font-size:13.5px;font-weight:800;color:#9A3412;margin-bottom:10px;">💡 Hoe kan jij als merk-marketeer de challenge voeden?</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;font-size:12px;color:#7C2D12;line-height:1.55;">
+          <div><strong>1. Richt een campagne op de challenge-regio's.</strong> Een "uitgaven per klant"-campagne in Halle–Pajottenland kan de zwakste KPI van jouw winkels boosten — gebruik de campagne builder met regio-targeting.</div>
+          <div><strong>2. Steun Colruyt Beersel.</strong> Jouw enige winkel die stagneert. Een lokale Xtratjes-actie (bv. dubbele punten op versproducten) geeft het team een zichtbare impuls.</div>
+          <div><strong>3. Vier successen mee.</strong> Colruyt Halle is Snelste Stijger — deel dat in je merkcommunicatie. Erkenning is een van de vier engagementmechanismen van de challenge.</div>
+        </div>
+      </div>
+
+    </div><!-- /tab-regio -->
+
   </div><!-- /content -->
 </main>
 </div><!-- /shell -->
@@ -1212,7 +1275,7 @@ function renderFlow(m) {
 //  TAB SWITCHING
 // ──────────────────────────────────────────────
 function toonTab(id, btn) {
-  ['klanten','dashboard','campagnes','builder','flow'].forEach(t => {
+  ['klanten','dashboard','campagnes','builder','flow','regio'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === id ? '' : 'none';
   });
   document.querySelectorAll('.tn-tab').forEach(b => b.classList.remove('active'));
@@ -1221,7 +1284,7 @@ function toonTab(id, btn) {
 }
 function toonTabDirect(id) {
   const tabs = document.querySelectorAll('.tn-tab');
-  const map = { klanten:0, dashboard:1, campagnes:2, builder:3, flow:4 };
+  const map = { klanten:0, dashboard:1, campagnes:2, builder:3, flow:4, regio:5 };
   toonTab(id, tabs[map[id]]);
 }
 
