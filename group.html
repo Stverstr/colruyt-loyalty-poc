@@ -1162,7 +1162,7 @@
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px;">
       <div>
         <div style="font-size:20px;font-weight:800;letter-spacing:-0.3px;">🗺️ Regio's t.o.v. elkaar — heel België</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-top:3px;">13 retailregio's vergeleken op de 5 loyalty-KPI's · klik op een regio · ⚔️ = actief in de Regio Challenge</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:3px;">Alle 13 regio's en 104 winkels in één competitie · klik op een regio óf een winkel · 🥇🥈🥉 = podium</div>
       </div>
       <a href="regio.html" style="text-decoration:none;font-size:12.5px;font-weight:700;color:var(--cg-blue);">Naar het challenge-dashboard →</a>
     </div>
@@ -1171,6 +1171,7 @@
 
     <div class="rg-map-wrap">
       <div class="rg-map-card">
+        <div class="rg-pills" id="rgMode" style="margin:0 0 12px;"></div>
         <svg viewBox="0 0 460 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
           <path d="M 30,120 L 70,85 L 120,60 L 152,74 L 175,62 L 205,45 L 232,62 L 252,44 L 300,58 L 322,50 L 346,80 L 338,110 L 366,120 L 400,130 L 416,168 L 421,192 L 398,232 L 372,280 L 355,330 L 352,372 L 322,345 L 282,330 L 240,302 L 198,312 L 158,270 L 110,232 L 78,190 L 58,160 Z"
                 fill="#EDF2F9" stroke="#C9D6E8" stroke-width="2" stroke-linejoin="round"/>
@@ -1182,7 +1183,7 @@
           <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#15803D;margin-right:4px;"></span>topregio</span>
           <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#EAB308;margin-right:4px;"></span>gemiddeld</span>
           <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#DC2626;margin-right:4px;"></span>aandachtsregio</span>
-          <span>· grootte = aantal winkels · ⚔️ = challenge-regio</span>
+          <span>· grootte = aantal winkels · in winkelmodus: <span style="color:#CC0000;font-weight:700;">●</span> Colruyt <span style="color:#E84010;font-weight:700;">●</span> OKay <span style="color:#2E7D32;font-weight:700;">●</span> Bio-Planet</span>
         </div>
       </div>
       <div class="rg-detail" id="rgDetail"></div>
@@ -1193,14 +1194,14 @@
     </div>
 
     <div style="background:linear-gradient(135deg,#1A1030,#2A1545 55%,#0D3B48);border-radius:16px;padding:22px 26px;margin-top:24px;color:white;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
-      <div style="font-size:34px;">⚔️</div>
+      <div style="font-size:34px;">🏆</div>
       <div style="flex:1;min-width:260px;">
-        <div style="font-size:14.5px;font-weight:800;margin-bottom:4px;">Het challenge-effect is meetbaar</div>
-        <div style="font-size:12.5px;color:rgba(255,255,255,0.7);line-height:1.6;">De twee challenge-regio's groeien <strong style="color:#FDBA74;">2,6× sneller</strong> op de 5 KPI's dan de rest van het land (+10,5% vs +4,1% gem. na 5 weken). Aanbeveling: bereid <strong style="color:#FDBA74;">golf 2</strong> voor met 4 extra regio's vanaf Q1 2027 — Kempen en Henegouwen tonen het grootste opwaarts potentieel.</div>
+        <div style="font-size:14.5px;font-weight:800;margin-bottom:4px;">Het challenge-effect is meetbaar — in heel het land</div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,0.7);line-height:1.6;">Sinds alle 13 regio's meedoen groeit de gemiddelde KPI-score <strong style="color:#FDBA74;">+7,3% in 5 weken</strong>, tegenover +1,9% in dezelfde periode vorig jaar (≈ 3,8× sneller). Omdat elke regio tegen zijn <strong style="color:#FDBA74;">eigen nulmeting</strong> speelt, maakt ook een kleinere regio als Kempen (🥉) kans op het podium.</div>
       </div>
       <div style="display:flex;gap:12px;">
-        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;text-align:center;"><div style="font-size:20px;font-weight:900;">+10,5%</div><div style="font-size:10px;color:#FDBA74;font-weight:700;">challenge-regio's</div></div>
-        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;text-align:center;"><div style="font-size:20px;font-weight:900;">+4,1%</div><div style="font-size:10px;color:rgba(255,255,255,0.55);font-weight:700;">overige 11 regio's</div></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;text-align:center;"><div style="font-size:20px;font-weight:900;">+7,3%</div><div style="font-size:10px;color:#FDBA74;font-weight:700;">13 regio's, na 5 weken</div></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;text-align:center;"><div style="font-size:20px;font-weight:900;">+1,9%</div><div style="font-size:10px;color:rgba(255,255,255,0.55);font-weight:700;">zelfde periode 2025</div></div>
       </div>
     </div>
   </div>
@@ -1231,6 +1232,7 @@ function updChallenge() {
 
 // ══════════════ REGIO'S TAB ══════════════
 const RG_KPIS = [
+  { id:'score', label:'🏆 Challenge-score', unit:'pt', fmt: v => v + ' pt' },
   { id:'index', label:'🏅 Loyalty-index', unit:'', fmt: v => v },
   { id:'herkenning', label:'🪪 Herkenning', unit:'%', fmt: v => String(v).replace('.',',') + '%' },
   { id:'betaling', label:'💳 Xtra-betaling', unit:'%', fmt: v => String(v).replace('.',',') + '%' },
@@ -1240,77 +1242,165 @@ const RG_KPIS = [
 ];
 // index 100 = landelijk gemiddelde
 const RG_DATA = [
-  { name:'Gent Oost', x:168, y:100, stores:9,  chal:true,  index:112, herkenning:69.1, betaling:17.8, freq:3.31, uitgaven:89, mix:1.72, groei:'+10,7%', note:'Challenge-leider ⚔️ — sterke digitale adoptie, jonge klanten' },
-  { name:'Halle–Pajottenland', x:172, y:172, stores:8, chal:true, index:110, herkenning:68.4, betaling:17.1, freq:3.28, uitgaven:90, mix:1.74, groei:'+10,4%', note:'Challenge-uitdager ⚔️ — beste formulemix van het land' },
-  { name:'Antwerpen Stad', x:210, y:76, stores:11, index:106, herkenning:66.2, betaling:16.4, freq:3.12, uitgaven:87, mix:1.61, groei:'+4,8%', note:'Grootste regio — hoge betaaladoptie, frequentie kan beter' },
-  { name:'Leuven-Hageland', x:250, y:142, stores:8, index:104, herkenning:65.8, betaling:15.2, freq:3.05, uitgaven:88, mix:1.58, groei:'+4,5%', note:'Stabiele groeier — studentensteden duwen app-gebruik' },
-  { name:'Gent West', x:122, y:118, stores:7, index:102, herkenning:64.5, betaling:14.9, freq:3.02, uitgaven:86, mix:1.55, groei:'+4,2%', note:'Net boven gemiddelde — profiteert van Gent Oost-buzz' },
-  { name:'Brussel Hoofdstad', x:200, y:152, stores:10, index:100, herkenning:61.8, betaling:15.8, freq:2.95, uitgaven:84, mix:1.49, groei:'+3,9%', note:'Hoge betaaladoptie, herkenning blijft achter (anonieme shoppers)' },
-  { name:'Kust & Westhoek', x:62, y:128, stores:6, index:98, herkenning:63.4, betaling:12.8, freq:2.88, uitgaven:83, mix:1.46, groei:'+3,6%', note:'Seizoensgebonden — tweede verblijvers moeilijk te binden' },
-  { name:'Limburg', x:322, y:98, stores:9, index:97, herkenning:62.9, betaling:13.1, freq:2.91, uitgaven:82, mix:1.44, groei:'+4,0%', note:'Trouwe klanten, maar lage formulemix (minder CG-formules aanwezig)' },
-  { name:'Mechelen-Rupel', x:212, y:112, stores:6, index:96, herkenning:62.1, betaling:13.6, freq:2.86, uitgaven:83, mix:1.47, groei:'+3,8%', note:'Compacte regio — potentieel voor cross-formule nudging' },
-  { name:'Kempen', x:268, y:72, stores:7, index:94, herkenning:61.2, betaling:12.4, freq:2.82, uitgaven:81, mix:1.41, groei:'+4,4%', note:'Grootste opwaarts potentieel — kandidaat golf 2 ⭐' },
-  { name:'Namen & Waals-Brabant', x:240, y:220, stores:7, index:92, herkenning:60.4, betaling:11.9, freq:2.78, uitgaven:80, mix:1.38, groei:'+3,4%', note:'Groeimarkt — minder formuledichtheid, app-adoptie stijgt' },
-  { name:'Henegouwen', x:142, y:232, stores:8, index:90, herkenning:59.6, betaling:11.2, freq:2.74, uitgaven:78, mix:1.35, groei:'+3,1%', note:'Aandachtsregio — prijsgevoelig, kandidaat golf 2 ⭐' },
-  { name:'Luik & Ardennen', x:330, y:202, stores:8, index:89, herkenning:59.1, betaling:10.8, freq:2.70, uitgaven:77, mix:1.33, groei:'+2,9%', note:'Uitgestrekt gebied — fysieke touchpoints wegen zwaarder' }
+  { name:'Gent Oost', x:168, y:100, stores:9, score:107, index:112, herkenning:69.1, betaling:17.8, freq:3.31, uitgaven:89, mix:1.72, groei:'+10,7%', note:'Nationale leider 🥇 — sterke digitale adoptie, jonge klanten' },
+  { name:'Halle–Pajottenland', x:172, y:172, stores:8, score:104, index:110, herkenning:68.4, betaling:17.1, freq:3.28, uitgaven:90, mix:1.74, groei:'+10,4%', note:'Sterkste stijger deze week 🚀 — beste formulemix van het land' },
+  { name:'Kempen', x:268, y:72, stores:7, score:91, index:94, herkenning:61.2, betaling:12.4, freq:2.82, uitgaven:81, mix:1.41, groei:'+9,1%', note:'Verrassing van de competitie 🌟 — lage index, maar enorme groei' },
+  { name:'Antwerpen Stad', x:210, y:76, stores:11, score:86, index:106, herkenning:66.2, betaling:16.4, freq:3.12, uitgaven:87, mix:1.61, groei:'+8,6%', note:'Grootste regio — hoge betaaladoptie, frequentie kan beter' },
+  { name:'Leuven-Hageland', x:250, y:142, stores:8, score:82, index:104, herkenning:65.8, betaling:15.2, freq:3.05, uitgaven:88, mix:1.58, groei:'+8,2%', note:'Stabiele groeier — studentensteden duwen app-gebruik' },
+  { name:'Gent West', x:122, y:118, stores:7, score:78, index:102, herkenning:64.5, betaling:14.9, freq:3.02, uitgaven:86, mix:1.55, groei:'+7,8%', note:'Profiteert van de derby met buur Gent Oost' },
+  { name:'Limburg', x:322, y:98, stores:9, score:71, index:97, herkenning:62.9, betaling:13.1, freq:2.91, uitgaven:82, mix:1.44, groei:'+7,1%', note:'Trouwe klanten, maar lage formulemix (minder CG-formules aanwezig)' },
+  { name:'Mechelen-Rupel', x:212, y:112, stores:6, score:68, index:96, herkenning:62.1, betaling:13.6, freq:2.86, uitgaven:83, mix:1.47, groei:'+6,8%', note:'Compacte regio — potentieel voor cross-formule nudging' },
+  { name:'Brussel Hoofdstad', x:200, y:152, stores:10, score:62, index:100, herkenning:61.8, betaling:15.8, freq:2.95, uitgaven:84, mix:1.49, groei:'+6,2%', note:'Hoge betaaladoptie, herkenning blijft achter (anonieme shoppers)' },
+  { name:'Kust & Westhoek', x:62, y:128, stores:6, score:59, index:98, herkenning:63.4, betaling:12.8, freq:2.88, uitgaven:83, mix:1.46, groei:'+5,9%', note:'Seizoensgebonden — tweede verblijvers moeilijk te binden' },
+  { name:'Namen & Waals-Brabant', x:240, y:220, stores:7, score:54, index:92, herkenning:60.4, betaling:11.9, freq:2.78, uitgaven:80, mix:1.38, groei:'+5,4%', note:'Groeimarkt — minder formuledichtheid, app-adoptie stijgt' },
+  { name:'Henegouwen', x:142, y:232, stores:8, score:48, index:90, herkenning:59.6, betaling:11.2, freq:2.74, uitgaven:78, mix:1.35, groei:'+4,8%', note:'Aandachtsregio — extra ondersteuning vanuit centrale marketing gepland' },
+  { name:'Luik & Ardennen', x:330, y:202, stores:8, score:42, index:89, herkenning:59.1, betaling:10.8, freq:2.70, uitgaven:77, mix:1.33, groei:'+4,2%', note:'Uitgestrekt gebied — fysieke touchpoints wegen zwaarder' }
 ];
-let rgKpi = 'index', rgSel = 'Gent Oost';
+let rgKpi = 'score', rgSel = 'Gent Oost';
 
 function rgColor(val, min, max) {
   const p = (val - min) / (max - min || 1);
   return p > 0.66 ? '#15803D' : p > 0.33 ? '#EAB308' : '#DC2626';
 }
+function rgRank(name) { return [...RG_DATA].sort((a, b) => b.score - a.score).findIndex(d => d.name === name) + 1; }
+function rgMedal(rank) { return rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''; }
+
+// winkels per regio: [naam, formule (c/o/b), dx, dy t.o.v. regiocentrum, winkelscore]
+const RG_FORMULES = { c: ['Colruyt', '#CC0000'], o: ['OKay', '#E84010'], b: ['Bio-Planet', '#2E7D32'] };
+const RG_STORES = {
+  'Gent Oost': [['Colruyt Gentbrugge','c',-6,14,121],['Colruyt Sint-Amandsberg','c',-12,-6,114],['Colruyt Destelbergen','c',14,2,110],['Colruyt Melle','c',6,20,107],['OKay Ledeberg','o',-14,6,105],['OKay Lochristi','o',10,-16,103],['OKay Merelbeke','o',-2,26,100],['Bio-Planet Gent Zuid','b',-20,16,97],['Colruyt Oostakker','c',2,-12,94]],
+  'Halle–Pajottenland': [['Colruyt Sint-Pieters-Leeuw','c',8,-12,118],['OKay Lennik','o',-10,-6,109],['Colruyt Halle','c',0,8,103],['Bio-Planet Halle','b',6,12,101],['Colruyt Dilbeek','c',4,-22,98],['OKay Pepingen','o',-12,10,95],['Colruyt Beersel','c',16,0,89],['OKay Gooik','o',-20,-2,84]],
+  'Kempen': [['Colruyt Turnhout','c',0,-10,104],['Colruyt Geel','c',6,16,98],['OKay Mol','o',18,12,93],['Colruyt Herentals','c',-12,10,91],['OKay Kasterlee','o',8,2,88],['Bio-Planet Turnhout','b',-4,-16,84],['Colruyt Hoogstraten','c',-14,-20,79]],
+  'Antwerpen Stad': [['Colruyt Deurne','c',10,0,101],['Colruyt Merksem','c',4,-12,97],['Colruyt Wilrijk','c',-4,16,94],['Colruyt Berchem','c',6,8,91],['OKay Antwerpen Centrum','o',-4,0,89],['OKay Borgerhout','o',12,-6,87],['OKay Hoboken','o',-10,20,84],['Bio-Planet Antwerpen Zuid','b',-8,10,81],['Colruyt Ekeren','c',-2,-20,78],['OKay Linkeroever','o',-16,2,75],['Bio-Planet Berchem','b',14,14,71]],
+  'Leuven-Hageland': [['Colruyt Leuven','c',-8,4,95],['Colruyt Aarschot','c',6,-14,90],['Colruyt Diest','c',20,-10,86],['Colruyt Tienen','c',12,16,83],['OKay Heverlee','o',-10,14,80],['OKay Rotselaar','o',-2,-8,77],['Bio-Planet Leuven','b',-16,-2,74],['OKay Haacht','o',-20,-14,70]],
+  'Gent West': [['Colruyt Drongen','c',-6,4,91],['Colruyt Mariakerke','c',4,-8,85],['OKay Wondelgem','o',10,-2,81],['Colruyt Deinze','c',-10,18,78],['OKay Nevele','o',-18,8,75],['Bio-Planet Gent West','b',2,10,71],['Colruyt Zomergem','c',-14,-12,66]],
+  'Limburg': [['Colruyt Hasselt','c',-2,8,86],['Colruyt Genk','c',12,2,80],['Colruyt Sint-Truiden','c',-16,20,76],['OKay Bilzen','o',8,16,73],['OKay Beringen','o',-14,-8,70],['Colruyt Tongeren','c',2,26,67],['OKay Peer','o',-2,-18,64],['Bio-Planet Hasselt','b',6,-6,60],['Colruyt Lommel','c',-10,-26,56]],
+  'Mechelen-Rupel': [['Colruyt Mechelen','c',2,4,80],['OKay Duffel','o',10,-4,74],['Colruyt Willebroek','c',-12,8,70],['OKay Bornem','o',-20,2,66],['Colruyt Lier','c',16,-10,62],['Bio-Planet Mechelen','b',-4,-10,57]],
+  'Brussel Hoofdstad': [['Colruyt Anderlecht','c',-10,6,78],['Colruyt Schaarbeek','c',6,-8,72],['Colruyt Jette','c',-6,-10,68],['OKay Elsene','o',6,8,65],['OKay Ukkel','o',0,16,63],['OKay Etterbeek','o',12,2,60],['Bio-Planet Sint-Gillis','b',-2,2,57],['Colruyt Evere','c',12,-14,54],['OKay Laken','o',-4,-18,50],['Colruyt Vorst','c',-12,16,46]],
+  'Kust & Westhoek': [['Colruyt Oostende','c',4,-14,71],['OKay Nieuwpoort','o',-6,-4,65],['Colruyt Ieper','c',6,24,61],['OKay Diksmuide','o',0,8,57],['Colruyt Poperinge','c',-8,20,53],['Bio-Planet Oostende','b',12,-10,48]],
+  'Namen & Waals-Brabant': [['Colruyt Namur','c',8,10,67],['Colruyt Wavre','c',-8,-14,61],['OKay Gembloux','o',-2,0,57],['Colruyt Nivelles','c',-20,-6,54],['OKay Jodoigne','o',8,-10,50],['Bio-Planet Wavre','b',-14,-18,46],['Colruyt Andenne','c',20,14,42]],
+  'Henegouwen': [['Colruyt Charleroi','c',18,6,61],['Colruyt Mons','c',-4,10,56],['Colruyt Tournai','c',-28,-6,52],['OKay La Louvière','o',8,-2,49],['OKay Binche','o',2,14,46],['Colruyt Mouscron','c',-34,-16,43],['Bio-Planet Mons','b',-8,18,39],['OKay Soignies','o',-2,-12,35]],
+  'Luik & Ardennen': [['Colruyt Liège','c',-4,-14,55],['Colruyt Verviers','c',14,-8,50],['OKay Spa','o',10,4,46],['Colruyt Marche-en-Famenne','c',-16,28,43],['OKay Bastogne','o',6,44,40],['Colruyt Huy','c',-22,-2,37],['Bio-Planet Liège','b',4,-22,33],['OKay Malmedy','o',24,8,29]]
+};
+function rgStoreRank(regio, naam) {
+  const list = [...RG_STORES[regio]].sort((a, b) => b[4] - a[4]);
+  return list.findIndex(s => s[0] === naam) + 1;
+}
+let rgMode = 'regio';       // 'regio' | 'winkel'
+let rgSelStore = null;      // [regio, winkelnaam]
+
 function rgRender() {
   const vals = RG_DATA.map(r => r[rgKpi]);
   const min = Math.min(...vals), max = Math.max(...vals);
   // pills
   document.getElementById('rgPills').innerHTML = RG_KPIS.map(k =>
     `<button class="rg-pill${k.id === rgKpi ? ' active' : ''}" onclick="rgSetKpi('${k.id}')">${k.label}</button>`).join('');
-  // bubbles
-  document.getElementById('rgBubbles').innerHTML = RG_DATA.map(r => {
-    const c = rgColor(r[rgKpi], min, max);
-    const rad = 9 + r.stores * 0.9;
-    return `<g class="rg-bubble${r.name === rgSel ? ' sel' : ''}" onclick="rgSelect('${r.name.replace(/'/g, "\\'")}')">
-      <circle class="rg-c" cx="${r.x}" cy="${r.y}" r="${rad}" fill="${c}" fill-opacity="0.82" stroke="white" stroke-width="2.5"/>
-      ${r.chal ? `<text x="${r.x}" y="${r.y - rad - 5}" text-anchor="middle" font-size="12">⚔️</text>` : ''}
-      <text x="${r.x}" y="${r.y + 3.5}" text-anchor="middle" font-size="9.5" font-weight="800" fill="white" font-family="Inter, sans-serif" pointer-events="none">${String(RG_KPIS.find(k => k.id === rgKpi).fmt(r[rgKpi])).replace('€','')}</text>
-      <text x="${r.x}" y="${r.y + rad + 11}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#4A4A4A" font-family="Inter, sans-serif" pointer-events="none">${r.name}</text>
-    </g>`;
-  }).join('');
+  // mode toggle
+  document.getElementById('rgMode').innerHTML =
+    `<button class="rg-pill${rgMode === 'regio' ? ' active' : ''}" onclick="rgSetMode('regio')">🗺️ Regio's (13)</button>
+     <button class="rg-pill${rgMode === 'winkel' ? ' active' : ''}" onclick="rgSetMode('winkel')">🏪 Winkels (104)</button>`;
+
+  if (rgMode === 'regio') {
+    document.getElementById('rgBubbles').innerHTML = RG_DATA.map(r => {
+      const c = rgColor(r[rgKpi], min, max);
+      const rad = 9 + r.stores * 0.9;
+      const med = rgMedal(rgRank(r.name));
+      return `<g class="rg-bubble${r.name === rgSel && !rgSelStore ? ' sel' : ''}" onclick="rgSelect('${r.name.replace(/'/g, "\\'")}')">
+        <circle class="rg-c" cx="${r.x}" cy="${r.y}" r="${rad}" fill="${c}" fill-opacity="0.82" stroke="white" stroke-width="2.5"/>
+        ${med ? `<text x="${r.x}" y="${r.y - rad - 4}" text-anchor="middle" font-size="13">${med}</text>` : ''}
+        <text x="${r.x}" y="${r.y + 3.5}" text-anchor="middle" font-size="9.5" font-weight="800" fill="white" font-family="Inter, sans-serif" pointer-events="none">${String(RG_KPIS.find(k => k.id === rgKpi).fmt(r[rgKpi])).replace('€','').replace(' pt','')}</text>
+        <text x="${r.x}" y="${r.y + rad + 11}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#4A4A4A" font-family="Inter, sans-serif" pointer-events="none">${r.name}</text>
+      </g>`;
+    }).join('');
+  } else {
+    // winkel-modus: alle 104 winkels als klikbare stippen (kleur = formule)
+    const allScores = Object.values(RG_STORES).flat().map(s => s[4]);
+    const smin = Math.min(...allScores), smax = Math.max(...allScores);
+    document.getElementById('rgBubbles').innerHTML = RG_DATA.map(r =>
+      `<circle cx="${r.x}" cy="${r.y}" r="2.5" fill="#B0B7C3"/>` +
+      RG_STORES[r.name].map(s => {
+        const sel = rgSelStore && rgSelStore[1] === s[0];
+        const x = r.x + s[2], y = r.y + s[3];
+        return `<g class="rg-bubble${sel ? ' sel' : ''}" onclick="rgSelectStore('${r.name.replace(/'/g, "\\'")}','${s[0].replace(/'/g, "\\'")}')">
+          <circle class="rg-c" cx="${x}" cy="${y}" r="${sel ? 8 : 5.5}" fill="${RG_FORMULES[s[1]][1]}" fill-opacity="0.9" stroke="white" stroke-width="1.8"><title>${s[0]} · ${s[4]} pt</title></circle>
+          ${sel ? `<text x="${x}" y="${y - 12}" text-anchor="middle" font-size="9" font-weight="800" fill="#1A1A1A" font-family="Inter, sans-serif">${s[0]}</text>` : ''}
+        </g>`;
+      }).join('')
+    ).join('');
+  }
   rgDetail();
   rgTable(min, max);
 }
 function rgSetKpi(id) { rgKpi = id; rgRender(); }
-function rgSelect(name) { rgSel = name; rgRender(); }
+function rgSetMode(m) { rgMode = m; if (m === 'regio') rgSelStore = null; rgRender(); }
+function rgSelect(name) { rgSel = name; rgSelStore = null; rgRender(); }
+function rgSelectStore(regio, naam) { rgSel = regio; rgSelStore = [regio, naam]; rgRender(); }
+
 function rgDetail() {
+  // winkel geselecteerd → winkelkaart
+  if (rgSelStore) {
+    const [regio, naam] = rgSelStore;
+    const s = RG_STORES[regio].find(x => x[0] === naam);
+    const r = RG_DATA.find(d => d.name === regio);
+    const rank = rgStoreRank(regio, naam);
+    const [fNaam, fKleur] = RG_FORMULES[s[1]];
+    document.getElementById('rgDetail').innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div style="width:12px;height:12px;border-radius:4px;background:${fKleur};flex-shrink:0;"></div>
+        <div style="font-size:16px;font-weight:800;flex:1;">${naam}</div>
+        <div style="font-size:12px;font-weight:800;color:var(--cg-blue);">${rank <= 3 ? ['🥇','🥈','🥉'][rank-1] : '#' + rank} in regio</div>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:16px;">${fNaam} · regio ${regio} (${rgMedal(rgRank(regio)) || '#' + rgRank(regio)} nationaal)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-size:22px;font-weight:900;">${s[4]}</div><div style="font-size:10px;color:var(--text-muted);font-weight:700;">WINKELPUNTEN</div></div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-size:22px;font-weight:900;">${rank}<span style="font-size:12px;">/${RG_STORES[regio].length}</span></div><div style="font-size:10px;color:var(--text-muted);font-weight:700;">PLAATS IN REGIO</div></div>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-mid);line-height:1.6;margin-bottom:12px;">Deze winkel telt mee voor de challenge-score van <b>${regio}</b> (${r.score} pt, ${r.groei} KPI-groei). Winkelpunten = gemiddelde KPI-groei van de winkel × 10.</div>
+      <button class="rg-pill" style="width:100%;" onclick="rgSelect('${regio.replace(/'/g, "\\'")}')">← Bekijk regio ${regio}</button>`;
+    return;
+  }
   const r = RG_DATA.find(d => d.name === rgSel);
-  const rank = [...RG_DATA].sort((a, b) => b.index - a.index).findIndex(d => d.name === rgSel) + 1;
+  const rank = rgRank(rgSel);
   const avg = { herkenning:63.0, betaling:14.0, freq:2.95, uitgaven:84, mix:1.50 };
   const maxes = { herkenning:75, betaling:22, freq:3.6, uitgaven:100, mix:2.0 };
+  const med = rgMedal(rank);
   document.getElementById('rgDetail').innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-      <div style="font-size:16px;font-weight:800;">${r.name}${r.chal ? ' <span class="rg-chal-tag">⚔️ CHALLENGE</span>' : ''}</div>
-      <div style="font-size:12px;font-weight:800;color:var(--cg-blue);">#${rank} / 13</div>
+      <div style="font-size:16px;font-weight:800;">${r.name}${med ? ' ' + med : ''}</div>
+      <div style="font-size:12px;font-weight:800;color:var(--cg-blue);">#${rank} / 13 · ${r.score} pt</div>
     </div>
-    <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:14px;">${r.stores} winkels · loyalty-index <b style="color:var(--text);">${r.index}</b> (100 = landelijk gem.) · KPI-groei 5 wk: <b style="color:${r.chal ? '#EA580C' : 'var(--text)'};">${r.groei}</b></div>
+    <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:14px;">${r.stores} winkels · loyalty-index <b style="color:var(--text);">${r.index}</b> (100 = landelijk gem.) · KPI-groei 5 wk: <b style="color:#EA580C;">${r.groei}</b></div>
     ${[['🪪 Herkenning','herkenning','%'],['💳 Xtra-betaling','betaling','%'],['🔁 Frequentie','freq',''],['🛒 Uitgaven / klant','uitgaven','€'],['🧩 Formulemix','mix','']].map(([lab, k, u]) => `
       <div class="rg-bar-row">
         <div class="rg-bar-head"><span>${lab}</span><span>${u === '€' ? '€' + r[k] : String(r[k]).replace('.',',') + u} · gem. ${u === '€' ? '€' + avg[k] : String(avg[k]).replace('.',',') + u}</span></div>
         <div class="rg-track"><div class="rg-fill" style="width:${r[k] / maxes[k] * 100}%;${r[k] >= avg[k] ? '' : 'background:linear-gradient(90deg,#DC2626,#F87171);'}"></div><div class="rg-mark" style="left:${avg[k] / maxes[k] * 100}%;"></div></div>
       </div>`).join('')}
     <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Zwart streepje = landelijk gemiddelde</div>
-    <div style="background:#F5F8FC;border:1px solid #D6E2F0;border-radius:10px;padding:10px 13px;font-size:11.5px;color:#2C5282;line-height:1.5;margin-top:12px;">💬 ${r.note}</div>`;
+    <div style="background:#F5F8FC;border:1px solid #D6E2F0;border-radius:10px;padding:10px 13px;font-size:11.5px;color:#2C5282;line-height:1.5;margin-top:12px;">💬 ${r.note}</div>
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🏪 Winkels in deze regio</div>
+      ${[...RG_STORES[r.name]].sort((a, b) => b[4] - a[4]).map((s, i) => `
+        <div onclick="rgSelectStore('${r.name.replace(/'/g, "\\'")}','${s[0].replace(/'/g, "\\'")}')" style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--border);cursor:pointer;font-size:11.5px;">
+          <span style="width:20px;font-weight:800;">${i < 3 ? ['🥇','🥈','🥉'][i] : (i + 1)}</span>
+          <span style="width:9px;height:9px;border-radius:3px;background:${RG_FORMULES[s[1]][1]};flex-shrink:0;"></span>
+          <span style="flex:1;font-weight:600;">${s[0]}</span>
+          <span style="font-weight:800;">${s[4]} pt</span>
+        </div>`).join('')}
+    </div>`;
 }
 function rgTable(min, max) {
   const sorted = [...RG_DATA].sort((a, b) => b[rgKpi] - a[rgKpi]);
   document.getElementById('rgTable').innerHTML =
     `<tr><th>#</th><th>Regio</th>${RG_KPIS.map(k => `<th class="${k.id === rgKpi ? 'on' : ''}" onclick="rgSetKpi('${k.id}')">${k.label}${k.id === rgKpi ? ' ▼' : ''}</th>`).join('')}<th>Groei 5 wk</th></tr>` +
-    sorted.map((r, i) => `<tr class="${r.chal ? 'chal' : ''}" onclick="rgSelect('${r.name.replace(/'/g, "\\'")}')" style="cursor:pointer;">
+    sorted.map((r, i) => {
+      const med = rgMedal(rgRank(r.name));
+      return `<tr class="${rgRank(r.name) <= 3 ? 'chal' : ''}" onclick="rgSelect('${r.name.replace(/'/g, "\\'")}')" style="cursor:pointer;">
       <td style="font-weight:900;">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</td>
-      <td style="font-weight:700;">${r.name}${r.chal ? '<span class="rg-chal-tag">⚔️</span>' : ''}</td>
+      <td style="font-weight:700;">${r.name}${med && rgKpi !== 'score' ? '<span class="rg-chal-tag">' + med + ' podium</span>' : ''}</td>
       ${RG_KPIS.map(k => `<td style="${k.id === rgKpi ? 'font-weight:800;color:var(--cg-blue);' : ''}">${k.fmt(r[k.id])}</td>`).join('')}
-      <td style="font-weight:800;color:${r.chal ? '#EA580C' : '#15803D'};">${r.groei}</td>
-    </tr>`).join('');
+      <td style="font-weight:800;color:#15803D;">${r.groei}</td>
+    </tr>`;
+    }).join('');
 }
 rgRender();
 </script>

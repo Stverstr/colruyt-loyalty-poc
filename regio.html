@@ -262,38 +262,41 @@
   </div>
 </div>
 
-<!-- ═══════════ DUEL HERO (shared) ═══════════ -->
+<!-- ═══════════ NATIONAAL PODIUM HERO (shared) ═══════════ -->
 <div class="duel">
   <div class="duel-inner">
-    <div class="duel-eyebrow">Spel zonder grenzen</div>
-    <div class="duel-title">Halle–Pajottenland 🆚 Gent Oost</div>
-    <div class="duel-sub">Kwartaalcompetitie op 5 klant-KPI's · groei t.o.v. nulmeting · elke KPI telt voor 20%</div>
+    <div class="duel-eyebrow">Spel zonder grenzen · 🇧🇪 heel België</div>
+    <div class="duel-title">Alle 13 regio's, één competitie</div>
+    <div class="duel-sub">Kwartaalcompetitie op 5 klant-KPI's · groei t.o.v. de eigen nulmeting (dus elke regio start gelijk) · elke KPI telt voor 20% · 104 winkels</div>
     <div class="duel-grid">
       <div class="duel-team">
-        <div class="duel-team-badge dtb-hp">🌳</div>
-        <div class="duel-team-name">Halle–Pajottenland</div>
-        <div class="duel-team-sub">8 winkels · 105.000 inwoners · "De Groene Reuzen"</div>
+        <div class="duel-team-badge dtb-hp">🥈</div>
+        <div class="duel-team-name">🌳 Halle–Pajottenland</div>
+        <div class="duel-team-sub">8 winkels · "De Groene Reuzen" · jouw regio ⭐</div>
         <div class="duel-score" id="scoreHP">0</div>
         <div class="duel-score-unit">challenge-punten</div><br>
-        <span class="duel-delta dd-up">↑ +9 pt deze week — sterkste weekgroei tot nu toe</span>
+        <span class="duel-delta dd-up">↑ +9 pt deze week — sterkste stijger van het land</span>
       </div>
       <div class="duel-mid">
         <div class="duel-week">📅 Week 5 / 13</div>
-        <div class="duel-vs">⚔️</div>
-        <div class="duel-left-note">Nog 8 weken<br>te gaan</div>
+        <div class="duel-vs">🥇</div>
+        <div class="duel-team-name">🦁 Gent Oost</div>
+        <div class="duel-team-sub">9 winkels · "De Digitale Leeuwen"</div>
+        <div class="duel-score" id="scoreGO" style="font-size:44px;">0</div>
+        <div class="duel-score-unit">challenge-punten · leider</div>
       </div>
       <div class="duel-team">
-        <div class="duel-team-badge dtb-go">🦁</div>
-        <div class="duel-team-name">Gent Oost</div>
-        <div class="duel-team-sub">9 winkels · 110.000 inwoners · "De Digitale Leeuwen"</div>
-        <div class="duel-score" id="scoreGO">0</div>
+        <div class="duel-team-badge dtb-go">🥉</div>
+        <div class="duel-team-name">🌲 Kempen</div>
+        <div class="duel-team-sub">7 winkels · "De Kempense Kanjers"</div>
+        <div class="duel-score" id="scoreKE">0</div>
         <div class="duel-score-unit">challenge-punten</div><br>
-        <span class="duel-delta dd-up">↑ +6 pt deze week</span>
+        <span class="duel-delta dd-up">↑ +5 pt deze week</span>
       </div>
     </div>
     <div class="tug">
       <div class="tug-bar"><div class="tug-hp" id="tugHP" style="width:50%;"></div><div class="tug-go"></div></div>
-      <div class="tug-labels"><span>🌳 104 pt</span><span>Verschil: slechts 3 punten — alles kan nog!</span><span>107 pt 🦁</span></div>
+      <div class="tug-labels"><span>🌳 Jouw regio: 104 pt</span><span>Jacht op de leider — verschil: slechts 3 punten!</span><span>107 pt 🦁 leider</span></div>
     </div>
   </div>
 </div>
@@ -303,14 +306,14 @@
 
   <div class="strip">
     <div class="strip-card">
-      <div class="strip-label">Positie</div>
-      <div class="strip-val">2e <span style="font-size:14px;">van 2</span></div>
-      <div class="strip-sub warn">3 pt achter Gent Oost</div>
+      <div class="strip-label">Positie nationaal</div>
+      <div class="strip-val">2e <span style="font-size:14px;">van 13</span></div>
+      <div class="strip-sub warn">3 pt achter leider Gent Oost</div>
     </div>
     <div class="strip-card">
       <div class="strip-label">Momentum</div>
       <div class="strip-val">+9 pt</div>
-      <div class="strip-sub pos">Sneller dan Gent Oost (+6) — comeback ingezet 🔥</div>
+      <div class="strip-sub pos">Sterkste weekgroei van alle 13 regio's 🔥</div>
     </div>
     <div class="strip-card">
       <div class="strip-label">Winkels boven target</div>
@@ -327,10 +330,51 @@
   <div class="sec-head">
     <div>
       <div class="sec-title">De 5 kern-KPI's — groei t.o.v. nulmeting</div>
-      <div class="sec-sub">Jouw regio (🌳 paars) vs Gent Oost (🦁 teal) · elke KPI weegt 20% in de challenge-score</div>
+      <div class="sec-sub">Jouw regio (🌳 paars) vs het gemiddelde van de 13 regio's (🇧🇪 teal) · elke KPI weegt 20% in de challenge-score</div>
     </div>
   </div>
   <div class="kpi-grid" id="kpiGridRegio"></div>
+
+  <div class="sec-head">
+    <div>
+      <div class="sec-title">🇧🇪 Nationaal klassement — alle 13 regio's</div>
+      <div class="sec-sub">Score = gemiddelde KPI-groei t.o.v. de eigen nulmeting × 10 · iedereen start gelijk, ook kleinere regio's maken kans</div>
+    </div>
+  </div>
+  <div class="lb" id="lbNationaal" style="margin-bottom:32px;"></div>
+
+  <div class="sec-head">
+    <div>
+      <div class="sec-title">🗺️ Jouw regio op de kaart</div>
+      <div class="sec-sub">Halle–Pajottenland met alle 8 winkels · klik op een winkel voor detail · kleur = formule</div>
+    </div>
+  </div>
+  <div class="two-col" style="grid-template-columns: 1.35fr 1fr;">
+    <div class="panel" style="margin-bottom:0;">
+      <svg viewBox="70 60 250 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <path d="M 30,120 L 70,85 L 120,60 L 152,74 L 175,62 L 205,45 L 232,62 L 252,44 L 300,58 L 322,50 L 346,80 L 338,110 L 366,120 L 400,130 L 416,168 L 421,192 L 398,232 L 372,280 L 355,330 L 352,372 L 322,345 L 282,330 L 240,302 L 198,312 L 158,270 L 110,232 L 78,190 L 58,160 Z"
+              fill="#F2F0FA" stroke="#D5CEE8" stroke-width="2" stroke-linejoin="round"/>
+        <!-- buurregio's (context) -->
+        <g font-family="Inter, sans-serif" font-size="7.5" font-weight="600" fill="#A9A2B8">
+          <circle cx="168" cy="100" r="3" fill="#C6BFD9"/><text x="168" y="92" text-anchor="middle">Gent Oost 🥇</text>
+          <circle cx="200" cy="152" r="3" fill="#C6BFD9"/><text x="207" y="148" text-anchor="start">Brussel</text>
+          <circle cx="122" cy="118" r="3" fill="#C6BFD9"/><text x="122" y="110" text-anchor="middle">Gent West</text>
+          <circle cx="250" cy="142" r="3" fill="#C6BFD9"/><text x="250" y="134" text-anchor="middle">Leuven-Hageland</text>
+          <circle cx="142" cy="232" r="3" fill="#C6BFD9"/><text x="142" y="224" text-anchor="middle">Henegouwen</text>
+        </g>
+        <!-- regio-zone -->
+        <circle cx="172" cy="172" r="36" fill="#6D28D9" fill-opacity="0.10" stroke="#6D28D9" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="172" y="216" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="800" fill="#6D28D9">🌳 HALLE–PAJOTTENLAND</text>
+        <g id="regioPins"></g>
+      </svg>
+      <div style="font-size:10.5px;color:var(--text-muted);margin-top:8px;"><span style="color:var(--colruyt);font-weight:700;">●</span> Colruyt&nbsp;&nbsp;<span style="color:var(--okay);font-weight:700;">●</span> OKay&nbsp;&nbsp;<span style="color:var(--bioplanet);font-weight:700;">●</span> Bio-Planet&nbsp;&nbsp;· grijze stippen = buurregio's (België als achtergrond)</div>
+    </div>
+    <div class="panel" style="margin-bottom:0;" id="pinDetail">
+      <div class="panel-title">👆 Klik op een winkel</div>
+      <div style="font-size:12.5px;color:var(--text-mid);line-height:1.6;">Elke stip is een winkel in jouw regio. Klik erop om de score, positie en weektrend te zien — en spring meteen naar de juiste rij in het leaderboard hieronder.</div>
+    </div>
+  </div>
+  <div style="margin-bottom:32px;"></div>
 
   <div class="sec-head">
     <div>
@@ -526,18 +570,34 @@
 
 </div>
 
-<div class="disclaimer">POC-demo met fictieve data · Regio Challenge 2026 — Halle–Pajottenland vs Gent Oost · scoringsmodel: gemiddelde procentuele KPI-groei t.o.v. nulmeting × 10</div>
+<div class="disclaimer">POC-demo met fictieve data · Regio Challenge 2026 — alle 13 regio's van België in één competitie · scoringsmodel: gemiddelde procentuele KPI-groei t.o.v. de eigen nulmeting × 10</div>
 
 <div id="toast"></div>
 
 <script>
 // ─── DATA ───────────────────────────────────────
 const KPIS = [
-  { icon:'🪪', name:'Herkenning aan kassa', base:'62%', now:'68,4%', hp:10.3, go:11.8, sub:'% transacties met Xtra-identificatie' },
-  { icon:'💳', name:'Xtra-betaling', base:'14%', now:'17,1%', hp:22.1, go:18.4, sub:'% betaald via Xtra-betaalfunctie' },
-  { icon:'🔁', name:'Klantfrequentie', base:'3,1', now:'3,28', hp:5.8, go:6.4, sub:'bezoeken / klant / maand' },
-  { icon:'🛒', name:'Uitgaven per klant', base:'€86', now:'€90,10', hp:4.8, go:5.1, sub:'gem. besteding / maand' },
-  { icon:'🧩', name:'Formulemix', base:'1,60', now:'1,74', hp:8.8, go:7.9, sub:'CG-formules / klant' }
+  { icon:'🪪', name:'Herkenning aan kassa', base:'62%', now:'68,4%', hp:10.3, go:7.4, sub:'% transacties met Xtra-identificatie' },
+  { icon:'💳', name:'Xtra-betaling', base:'14%', now:'17,1%', hp:22.1, go:13.6, sub:'% betaald via Xtra-betaalfunctie' },
+  { icon:'🔁', name:'Klantfrequentie', base:'3,1', now:'3,28', hp:5.8, go:4.6, sub:'bezoeken / klant / maand' },
+  { icon:'🛒', name:'Uitgaven per klant', base:'€86', now:'€90,10', hp:4.8, go:4.2, sub:'gem. besteding / maand' },
+  { icon:'🧩', name:'Formulemix', base:'1,60', now:'1,74', hp:8.8, go:6.7, sub:'CG-formules / klant' }
+];
+
+const NATIONAL = [
+  { rank:1,  emoji:'🦁', name:'Gent Oost', nick:'De Digitale Leeuwen', stores:9,  score:107, trend:'↑ +6', tclass:'up', badges:['👑 Weekleider'] },
+  { rank:2,  emoji:'🌳', name:'Halle–Pajottenland', nick:'De Groene Reuzen', stores:8, score:104, trend:'↑ +9', tclass:'up', badges:['🚀 Sterkste Stijger'], me:true },
+  { rank:3,  emoji:'🌲', name:'Kempen', nick:'De Kempense Kanjers', stores:7, score:91, trend:'↑ +5', tclass:'up', badges:['🌟 Verrassing v/d week'] },
+  { rank:4,  emoji:'🏙️', name:'Antwerpen Stad', nick:'De Sinjoren', stores:11, score:86, trend:'↑ +4', tclass:'up', badges:[] },
+  { rank:5,  emoji:'🎓', name:'Leuven-Hageland', nick:'De Slimme Spaarders', stores:8, score:82, trend:'↑ +4', tclass:'up', badges:[] },
+  { rank:6,  emoji:'🌉', name:'Gent West', nick:'De Stroppendragers', stores:7, score:78, trend:'↑ +3', tclass:'up', badges:[] },
+  { rank:7,  emoji:'🍒', name:'Limburg', nick:'De Fruitige Fanaten', stores:9, score:71, trend:'↑ +3', tclass:'up', badges:[] },
+  { rank:8,  emoji:'🐟', name:'Mechelen-Rupel', nick:'De Maneblussers', stores:6, score:68, trend:'↑ +2', tclass:'up', badges:[] },
+  { rank:9,  emoji:'🏛️', name:'Brussel Hoofdstad', nick:'De Kosmopolieten', stores:10, score:62, trend:'↑ +3', tclass:'up', badges:[] },
+  { rank:10, emoji:'🌊', name:'Kust & Westhoek', nick:'De Zeebonken', stores:6, score:59, trend:'↑ +2', tclass:'up', badges:[] },
+  { rank:11, emoji:'🏰', name:'Namen & Waals-Brabant', nick:'Les Citadelles', stores:7, score:54, trend:'↑ +2', tclass:'up', badges:[] },
+  { rank:12, emoji:'⛏️', name:'Henegouwen', nick:'Les Loups', stores:8, score:48, trend:'↑ +1', tclass:'up', badges:[] },
+  { rank:13, emoji:'🦌', name:'Luik & Ardennen', nick:'Les Sangliers', stores:8, score:42, trend:'↑ +1', tclass:'up', badges:[] }
 ];
 
 const STORES = [
@@ -584,6 +644,17 @@ document.getElementById('kpiGridRegio').innerHTML = KPIS.map(k => {
 
 // ─── RENDER: leaderboard ────────────────────────
 function medal(r) { return r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : r + 'e'; }
+
+// nationaal klassement (13 regio's)
+document.getElementById('lbNationaal').innerHTML =
+  `<div class="lb-row head"><div>Plaats</div><div>Regio</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
+  NATIONAL.map(r => `<div class="lb-row${r.me ? ' me' : ''}">
+    <div class="lb-rank${r.rank <= 3 ? ' podium' : ''}">${medal(r.rank)}</div>
+    <div class="lb-store"><span style="font-size:16px;">${r.emoji}</span><div><div class="lb-store-name">${r.name}${r.me ? ' ⭐ jouw regio' : ''}</div><div class="lb-store-sub">"${r.nick}" · ${r.stores} winkels</div></div></div>
+    <div class="lb-score">${r.score} <span>pt</span> <span style="display:inline-block;vertical-align:middle;width:52px;height:5px;border-radius:100px;background:var(--bg);overflow:hidden;margin-left:4px;"><span style="display:block;height:100%;width:${r.score / 107 * 100}%;background:${r.me ? 'var(--accent)' : 'var(--hp)'};border-radius:100px;"></span></span></div>
+    <div class="lb-trend ${r.tclass}">${r.trend}</div>
+    <div class="lb-badges">${r.badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
+  </div>`).join('');
 document.getElementById('lbRegio').innerHTML =
   `<div class="lb-row head"><div>Plaats</div><div>Winkel</div><div>Score</div><div>Deze week</div><div>Badges</div></div>` +
   STORES.map(s => `<div class="lb-row${s.me ? ' me' : ''}">
@@ -593,6 +664,40 @@ document.getElementById('lbRegio').innerHTML =
     <div class="lb-trend ${s.tclass}">${s.trend}</div>
     <div class="lb-badges">${s.badges.map(b => `<span class="lb-badge${b.includes('👑') ? ' hot' : ''}">${b}</span>`).join('')}</div>
   </div>`).join('');
+
+// ─── RENDER: regiokaart met winkelpins ──────────
+const GEO = { 'Colruyt Sint-Pieters-Leeuw':[8,-12], 'OKay Lennik':[-10,-6], 'Colruyt Halle':[0,8], 'Bio-Planet Halle':[6,14], 'Colruyt Dilbeek':[4,-22], 'OKay Pepingen':[-12,12], 'Colruyt Beersel':[16,0], 'OKay Gooik':[-20,-2] };
+const CX = 172, CY = 172;
+let selPin = null;
+function fmColor(sub) { return sub.includes('OKay') ? 'var(--okay)' : sub.includes('Bio') ? 'var(--bioplanet)' : 'var(--colruyt)'; }
+function renderPins() {
+  document.getElementById('regioPins').innerHTML = STORES.map(s => {
+    const [dx, dy] = GEO[s.name];
+    const x = CX + dx, y = CY + dy;
+    const sel = selPin === s.name;
+    return `<g style="cursor:pointer;" onclick="pickPin('${s.name.replace(/'/g, "\\'")}')">
+      <circle cx="${x}" cy="${y}" r="${sel ? 8 : 6}" fill="${s.color.replace('var(--colruyt)', '#CC0000').replace('var(--okay)', '#E84010').replace('var(--bioplanet)', '#2E7D32')}" stroke="${sel ? '#1A1A1A' : 'white'}" stroke-width="${sel ? 2.5 : 1.8}"><title>${s.name} · ${s.score} pt</title></circle>
+      <text x="${x}" y="${y + 2.5}" text-anchor="middle" font-size="6.5" font-weight="800" fill="white" font-family="Inter, sans-serif" pointer-events="none">${s.rank}</text>
+      ${sel ? `<text x="${x}" y="${y - 12}" text-anchor="middle" font-size="8" font-weight="800" fill="#1A1A1A" font-family="Inter, sans-serif">${s.name}</text>` : ''}
+    </g>`;
+  }).join('');
+}
+function pickPin(name) {
+  selPin = name;
+  renderPins();
+  const s = STORES.find(x => x.name === name);
+  document.getElementById('pinDetail').innerHTML = `
+    <div class="panel-title"><span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${s.color};"></span> ${s.name}${s.me ? ' ⭐' : ''}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${medal(s.rank)}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PLAATS</div></div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:19px;font-weight:900;">${s.score}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">PUNTEN</div></div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:16px;font-weight:900;" class="lb-trend ${s.tclass}">${s.trend}</div><div style="font-size:9.5px;color:var(--text-muted);font-weight:700;">DEZE WEEK</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:10px;">${s.sub} · ${s.badges.length ? 'badges: ' + s.badges.join(', ') : 'nog geen badges dit kwartaal'}</div>
+    ${s.rank >= 7 ? '<div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:9px;padding:9px 12px;font-size:11.5px;color:#9A3412;line-height:1.5;margin-bottom:10px;">💡 Tip: plan een boost of bezoek via het actiecentrum hieronder.</div>' : ''}
+    <button class="action-btn" style="width:100%;" onclick="document.getElementById('lbRegio').scrollIntoView({behavior:'smooth',block:'center'})">Bekijk in leaderboard ↓</button>`;
+}
+renderPins();
 
 // mini leaderboard (store view)
 document.getElementById('lbMini').innerHTML = STORES.slice(0, 5).map(s =>
@@ -703,6 +808,7 @@ function countUp(id, target, ms) {
 }
 countUp('scoreHP', 104, 1400);
 countUp('scoreGO', 107, 1400);
+countUp('scoreKE', 91, 1400);
 setTimeout(() => { document.getElementById('tugHP').style.width = (104 / (104 + 107) * 100) + '%'; }, 300);
 </script>
 </body>
